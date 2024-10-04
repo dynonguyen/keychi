@@ -1,4 +1,4 @@
-<div align="center"><img src="./.docs/img/cover.png" height="240" /></div>
+<div align="center"><img src="./.docs/img/cover.jpg" height="256" /></div>
 
 # ✳️ Keychi
 
