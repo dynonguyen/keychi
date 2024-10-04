@@ -1,9 +1,10 @@
 {
-	"recommendations": [
-		"esbenp.prettier-vscode",
-		"dbaeumer.vscode-eslint",
-		"streetsidesoftware.code-spell-checker",
-		"EditorConfig.EditorConfig",
-		"Gruntfuggly.todo-tree"
-	]
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "streetsidesoftware.code-spell-checker",
+    "EditorConfig.EditorConfig",
+    "Gruntfuggly.todo-tree",
+    "golang.go"
+  ]
 }

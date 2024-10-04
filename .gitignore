@@ -13,6 +13,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 package-lock.json
+.nx/cache
 
 # Binaries for programs and plugins
 *.exe
@@ -44,3 +45,12 @@ project.xcworkspace
 .gradle
 local.properties
 *.iml
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
