@@ -1,9 +1,16 @@
 # Common
 .env
+**/.env
 .DS_*
 .Trash-*
 build/
 dist/
+
+# Docker
+docker/*/volumes/db/data
+docker/*/volumes/storage
+docker/*/test.http
+docker/*/docker-compose.override.yml
 
 # Node, NPM
 node_modules/

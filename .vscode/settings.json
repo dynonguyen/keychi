@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["commitlint", "keychi"]
+  "cSpell.words": ["commitlint", "keychi", "supabase"],
+  "files.exclude": {
+    "**/volumes/db": true,
+    "**/volumes/storage": true
+  }
 }
