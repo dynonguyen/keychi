@@ -3,5 +3,18 @@
   "files.exclude": {
     "**/volumes/db": true,
     "**/volumes/storage": true
+  },
+  "todo-tree.filtering.excludeGlobs": ["**/node_modules/*/**", "**/@deprecated/*/**"],
+  "todo-tree.tree.scanMode": "workspace",
+  "todo-tree.general.tags": ["BUG", "FIX", "TODO", "MOCK", "REFACTOR", "EXAMPLE", "DEPRECATED", "WORKAROUND"],
+  "todo-tree.highlights.customHighlight": {
+    // Icon from: https://primer.style/design/foundations/icons
+    "BUG": { "background": "#B72136", "foreground": "#FFF", "icon": "bug", "iconColour": "#B72136" },
+    "DEPRECATED": { "background": "#851515", "foreground": "#FFF", "icon": "stop", "iconColour": "#851515" },
+    "FIX": { "background": "#E25822", "foreground": "#FFF", "icon": "flame", "iconColour": "#E25822" },
+    "MOCK": { "background": "#B78103", "foreground": "#FFF", "icon": "pencil", "iconColour": "#B78103" },
+    "REFACTOR": { "background": "#0FBDCC", "foreground": "#000", "icon": "tools", "iconColour": "#0FBDCC" },
+    "TODO": { "background": "#007460", "foreground": "#FFF", "icon": "check-circle", "iconColour": "#007460" },
+    "WORKAROUND": { "icon": "issue-draft", "iconColour": "#fa6b9a", "background": "#fa6b9a", "foreground": "#011C37" }
   }
 }
