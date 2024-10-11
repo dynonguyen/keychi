@@ -1,9 +1,30 @@
 {
-  "cSpell.words": ["commitlint", "keychi", "supabase"],
+  "cSpell.words": [
+    "clsx",
+    "commitlint",
+    "cssnano",
+    "daisyui",
+    "hookform",
+    "iconify",
+    "keychi",
+    "minio",
+    "supabase",
+    "tailwindcss",
+    "toastify",
+    "zustand"
+  ],
+
   "files.exclude": {
-    "**/volumes/db": true,
-    "**/volumes/storage": true
+    "**/.nx": true,
+    "**/.husky": true,
+    "yarn-error.log": true
   },
+
+  "search.exclude": {
+    "**/volumes": true,
+    "**/.nx": true
+  },
+
   "todo-tree.filtering.excludeGlobs": ["**/node_modules/*/**", "**/@deprecated/*/**"],
   "todo-tree.tree.scanMode": "workspace",
   "todo-tree.general.tags": ["BUG", "FIX", "TODO", "MOCK", "REFACTOR", "EXAMPLE", "DEPRECATED", "WORKAROUND"],
@@ -16,5 +37,11 @@
     "REFACTOR": { "background": "#0FBDCC", "foreground": "#000", "icon": "tools", "iconColour": "#0FBDCC" },
     "TODO": { "background": "#007460", "foreground": "#FFF", "icon": "check-circle", "iconColour": "#007460" },
     "WORKAROUND": { "icon": "issue-draft", "iconColour": "#fa6b9a", "background": "#fa6b9a", "foreground": "#011C37" }
-  }
+  },
+
+  // Fix: https://stackoverflow.com/questions/63477929/visual-studio-code-auto-imports-quick-fix-does-not-work
+  // imports list exceeds 10 dependencies - it may/won't not scan them
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifier": "project-relative"
 }

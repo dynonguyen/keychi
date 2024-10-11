@@ -8,30 +8,17 @@
 
 ## 🚀 Getting Started
 
-### Installation
+### Setup environment / start containers
 
 ```bash
-chmod +x ./scripts/*.sh
-
-./scripts/install.sh
+yarn docker:up
 ```
 
 ### Development
 
-- Start all services
-
 ```bash
-./scripts/startup.sh
-```
-
-- Start individual services
-
-```bash
-# Start supabase
-cd ./docker/supabase
-docker compose up -d
-
 # Start keychi api server
+yarn web:dev
 
 # Start keychi web app
 
@@ -42,7 +29,7 @@ docker compose up -d
 
 ### Accessing resources
 
-- Supabase dashboard: http://localhost:8000
+- Minio console: http://localhost:9000
 - Postgres server: http://localhost:5432
 - Keychi web: http://localhost:8888
 
@@ -50,7 +37,8 @@ docker compose up -d
 
 - [Notion](https://www.notion.so/dynonguyen/Keychi-8631d1fdd1b848d2be6f2096927d5ae9?pvs=4)
 - [Figma](https://www.figma.com/design/5GnVktY7e8oYPlinkDVESt/Keychi?node-id=0-1&t=sdIXWoYCRInTmhF1-1)
+- [System Architecture](https://drive.google.com/file/d/16kmKYs4FQ-kW8QHaTtWmcBEWbqANYkKi/view?usp=sharing)
 
 ## 📎 References
 
-- [Supabase](https://supabase.com/)
+- [Photphor Iconify](https://icon-sets.iconify.design/)

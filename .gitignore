@@ -5,12 +5,10 @@
 .Trash-*
 build/
 dist/
+.local.*
 
 # Docker
-docker/*/volumes/db/data
-docker/*/volumes/storage
-docker/*/test.http
-docker/*/docker-compose.override.yml
+docker/volumes/*
 
 # Node, NPM
 node_modules/
@@ -61,3 +59,6 @@ local.properties
 *.launch
 .settings/
 *.sublime-workspace
+
+.nx/cache
+.nx/workspace-data
