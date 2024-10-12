@@ -10,7 +10,7 @@ export const NotFoundErrorPage = () => {
 
   return (
     <ErrorPageLayout
-      title={t('notFound.title')}
+      title={t('pageTitle.notFound')}
       imgSrc="not-found.svg"
       detail={
         <React.Fragment>

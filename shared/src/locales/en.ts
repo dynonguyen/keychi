@@ -1,7 +1,8 @@
 const en = {
   pageTitle: {
     home: 'Home page',
-    notFound: 'Page not found'
+    notFound: 'Page not found',
+		serverError: 'Server error'
   },
   notFound: {
     title: 'Oops!',
@@ -9,7 +10,7 @@ const en = {
     backHome: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.'
   },
   serverError: {
-    title: 'Server Error',
+    title: 'Server error',
     description: 'An error occurred on the server. Please try again later.'
   }
 } as const;

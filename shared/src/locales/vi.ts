@@ -1,7 +1,8 @@
 const vi = {
   pageTitle: {
     home: 'Trang chủ',
-    notFound: 'Không tìm thấy trang'
+    notFound: 'Không tìm thấy trang',
+		serverError: 'Lỗi máy chủ'
   },
   notFound: {
     title: 'Không tìm thấy trang.',

@@ -12,7 +12,7 @@ export const ServerErrorPage = ({ error }: { error?: string | object }) => {
 
   return (
     <ErrorPageLayout
-      title="Server Error"
+      title={t('pageTitle.serverError')}
       imgSrc="server-down.svg"
       detail={<RenderHTML html={t('serverError.description')} />}
     />
