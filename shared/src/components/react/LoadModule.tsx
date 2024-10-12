@@ -6,6 +6,7 @@ type LoadModuleProps = Partial<React.ComponentProps<typeof ErrorBoundary>> & {
   children?: React.ReactNode;
 };
 
+/** Suspense + Error Boundary */
 export const LoadModule = (props: LoadModuleProps) => {
   const { children, suspense = null, fallback = null, onError, ...boundaryProps } = props;
 

@@ -1,10 +1,13 @@
-<div align="center"><img src="./.docs/img/cover.jpg" height="256" /></div>
+<div align="center">
+	<img src="./.docs/img/cover.jpg" height="256" />
+	<img src="./.docs/img/cover-2.jpg" height="256" />
+</div>
 
-# ✳️ Keychi
+# Keychi
 
 <img src="./.docs/img/app-logo.svg" height="64" />
 
-> Keychi is the best password manager for securely storing, managing data such as passwords, passkeys, OTP and credit cards.
+> **Keychi** is the best password manager for securely storing, managing data such as passwords, passkeys, OTP and credit cards.
 
 ## 🚀 Getting Started
 
