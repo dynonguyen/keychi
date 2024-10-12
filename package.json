@@ -16,7 +16,8 @@
     "docker:stop": "cd ./docker && docker compose stop",
     "docker:down": "cd ./docker && docker compose down",
     "web:dev": "nx run web:serve",
-    "web:build": "nx run web:build"
+    "web:build": "nx run web:build",
+    "api:dev": "nx run api:serve"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

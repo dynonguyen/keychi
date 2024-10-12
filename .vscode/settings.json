@@ -5,6 +5,7 @@
     "cssnano",
     "daisyui",
     "dompurify",
+    "gorm",
     "hookform",
     "iconify",
     "keychi",
@@ -12,6 +13,7 @@
     "supabase",
     "tailwindcss",
     "toastify",
+    "usecase",
     "zustand"
   ],
 
