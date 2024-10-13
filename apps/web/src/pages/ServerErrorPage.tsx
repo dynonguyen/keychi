@@ -10,7 +10,12 @@ export const ServerErrorPage = ({ error }: { error?: string | object }) => {
   error && console.error('Server error page: ', error);
 
   return (
-    <PageResult title={t('pageTitle.serverError')} imgSrc="server-down.svg" detail={t('serverError.description')} />
+    <PageResult
+      title={t('pageTitle.serverError')}
+      imgSrc="server-down.svg"
+      detail={t('serverError.description')}
+      showAction
+    />
   );
 };
 

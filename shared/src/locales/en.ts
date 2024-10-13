@@ -4,10 +4,10 @@ const en = {
     notFound: 'Page not found',
     serverError: 'Server error'
   },
+  pageResultAction: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.',
   notFound: {
     title: 'Oops!',
-    description: "We can't seem to find the page you're looking for.",
-    backHome: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.'
+    description: "We can't seem to find the page you're looking for."
   },
   serverError: {
     title: 'Server error',

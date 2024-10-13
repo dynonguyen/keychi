@@ -4,10 +4,10 @@ const vi = {
     notFound: 'Không tìm thấy trang',
     serverError: 'Đã xảy ra lỗi'
   },
+  pageResultAction: 'Quay về <toHome>trang chủ</toHome> hoặc <toContact>liên hệ với chúng tôi</toContact>.',
   notFound: {
     title: 'Không tìm thấy trang.',
-    description: 'Trang này không tồn tại hoặc đã bị xóa!',
-    backHome: 'Quay về <toHome>trang chủ</toHome> hoặc <toContact>liên hệ với chúng tôi</toContact>.'
+    description: 'Trang này không tồn tại hoặc đã bị xóa!'
   },
   serverError: {
     title: 'Đã xảy ra lỗi',
