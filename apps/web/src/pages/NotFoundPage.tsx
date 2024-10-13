@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import usePageTitle from '../hooks/usePageTitle';
+import PageResult from '../components/PageResult';
 
-// TODO: Implement NotFoundPage
 export const NotFoundPage = () => {
   const { t } = useTranslation();
 
-  usePageTitle(t('pageTitle.notFound'));
-
-  return <div>Not found</div>;
+  return (
+    <PageResult title={t('pageTitle.notFound')} imgSrc="not-found.svg" detail={t('notFound.description')} showAction />
+  );
 };
 
 export default NotFoundPage;

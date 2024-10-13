@@ -5,13 +5,17 @@
     "cssnano",
     "daisyui",
     "dompurify",
+    "gorm",
     "hookform",
     "iconify",
     "keychi",
+    "labstack",
     "minio",
+    "pgsql",
     "supabase",
     "tailwindcss",
     "toastify",
+    "usecase",
     "zustand"
   ],
 
