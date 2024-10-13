@@ -2,7 +2,7 @@ const en = {
   pageTitle: {
     home: 'Home page',
     notFound: 'Page not found',
-		serverError: 'Server error'
+    serverError: 'Server error'
   },
   notFound: {
     title: 'Oops!',

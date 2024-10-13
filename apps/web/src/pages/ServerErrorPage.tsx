@@ -1,7 +1,6 @@
-import { useRouteError } from 'react-router-dom';
-import { RenderHTML } from '@shared/components/react/RenderHTML';
-import { ErrorPageLayout } from './ErrorPageLayout';
 import { useTranslation } from 'react-i18next';
+import { useRouteError } from 'react-router-dom';
+import PageResult from '../components/PageResult';
 
 export const ServerErrorPage = ({ error }: { error?: string | object }) => {
   const routeError = useRouteError();
@@ -11,11 +10,7 @@ export const ServerErrorPage = ({ error }: { error?: string | object }) => {
   error && console.error('Server error page: ', error);
 
   return (
-    <ErrorPageLayout
-      title={t('pageTitle.serverError')}
-      imgSrc="server-down.svg"
-      detail={<RenderHTML html={t('serverError.description')} />}
-    />
+    <PageResult title={t('pageTitle.serverError')} imgSrc="server-down.svg" detail={t('serverError.description')} />
   );
 };
 

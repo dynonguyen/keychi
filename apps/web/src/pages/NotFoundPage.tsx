@@ -1,15 +1,15 @@
-import { Trans, useTranslation } from 'react-i18next';
 import { RenderHTML } from '@shared/components/react/RenderHTML';
-import ErrorPageLayout from './ErrorPageLayout';
-import { Link } from 'react-router-dom';
-import { PATH } from '../../constants/path';
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import PageResult from '../components/PageResult';
+import { PATH } from '../constants/path';
 
-export const NotFoundErrorPage = () => {
+export const NotFoundPage = () => {
   const { t } = useTranslation();
 
   return (
-    <ErrorPageLayout
+    <PageResult
       title={t('pageTitle.notFound')}
       imgSrc="not-found.svg"
       detail={
@@ -29,4 +29,4 @@ export const NotFoundErrorPage = () => {
   );
 };
 
-export default NotFoundErrorPage;
+export default NotFoundPage;

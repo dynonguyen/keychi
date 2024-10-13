@@ -2,7 +2,7 @@ const vi = {
   pageTitle: {
     home: 'Trang chủ',
     notFound: 'Không tìm thấy trang',
-		serverError: 'Lỗi máy chủ'
+    serverError: 'Đã xảy ra lỗi'
   },
   notFound: {
     title: 'Không tìm thấy trang.',
@@ -10,7 +10,7 @@ const vi = {
     backHome: 'Quay về <toHome>trang chủ</toHome> hoặc <toContact>liên hệ với chúng tôi</toContact>.'
   },
   serverError: {
-    title: 'Lỗi máy chủ',
+    title: 'Đã xảy ra lỗi',
     description: 'Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.'
   }
 } as const;
