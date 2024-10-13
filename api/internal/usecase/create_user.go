@@ -25,5 +25,9 @@ func (uc *CreateUserUsecase) CreateUser(ctx context.Context, user *entity.User) 
 		return err
 	}
 
-	return uc.userRepo.CreateUser(ctx, user)
+	if err := uc.userRepo.CreateUser(ctx, user); err != nil {
+		return err
+	}
+
+	return nil
 }
