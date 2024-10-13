@@ -6,7 +6,11 @@ export const HomePage = () => {
 
   usePageTitle(t('pageTitle.home'));
 
-  return <div>Home page</div>;
+  return (
+    <div>
+      <p className="text-xl">Home page</p>
+    </div>
+  );
 };
 
 export default HomePage;

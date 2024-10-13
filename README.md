@@ -15,6 +15,9 @@
 
 ```bash
 yarn docker:up
+
+# Stop containers
+yarn docker:down
 ```
 
 ### Development
@@ -45,3 +48,7 @@ yarn web:dev
 ## 📎 References
 
 - [Photphor Iconify](https://icon-sets.iconify.design/)
+
+---
+
+**Created at**: 06-10-2024
