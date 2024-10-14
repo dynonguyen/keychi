@@ -12,6 +12,11 @@ const vi = {
   serverError: {
     title: 'Đã xảy ra lỗi',
     description: 'Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.'
+  },
+  theme: {
+    light: 'Sáng',
+    dark: 'Tối',
+    system: 'Hệ thống'
   }
 } as const;
 

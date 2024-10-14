@@ -44,3 +44,9 @@ export const COLOR_PALETTE = {
     ERROR_CONTENT: '#000000'
   }
 };
+
+export enum ThemeMode {
+  Light = 'light',
+  Dark = 'dark',
+  System = 'system'
+}
