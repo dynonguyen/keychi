@@ -9,8 +9,14 @@ type ThemeStore = {
 };
 
 const setPersistedTheme = (newTheme: ThemeMode) => {
+  const actualTheme =
+    newTheme !== ThemeMode.System
+      ? newTheme
+      : window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? ThemeMode.Dark
+        : ThemeMode.Light;
   localStorage.setItem(LS_KEY.THEME, newTheme);
-  document.documentElement.setAttribute('data-theme', newTheme === ThemeMode.Light ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', actualTheme);
 };
 
 const initTheme = (): ThemeMode => {
@@ -19,7 +25,7 @@ const initTheme = (): ThemeMode => {
   const newTheme =
     savedTheme && Object.values(ThemeMode).some((value) => value === savedTheme)
       ? (savedTheme as ThemeMode)
-      : ThemeMode.Light;
+      : ThemeMode.System;
   setPersistedTheme(newTheme);
 
   return newTheme;
