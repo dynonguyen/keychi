@@ -8,24 +8,25 @@ type ThemeStore = {
   changeTheme(theme: ThemeMode): void;
 };
 
-const setPersistedTheme = (newTheme: ThemeMode) => {
+const setPersistedTheme = (theme: ThemeMode) => {
   const actualTheme =
-    newTheme !== ThemeMode.System
-      ? newTheme
+    theme !== ThemeMode.System
+      ? theme
       : window.matchMedia('(prefers-color-scheme: dark)').matches
         ? ThemeMode.Dark
         : ThemeMode.Light;
-  localStorage.setItem(LS_KEY.THEME, newTheme);
-  document.documentElement.setAttribute('data-theme', actualTheme);
+
+  localStorage.setItem(LS_KEY.THEME, theme);
+  document.documentElement.classList.remove(...Object.values(ThemeMode));
+  document.documentElement.classList.add(actualTheme);
 };
 
 const initTheme = (): ThemeMode => {
-  const savedTheme = localStorage.getItem(LS_KEY.THEME);
+  const savedTheme = localStorage.getItem(LS_KEY.THEME) as ThemeMode | undefined;
 
   const newTheme =
-    savedTheme && Object.values(ThemeMode).some((value) => value === savedTheme)
-      ? (savedTheme as ThemeMode)
-      : ThemeMode.System;
+    savedTheme && Object.values(ThemeMode).some((value) => value === savedTheme) ? savedTheme : ThemeMode.System;
+
   setPersistedTheme(newTheme);
 
   return newTheme;
