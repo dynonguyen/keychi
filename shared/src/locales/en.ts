@@ -12,6 +12,11 @@ const en = {
   serverError: {
     title: 'Server error',
     description: 'An error occurred on the server. Please try again later.'
+  },
+  theme: {
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System'
   }
 } as const;
 

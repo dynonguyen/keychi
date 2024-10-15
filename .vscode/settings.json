@@ -11,6 +11,7 @@
     "keychi",
     "labstack",
     "minio",
+    "nextui",
     "pgsql",
     "supabase",
     "tailwindcss",

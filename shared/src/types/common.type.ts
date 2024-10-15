@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Any = any;
 
@@ -20,3 +22,5 @@ export type ValueMap<T> = TypeMap<T>[keyof TypeMap<T>];
 */
 export type EnumValue<T extends string | number | bigint | boolean | null | undefined> =
   `${T}` extends `${infer N extends string}` ? N : never;
+
+export type TFunction = typeof i18next.t;

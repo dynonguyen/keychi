@@ -1,4 +1,5 @@
 // Local storage key
 export const LS_KEY = {
-  LANGUAGE: 'keychi-language'
+  LANGUAGE: 'keychi-language',
+  THEME: 'keychi-theme'
 };
