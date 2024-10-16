@@ -5,6 +5,7 @@
     "cssnano",
     "daisyui",
     "dompurify",
+    "godotenv",
     "gorm",
     "hookform",
     "iconify",
