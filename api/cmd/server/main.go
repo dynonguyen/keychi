@@ -1,9 +1,12 @@
 package main
 
 import (
+	"errors"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/handler"
 	"github.com/dynonguyen/keychi/api/internal/middleware"
 	"github.com/joho/godotenv"
@@ -34,7 +37,7 @@ func main() {
 
 	// Config controllers
 	e.GET("/", func(c echo.Context) error {
-		return c.JSON(200, map[string]string{"message": "OK"})
+		return c.JSON(http.StatusBadRequest, common.NewBadRequestError("Invalid request", "", errors.New("It Says Error!")))
 	})
 	e.POST("/user", handler.HandleCreateUser(db))
 
