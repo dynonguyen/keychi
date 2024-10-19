@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/entity"
 	"github.com/dynonguyen/keychi/api/internal/repository"
 	"github.com/dynonguyen/keychi/api/internal/usecase"
@@ -21,7 +22,7 @@ func HandleCreateUser(db *gorm.DB) echo.HandlerFunc {
 		uc := usecase.NewCreateUserUsecase(storage)
 
 		if err := uc.CreateUser(c.Request().Context(), &user); err != nil {
-			return c.JSON(http.StatusBadRequest, "Error")
+			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, err.Error(), "create_user_failed"))
 		}
 
 		return c.JSON(http.StatusOK, &user)

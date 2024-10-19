@@ -37,7 +37,17 @@ func main() {
 
 	// Config controllers
 	e.GET("/", func(c echo.Context) error {
-		return c.JSON(http.StatusBadRequest, common.NewBadRequestError("Invalid request", "", errors.New("It Says Error!")))
+		return c.JSON(http.StatusBadRequest, common.NewBadRequestError(&common.AppError{
+			Status:  100,
+			Message: "invalid request",
+			Code:    "ABC",
+			RootErr: &common.AppError{
+				Status:  100,
+				Message: "invalid request",
+				Code:    "ABC",
+				RootErr: errors.New("con meo con 2"),
+			},
+		}, "invalid request", "BAD_REQUEST"))
 	})
 	e.POST("/user", handler.HandleCreateUser(db))
 
