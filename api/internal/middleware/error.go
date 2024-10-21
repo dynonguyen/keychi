@@ -1,10 +1,16 @@
 package middleware
 
-import "github.com/labstack/echo/v4"
+import (
+	"net/http"
 
-func NewErrorHandlerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/labstack/echo/v4"
+)
 
-		return next(c)
+func NewHTTPErrorHandler(err error, c echo.Context) {
+	if err == nil {
+		return
 	}
+
+	c.JSON(http.StatusInternalServerError, common.NewAppErrorResponse(http.StatusInternalServerError, err, err.Error(), common.CodeInternalServerError))
 }

@@ -6,7 +6,7 @@ type AppError struct {
 	Status  int    `json:"status,omitempty"`
 	Message string `json:"message,omitempty"`
 	Code    string `json:"code,omitempty"` // Client error code (i18n key)
-	RootErr error  `json:"error"`
+	RootErr error  `json:"-"`
 }
 
 // Get the root error
@@ -28,6 +28,7 @@ func NewAppErrorResponse(status int, rootError error, message string, code strin
 		Status:  status,
 		Message: message,
 		Code:    code,
+		RootErr: rootError,
 	}
 }
 
