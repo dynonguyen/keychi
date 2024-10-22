@@ -35,3 +35,7 @@ func NewAppErrorResponse(status int, rootError error, message string, code strin
 func NewBadRequestError(rootError error, message string, code string) *AppError {
 	return NewAppErrorResponse(http.StatusBadRequest, rootError, message, code)
 }
+
+func NewUnauthorizedError(rootError error, message string, code string) *AppError {
+	return NewAppErrorResponse(http.StatusUnauthorized, rootError, message, code)
+}

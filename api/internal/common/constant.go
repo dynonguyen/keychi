@@ -10,5 +10,6 @@ const (
 // Common i18n error codes
 const (
 	CodeInternalServerError = "INTERNAL_SERVER_ERROR"
-	CodeBadRequestError     = "BAD_REQUEST_ERROR"
+	CodeBadRequestError     = "BAD_REQUEST"
+	CodeUnauthorizedError   = "UNAUTHORIZED"
 )

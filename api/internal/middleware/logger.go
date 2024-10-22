@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func NewLoggerMiddleware() echo.MiddlewareFunc {
+func CustomLogger() echo.MiddlewareFunc {
 	mode := common.EnvMode(os.Getenv("ENV_MODE"))
 
 	var loggerConfig middleware.LoggerConfig
