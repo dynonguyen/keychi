@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/labstack/echo/v4"
-	"keychi.org/api/internal/common"
 )
 
 func HTTPErrorHandler(err error, c echo.Context) {

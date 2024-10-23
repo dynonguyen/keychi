@@ -3,17 +3,18 @@ package postgres
 import (
 	"context"
 
-	"keychi.org/api/internal/infra"
-	"keychi.org/api/internal/user/dto"
-	"keychi.org/api/internal/user/repository"
+	"github.com/dynonguyen/keychi/api/internal/infra"
+	"github.com/dynonguyen/keychi/api/internal/user/dto"
+	"github.com/dynonguyen/keychi/api/internal/user/repository"
 )
 
 type registerUserRepo struct {
 	storage *infra.PgsqlStorage
 }
 
-func (r *registerUserRepo) RegisterUser(ctx context.Context, user *dto.UserRegistration) error {
-	// Implement the logic to register a user
+func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistration) error {
+	// TODO: Implement the logic to register a user
+
 	return nil
 }
 

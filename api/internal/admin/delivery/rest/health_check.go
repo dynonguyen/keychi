@@ -3,9 +3,9 @@ package rest
 import (
 	"net/http"
 
+	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/labstack/echo/v4"
-	"keychi.org/api/internal/common"
-	"keychi.org/api/internal/infra"
 )
 
 func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {

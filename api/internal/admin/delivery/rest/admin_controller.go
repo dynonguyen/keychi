@@ -1,8 +1,8 @@
 package rest
 
 import (
+	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/labstack/echo/v4"
-	"keychi.org/api/internal/infra"
 )
 
 func AdminController(g *echo.Group, storage *infra.PgsqlStorage) {

@@ -1,9 +1,11 @@
 package infra
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type PgsqlStorage struct {
-	*gorm.DB
+	DB *gorm.DB
 }
 
 func NewPgsqlStorage(db *gorm.DB) *PgsqlStorage {

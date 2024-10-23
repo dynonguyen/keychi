@@ -4,15 +4,15 @@ import (
 	"log"
 	"os"
 
+	adminHandler "github.com/dynonguyen/keychi/api/internal/admin/delivery/rest"
+	"github.com/dynonguyen/keychi/api/internal/infra"
+	"github.com/dynonguyen/keychi/api/internal/middleware"
+	userHandler "github.com/dynonguyen/keychi/api/internal/user/delivery/rest"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	adminHandler "keychi.org/api/internal/admin/delivery/rest"
-	"keychi.org/api/internal/infra"
-	"keychi.org/api/internal/middleware"
-	userHandler "keychi.org/api/internal/user/delivery/rest"
 )
 
 func main() {

@@ -3,9 +3,9 @@ package middleware
 import (
 	"os"
 
+	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"keychi.org/api/internal/common"
 )
 
 func CustomLogger() echo.MiddlewareFunc {
