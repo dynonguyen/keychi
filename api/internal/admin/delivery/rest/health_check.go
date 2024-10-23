@@ -1,20 +1,20 @@
-package handler
+package rest
 
 import (
 	"net/http"
 
-	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
+	"keychi.org/api/internal/common"
+	"keychi.org/api/internal/infra"
 )
 
-func HandleHealthCheck(db *gorm.DB) echo.HandlerFunc {
+func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		connection := struct {
 			DbConnected bool `json:"dbConnected"`
 		}{DbConnected: true}
 
-		if sqlDb, err := db.DB(); err != nil || sqlDb.Ping() != nil {
+		if sqlDb, err := s.DB.DB(); err != nil || sqlDb.Ping() != nil {
 			connection.DbConnected = false
 		}
 

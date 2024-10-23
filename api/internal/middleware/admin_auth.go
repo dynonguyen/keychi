@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/labstack/echo/v4"
+	"keychi.org/api/internal/common"
 )
 
 const (

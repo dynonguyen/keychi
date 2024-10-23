@@ -1,4 +1,4 @@
-module github.com/dynonguyen/keychi/api
+module keychi.org/api
 
 go 1.23.1
 
