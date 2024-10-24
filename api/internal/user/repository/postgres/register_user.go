@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"errors"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
@@ -15,16 +16,20 @@ const (
 	CodeDuplicateEmail common.I18nCode = "EMAIL_DUPLICATE"
 )
 
+var (
+	ErrDuplicatedEmail = errors.New("Email already existed")
+)
+
 type registerUserRepo struct {
 	storage *infra.PgsqlStorage
 }
 
-func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (common.I18nCode, error) {
+func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) error {
 	db := r.storage.DB
 
 	// Check if user existed
 	if result := db.Where("email = ?", user.Email).Take(&model.UserModel{}); result.Error != gorm.ErrRecordNotFound {
-		return CodeDuplicateEmail, nil
+		return common.NewBadRequestError(ErrDuplicatedEmail, CodeDuplicateEmail)
 	}
 
 	err := db.Create(&model.UserModel{
@@ -33,7 +38,7 @@ func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistr
 		PwdHint: user.PwdHint,
 	}).Error
 
-	return "", err
+	return common.NewBadRequestError(err, common.CodeInternalServerError)
 }
 
 func NewRegisterUserRepo(s *infra.PgsqlStorage) repository.RegisterUserRepository {

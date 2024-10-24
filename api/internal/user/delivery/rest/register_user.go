@@ -17,16 +17,16 @@ func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo
 		var user dto.UserRegistrationInput
 
 		if err := (&echo.DefaultBinder{}).BindBody(c, &user); err != nil {
-			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, err.Error(), common.CodeBadRequestError))
+			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, common.CodeBadRequestError))
 		}
 
 		repo := postgres.NewRegisterUserRepo(s)
 		uc := usecase.NewRegisterUserUsecase(repo, authSvc)
 
 		if err := uc.RegisterUser(c.Request().Context(), &user); err != nil {
-			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, err.Error(), common.CodeBadRequestError))
+			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, common.CodeBadRequestError))
 		}
 
-		return c.JSON(http.StatusOK, &user)
+		return c.JSON(http.StatusOK, common.NewCreatedResponse("ok"))
 	}
 }

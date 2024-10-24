@@ -20,5 +20,5 @@ func HTTPErrorHandler(err error, c echo.Context) {
 		status = httpErr.Code
 	}
 
-	c.JSON(status, common.NewAppErrorResponse(status, err, err.Error(), common.CodeInternalServerError))
+	c.JSON(status, common.NewAppErrorResponse(status, err, common.CodeInternalServerError))
 }

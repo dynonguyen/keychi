@@ -10,8 +10,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const (
-	ErrInvalidToken = "invalid token"
+var (
+	ErrInvalidToken = errors.New("invalid token")
 )
 
 func AdminAuth(next echo.HandlerFunc) echo.HandlerFunc {
@@ -23,6 +23,6 @@ func AdminAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			return next(c)
 		}
 
-		return c.JSON(http.StatusUnauthorized, common.NewUnauthorizedError(errors.New(ErrInvalidToken), ErrInvalidToken, common.CodeUnauthorizedError))
+		return c.JSON(http.StatusUnauthorized, common.NewUnauthorizedError(ErrInvalidToken, common.CodeUnauthorizedError))
 	}
 }

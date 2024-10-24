@@ -2,7 +2,7 @@ package common
 
 import "net/http"
 
-type AppError struct {
+type appError struct {
 	Status  int      `json:"status,omitempty"`
 	Message string   `json:"message,omitempty"`
 	Code    I18nCode `json:"code,omitempty"` // Client error code (i18n key)
@@ -10,8 +10,8 @@ type AppError struct {
 }
 
 // Get the root error
-func (e *AppError) RootError() error {
-	if err, ok := e.RootErr.(*AppError); ok {
+func (e *appError) RootError() error {
+	if err, ok := e.RootErr.(*appError); ok {
 		return err.RootError()
 	}
 
@@ -19,23 +19,23 @@ func (e *AppError) RootError() error {
 }
 
 // Implement the custom error
-func (e *AppError) Error() string {
+func (e *appError) Error() string {
 	return e.RootError().Error()
 }
 
-func NewAppErrorResponse(status int, rootError error, message string, code I18nCode) *AppError {
-	return &AppError{
+func NewAppErrorResponse(status int, rootError error, code I18nCode) *appError {
+	return &appError{
 		Status:  status,
-		Message: message,
+		Message: rootError.Error(),
 		Code:    code,
 		RootErr: rootError,
 	}
 }
 
-func NewBadRequestError(rootError error, message string, code I18nCode) *AppError {
-	return NewAppErrorResponse(http.StatusBadRequest, rootError, message, code)
+func NewBadRequestError(rootError error, code I18nCode) *appError {
+	return NewAppErrorResponse(http.StatusBadRequest, rootError, code)
 }
 
-func NewUnauthorizedError(rootError error, message string, code I18nCode) *AppError {
-	return NewAppErrorResponse(http.StatusUnauthorized, rootError, message, code)
+func NewUnauthorizedError(rootError error, code I18nCode) *appError {
+	return NewAppErrorResponse(http.StatusUnauthorized, rootError, code)
 }

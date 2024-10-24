@@ -8,6 +8,6 @@ const (
 	CodeUnauthorizedError   I18nCode = "UNAUTHORIZED"
 )
 
-func (i I18nCode) Error() string {
-	return string(i)
+func (code I18nCode) Error() string {
+	return string(code)
 }
