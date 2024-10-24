@@ -31,6 +31,9 @@ func main() {
 
 	pgStorage := infra.NewPgsqlStorage(db)
 
+	// 3rd party services
+	keycloakAuthSvc := infra.NewKeycloakAuthService()
+
 	// Initialize server
 	e := echo.New()
 
@@ -49,7 +52,7 @@ func main() {
 
 	// Route controller
 	adminHandler.AdminController(adminGroup, pgStorage)
-	userHandler.UserController(v1, pgStorage)
+	userHandler.UserController(v1, pgStorage, keycloakAuthSvc)
 
 	// Start server
 	e.Logger.Fatal(e.Start(os.Getenv("API_HOST")))

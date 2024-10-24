@@ -7,5 +7,5 @@ import (
 )
 
 type AuthService interface {
-	CreateUser(ctx context.Context, user *dto.UserRegistration) error
+	CreateUser(ctx context.Context, user *dto.UserRegistrationInput) error
 }

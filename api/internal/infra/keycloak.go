@@ -8,7 +8,7 @@ import (
 
 type keycloakAuthService struct{}
 
-func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegistration) error {
+func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegistrationInput) error {
 	return nil
 }
 

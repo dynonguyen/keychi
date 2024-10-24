@@ -10,11 +10,11 @@ import (
 )
 
 type RegisterUserUsecase struct {
-	repo        repository.RegisterUserRepository
-	authService service.AuthService
+	repo    repository.RegisterUserRepository
+	authSvc service.AuthService
 }
 
-func (uc *RegisterUserUsecase) RegisterUser(ctx context.Context, user *dto.UserRegistration) error {
+func (uc *RegisterUserUsecase) RegisterUser(ctx context.Context, user *dto.UserRegistrationInput) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(user); err != nil {
@@ -25,16 +25,16 @@ func (uc *RegisterUserUsecase) RegisterUser(ctx context.Context, user *dto.UserR
 		return err
 	}
 
-	if err := uc.authService.CreateUser(ctx, user); err != nil {
+	if err := uc.authSvc.CreateUser(ctx, user); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func NewRegisterUserUsecase(repo repository.RegisterUserRepository, authService service.AuthService) *RegisterUserUsecase {
+func NewRegisterUserUsecase(repo repository.RegisterUserRepository, authSvc service.AuthService) *RegisterUserUsecase {
 	return &RegisterUserUsecase{
-		repo:        repo,
-		authService: authService,
+		repo:    repo,
+		authSvc: authSvc,
 	}
 }
