@@ -1,6 +1,9 @@
 package common
 
-import "net/http"
+import (
+	"errors"
+	"net/http"
+)
 
 type appError struct {
 	Status  int      `json:"status,omitempty"`
@@ -24,6 +27,10 @@ func (e *appError) Error() string {
 }
 
 func NewAppErrorResponse(status int, rootError error, code I18nCode) *appError {
+	if rootError == nil {
+		rootError = errors.New("Unknown error")
+	}
+
 	return &appError{
 		Status:  status,
 		Message: rootError.Error(),
@@ -36,6 +43,18 @@ func NewBadRequestError(rootError error, code I18nCode) *appError {
 	return NewAppErrorResponse(http.StatusBadRequest, rootError, code)
 }
 
+func NewInternalServerError(rootError error, code I18nCode) *appError {
+	return NewAppErrorResponse(http.StatusInternalServerError, rootError, code)
+}
+
 func NewUnauthorizedError(rootError error, code I18nCode) *appError {
 	return NewAppErrorResponse(http.StatusUnauthorized, rootError, code)
+}
+
+func GetAppErrorStatus(err error, defaultStatus int) int {
+	if appErr, ok := err.(*appError); ok {
+		return appErr.Status
+	}
+
+	return defaultStatus
 }

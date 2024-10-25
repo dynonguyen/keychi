@@ -32,13 +32,15 @@ func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistr
 		return common.NewBadRequestError(ErrDuplicatedEmail, CodeDuplicateEmail)
 	}
 
-	err := db.Create(&model.UserModel{
+	if err := db.Create(&model.UserModel{
 		Name:    user.Name,
 		Email:   user.Email,
 		PwdHint: user.PwdHint,
-	}).Error
+	}).Error; err != nil {
+		return common.NewBadRequestError(err, common.CodeInternalServerError)
+	}
 
-	return common.NewBadRequestError(err, common.CodeInternalServerError)
+	return nil
 }
 
 func NewRegisterUserRepo(s *infra.PgsqlStorage) repository.RegisterUserRepository {

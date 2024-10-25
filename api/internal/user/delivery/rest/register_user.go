@@ -24,9 +24,9 @@ func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo
 		uc := usecase.NewRegisterUserUsecase(repo, authSvc)
 
 		if err := uc.RegisterUser(c.Request().Context(), &user); err != nil {
-			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, common.CodeBadRequestError))
+			return c.JSON(common.GetAppErrorStatus(err, http.StatusBadRequest), err)
 		}
 
-		return c.JSON(http.StatusOK, common.NewCreatedResponse("ok"))
+		return c.JSON(http.StatusCreated, common.NewCreatedResponse("ok"))
 	}
 }

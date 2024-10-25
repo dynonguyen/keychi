@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
 	"github.com/dynonguyen/keychi/api/internal/user/repository"
@@ -18,7 +19,7 @@ func (uc *RegisterUserUsecase) RegisterUser(ctx context.Context, user *dto.UserR
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(user); err != nil {
-		return err
+		return common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
 	if err := uc.repo.InsertUser(ctx, user); err != nil {

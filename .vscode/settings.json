@@ -15,6 +15,7 @@
     "minio",
     "nextui",
     "pgsql",
+    "resty",
     "supabase",
     "tailwindcss",
     "toastify",
