@@ -1,0 +1,161 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Keychi | The best password manager for securely storing, managing data such as passwords, passkeys, OTP and credit cards.",
+        "title": "Keychi API",
+        "contact": {
+            "name": "Keychi Team",
+            "url": "https://github.com/dynonguyen/keychi"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/admin/health-check": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Health check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.appResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.appError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "description": "Register a new user",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register a new user",
+                "parameters": [
+                    {
+                        "description": "User registration input",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserRegistrationInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/common.appResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.appError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "common.I18nCode": {
+            "type": "string",
+            "enum": [
+                "INTERNAL_SERVER_ERROR",
+                "BAD_REQUEST",
+                "UNAUTHORIZED"
+            ],
+            "x-enum-varnames": [
+                "CodeInternalServerError",
+                "CodeBadRequestError",
+                "CodeUnauthorizedError"
+            ]
+        },
+        "common.appError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Client error code (i18n key)",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.I18nCode"
+                        }
+                    ]
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.appResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UserRegistrationInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "pwdHint": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "tags": [
+        {
+            "description": "Manage services, health check and other admin tasks.",
+            "name": "Admin"
+        },
+        {
+            "description": "Manage user account, authentication and authorization.",
+            "name": "User"
+        }
+    ]
+}
