@@ -1,3 +1,4 @@
+import { NextUIProvider } from '@nextui-org/react';
 import { RouterProvider } from 'react-router-dom';
 import ErrorBoundaryWrapper from './components/ErrorBoundaryWrapper';
 import { router } from './routes/router';
@@ -5,7 +6,9 @@ import { router } from './routes/router';
 export const App = () => {
   return (
     <ErrorBoundaryWrapper>
-      <RouterProvider router={router} />
+      <NextUIProvider>
+        <RouterProvider router={router} />
+      </NextUIProvider>
     </ErrorBoundaryWrapper>
   );
 };

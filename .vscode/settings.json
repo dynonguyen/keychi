@@ -5,14 +5,19 @@
     "cssnano",
     "daisyui",
     "dompurify",
+    "godotenv",
     "gorm",
     "hookform",
     "iconify",
     "keychi",
+    "keycloak",
     "labstack",
     "minio",
+    "nextui",
     "pgsql",
+    "resty",
     "supabase",
+    "swaggo",
     "tailwindcss",
     "toastify",
     "usecase",
@@ -41,7 +46,8 @@
     "MOCK": { "background": "#B78103", "foreground": "#FFF", "icon": "pencil", "iconColour": "#B78103" },
     "REFACTOR": { "background": "#0FBDCC", "foreground": "#000", "icon": "tools", "iconColour": "#0FBDCC" },
     "TODO": { "background": "#007460", "foreground": "#FFF", "icon": "check-circle", "iconColour": "#007460" },
-    "WORKAROUND": { "icon": "issue-draft", "iconColour": "#fa6b9a", "background": "#fa6b9a", "foreground": "#011C37" }
+    "WORKAROUND": { "icon": "issue-draft", "iconColour": "#fa6b9a", "background": "#fa6b9a", "foreground": "#011C37" },
+    "EXAMPLE": { "icon": "smiley", "iconColour": "#6f1f94", "background": "#6f1f94", "foreground": "#FFF" }
   },
 
   // Fix: https://stackoverflow.com/questions/63477929/visual-studio-code-auto-imports-quick-fix-does-not-work
