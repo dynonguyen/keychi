@@ -17,6 +17,7 @@
     "pgsql",
     "resty",
     "supabase",
+    "swaggo",
     "tailwindcss",
     "toastify",
     "usecase",

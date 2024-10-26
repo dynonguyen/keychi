@@ -14,13 +14,13 @@ func CustomLogger() echo.MiddlewareFunc {
 	var loggerConfig middleware.LoggerConfig
 
 	switch mode {
-	case common.Dev:
+	case common.EnvDev:
 		loggerConfig = middleware.LoggerConfig{
 			Format:           "${time_custom} ${method} ${uri} ${status} ${remote_ip} ${error} ${latency_human}\n",
 			CustomTimeFormat: "02-01-2006 15:04:05", // dd-mm-yyyy hh:mm:ss
 		}
 
-	case common.Prod:
+	case common.EnvProd:
 		loggerConfig = middleware.DefaultLoggerConfig
 	}
 

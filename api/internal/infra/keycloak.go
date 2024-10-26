@@ -3,6 +3,7 @@ package infra
 import (
 	"context"
 	"errors"
+	"net/http"
 	"os"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
@@ -80,7 +81,7 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 		return common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 
-	if resp.StatusCode() != 200 {
+	if resp.StatusCode() != http.StatusCreated {
 		return common.NewInternalServerError(ErrCreatedUserFailed, common.CodeInternalServerError)
 	}
 

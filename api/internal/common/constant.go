@@ -3,6 +3,6 @@ package common
 type EnvMode string
 
 const (
-	Dev  EnvMode = "dev"
-	Prod EnvMode = "prod"
+	EnvDev  EnvMode = "dev"
+	EnvProd EnvMode = "prod"
 )

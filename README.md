@@ -23,10 +23,16 @@ yarn docker:down
 ### Development
 
 ```bash
-# Start keychi api server
-yarn web:dev
+# Start keychi api server (Golang)
+# Install swaggo cli for generating api docs (if not installed)
+go install github.com/swaggo/swag/cmd/swag@latest
+
+# Install gow cli for watching file changes and restart server (if not installed)
+go install github.com/mitranim/gow@latest
+yarn api:dev
 
 # Start keychi web app
+yarn web:dev
 
 # Start keychi mobile app
 
@@ -37,7 +43,9 @@ yarn web:dev
 
 - Minio console: http://localhost:9000
 - Postgres server: http://localhost:5432
+- Keycloak: http://localhost:8080
 - Keychi web: http://localhost:8888
+- Keychi API: http://localhost:3000/api/v1/docs/index.html
 
 ## 🐥 Documentation
 

@@ -8,6 +8,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Summary	Health check
+// @Description
+// @Tags		Admin
+// @Success	200	{object}	common.appResponse
+// @Failure	401	{object}	common.appError
+// @Router		/admin/health-check [post]
+// @Security	Bearer
 func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		connection := struct {
@@ -18,6 +25,6 @@ func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {
 			connection.DbConnected = false
 		}
 
-		return c.JSON(http.StatusOK, common.NewOkResponse(connection))
+		return c.JSON(http.StatusOK, common.NewOkResponse(&connection))
 	}
 }

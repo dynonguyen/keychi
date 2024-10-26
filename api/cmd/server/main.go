@@ -4,7 +4,10 @@ import (
 	"log"
 	"os"
 
+	"github.com/dynonguyen/keychi/api/docs"
 	adminHandler "github.com/dynonguyen/keychi/api/internal/admin/delivery/rest"
+	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/dynonguyen/keychi/api/internal/config"
 	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/dynonguyen/keychi/api/internal/middleware"
 	userHandler "github.com/dynonguyen/keychi/api/internal/user/delivery/rest"
@@ -44,7 +47,8 @@ func main() {
 	e.Use(middleware.CustomLogger())
 
 	// Routes
-	v1 := e.Group(os.Getenv("BASE_URL") + "/v1")
+	basePath := os.Getenv("BASE_URL") + "/v1"
+	v1 := e.Group(basePath)
 	adminGroup := v1.Group("/admin")
 
 	// Route middleware
@@ -53,6 +57,12 @@ func main() {
 	// Route controller
 	adminHandler.AdminController(adminGroup, pgStorage)
 	userHandler.UserController(v1, pgStorage, keycloakAuthSvc)
+
+	// API docs
+	if os.Getenv("ENV_MODE") != string(common.EnvProd) {
+		swaggerHandler := config.SwaggerConfig(docs.SwaggerInfo, basePath)
+		v1.GET("/docs/*", swaggerHandler)
+	}
 
 	// Start server
 	e.Logger.Fatal(e.Start(os.Getenv("API_HOST")))
