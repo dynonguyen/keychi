@@ -8,6 +8,7 @@ import (
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
+	"github.com/dynonguyen/keychi/api/internal/user/mock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +27,6 @@ var mockStorage = []*dto.UserRegistrationInput{}
 
 type mockTransactionManager struct{}
 type mockRepository struct{}
-type mockAuthService struct{}
 
 func (m *mockTransactionManager) WithTransaction(fn func() error) error {
 	return fn()
@@ -42,15 +42,11 @@ func (m *mockRepository) InsertUser(ctx context.Context, user *dto.UserRegistrat
 	return nil
 }
 
-func (m *mockAuthService) CreateUser(ctx context.Context, user *dto.UserRegistrationInput) error {
-	return nil
-}
-
 func TestRegisterUser(t *testing.T) {
 	assert := assert.New(t)
 
 	mockRepo := &mockRepository{}
-	mockAuth := &mockAuthService{}
+	mockAuth := mock.NewMockAuthService()
 	mockTxm := &mockTransactionManager{}
 
 	for index, tc := range testCases {

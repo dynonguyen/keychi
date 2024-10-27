@@ -11,8 +11,8 @@ import (
 // @Summary	Health check
 // @Description
 // @Tags		Admin
-// @Success	200	{object}	common.appResponse
-// @Failure	401	{object}	common.appError
+// @Success	200	{object}	common.AppResponse
+// @Failure	401	{object}	common.AppError
 // @Router		/admin/health-check [post]
 // @Security	Bearer
 func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {

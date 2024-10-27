@@ -33,13 +33,46 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.appResponse"
+                            "$ref": "#/definitions/common.AppResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.appError"
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "dto.UserLoginInput",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
                         }
                     }
                 }
@@ -47,14 +80,13 @@ const docTemplate = `{
         },
         "/user": {
             "post": {
-                "description": "Register a new user",
                 "tags": [
                     "User"
                 ],
                 "summary": "Register a new user",
                 "parameters": [
                     {
-                        "description": "User registration input",
+                        "description": "dto.UserRegistrationInput",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -67,13 +99,13 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/common.appResponse"
+                            "$ref": "#/definitions/common.AppResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.appError"
+                            "$ref": "#/definitions/common.AppError"
                         }
                     }
                 }
@@ -81,20 +113,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "common.I18nCode": {
-            "type": "string",
-            "enum": [
-                "INTERNAL_SERVER_ERROR",
-                "BAD_REQUEST",
-                "UNAUTHORIZED"
-            ],
-            "x-enum-varnames": [
-                "CodeInternalServerError",
-                "CodeBadRequestError",
-                "CodeUnauthorizedError"
-            ]
-        },
-        "common.appError": {
+        "common.AppError": {
             "type": "object",
             "properties": {
                 "code": {
@@ -113,12 +132,40 @@ const docTemplate = `{
                 }
             }
         },
-        "common.appResponse": {
+        "common.AppResponse": {
             "type": "object",
             "properties": {
                 "data": {},
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "common.I18nCode": {
+            "type": "string",
+            "enum": [
+                "INTERNAL_SERVER_ERROR",
+                "BAD_REQUEST",
+                "UNAUTHORIZED"
+            ],
+            "x-enum-varnames": [
+                "CodeInternalServerError",
+                "CodeBadRequestError",
+                "CodeUnauthorizedError"
+            ]
+        },
+        "dto.UserLoginInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         },
