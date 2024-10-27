@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	ErrCreatedUserFailed = errors.New("Failed to create user")
+	ErrCreatedUserFailed = errors.New("failed to create user")
 )
 
 type keycloakAuthService struct {
@@ -81,7 +81,8 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 		return common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 
-	if resp.StatusCode() != http.StatusCreated {
+	status := resp.StatusCode()
+	if status != http.StatusCreated && status != http.StatusOK {
 		return common.NewInternalServerError(ErrCreatedUserFailed, common.CodeInternalServerError)
 	}
 

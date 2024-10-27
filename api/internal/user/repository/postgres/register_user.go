@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	ErrDuplicatedEmail = errors.New("Email already existed")
+	ErrDuplicatedEmail = errors.New("email already existed")
 )
 
 type registerUserRepo struct {
@@ -25,7 +25,7 @@ type registerUserRepo struct {
 }
 
 func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) error {
-	db := r.storage.DB
+	db := r.storage.GetInstance()
 
 	// Check if user existed
 	if result := db.Where("email = ?", user.Email).Take(&model.UserModel{}); result.Error != gorm.ErrRecordNotFound {
