@@ -33,7 +33,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.AppResponse"
+                            "$ref": "#/definitions/rest.HealthCheckResponse"
                         }
                     },
                     "401": {
@@ -53,10 +53,9 @@ const docTemplate = `{
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "dto.UserLoginInput",
+                        "description": "User login input",
                         "name": "user",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/dto.UserLoginInput"
                         }
@@ -66,7 +65,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.AppResponse"
+                            "$ref": "#/definitions/dto.LoginResponse"
                         }
                     },
                     "400": {
@@ -99,7 +98,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/common.AppResponse"
+                            "$ref": "#/definitions/rest.RegisterUserResponse"
                         }
                     },
                     "400": {
@@ -132,15 +131,6 @@ const docTemplate = `{
                 }
             }
         },
-        "common.AppResponse": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "status": {
-                    "type": "integer"
-                }
-            }
-        },
         "common.I18nCode": {
             "type": "string",
             "enum": [
@@ -153,6 +143,9 @@ const docTemplate = `{
                 "CodeBadRequestError",
                 "CodeUnauthorizedError"
             ]
+        },
+        "dto.LoginResponse": {
+            "type": "object"
         },
         "dto.UserLoginInput": {
             "type": "object",
@@ -190,6 +183,12 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "rest.HealthCheckResponse": {
+            "type": "object"
+        },
+        "rest.RegisterUserResponse": {
+            "type": "object"
         }
     },
     "securityDefinitions": {

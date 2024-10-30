@@ -14,8 +14,8 @@ import (
 
 // @Summary Login
 // @Tags User
-// @Param user body dto.UserLoginInput true "dto.UserLoginInput"
-// @Success 200 {object} common.AppResponse
+// @Param user body dto.UserLoginInput false "User login input"
+// @Success 200 {object} dto.LoginResponse
 // @Failure 400 {object} common.AppError
 // @Router /login [post]
 func HandleLogin(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {
@@ -29,10 +29,12 @@ func HandleLogin(s *infra.PgsqlStorage, authSvc service.AuthService) echo.Handle
 		repo := postgres.NewLoginRepository(s)
 		uc := usecase.NewLoginUsecase(repo, authSvc)
 
-		if err := uc.Login(c.Request().Context(), &user); err != nil {
+		userToken, err := uc.Login(c.Request().Context(), &user)
+
+		if err != nil {
 			return c.JSON(common.GetAppErrorStatus(err, http.StatusUnauthorized), err)
 		}
 
-		return c.JSON(http.StatusOK, common.NewOkResponse("ok"))
+		return c.JSON(http.StatusOK, common.NewOkResponse(userToken))
 	}
 }

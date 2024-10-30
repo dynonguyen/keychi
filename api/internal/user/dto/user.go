@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/dynonguyen/keychi/api/internal/common"
+
 type UserRegistrationInput struct {
 	Name     string `json:"name" validate:"required" gorm:"column:name"`
 	Email    string `json:"email" validate:"required,email" gorm:"column:email"`
@@ -18,3 +20,5 @@ type UserToken struct {
 	ExpireIn     int    `json:"expires_in"`
 	TokenType    string `json:"token_type"`
 }
+
+type LoginResponse common.AppResponse[UserToken]

@@ -3,23 +3,24 @@ package rest
 import (
 	"net/http"
 
+	"github.com/dynonguyen/keychi/api/internal/admin/dto"
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/labstack/echo/v4"
 )
 
+type HealthCheckResponse = common.AppResponse[dto.HealthCheckResponse]
+
 // @Summary	Health check
 // @Description
 // @Tags		Admin
-// @Success	200	{object}	common.AppResponse
+// @Success	200	{object}	HealthCheckResponse
 // @Failure	401	{object}	common.AppError
 // @Router		/admin/health-check [post]
 // @Security	Bearer
 func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		connection := struct {
-			DbConnected bool `json:"dbConnected"`
-		}{DbConnected: true}
+		connection := dto.HealthCheckResponse{DbConnected: true}
 
 		if sqlDb, err := s.DB.DB(); err != nil || sqlDb.Ping() != nil {
 			connection.DbConnected = false

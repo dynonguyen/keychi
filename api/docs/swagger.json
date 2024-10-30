@@ -29,7 +29,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.AppResponse"
+                            "$ref": "#/definitions/rest.HealthCheckResponse"
                         }
                     },
                     "401": {
@@ -49,10 +49,9 @@
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "dto.UserLoginInput",
+                        "description": "User login input",
                         "name": "user",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/dto.UserLoginInput"
                         }
@@ -62,7 +61,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.AppResponse"
+                            "$ref": "#/definitions/dto.LoginResponse"
                         }
                     },
                     "400": {
@@ -95,7 +94,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/common.AppResponse"
+                            "$ref": "#/definitions/rest.RegisterUserResponse"
                         }
                     },
                     "400": {
@@ -128,15 +127,6 @@
                 }
             }
         },
-        "common.AppResponse": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "status": {
-                    "type": "integer"
-                }
-            }
-        },
         "common.I18nCode": {
             "type": "string",
             "enum": [
@@ -149,6 +139,9 @@
                 "CodeBadRequestError",
                 "CodeUnauthorizedError"
             ]
+        },
+        "dto.LoginResponse": {
+            "type": "object"
         },
         "dto.UserLoginInput": {
             "type": "object",
@@ -186,6 +179,12 @@
                     "type": "string"
                 }
             }
+        },
+        "rest.HealthCheckResponse": {
+            "type": "object"
+        },
+        "rest.RegisterUserResponse": {
+            "type": "object"
         }
     },
     "securityDefinitions": {
