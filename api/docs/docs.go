@@ -33,7 +33,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/rest.HealthCheckResponse"
+                            "$ref": "#/definitions/dto.HealthCheckResponse"
                         }
                     },
                     "401": {
@@ -65,7 +65,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.LoginResponse"
+                            "$ref": "#/definitions/dto.UserToken"
                         }
                     },
                     "400": {
@@ -98,7 +98,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/rest.RegisterUserResponse"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -144,8 +144,13 @@ const docTemplate = `{
                 "CodeUnauthorizedError"
             ]
         },
-        "dto.LoginResponse": {
-            "type": "object"
+        "dto.HealthCheckResponse": {
+            "type": "object",
+            "properties": {
+                "dbConnected": {
+                    "type": "boolean"
+                }
+            }
         },
         "dto.UserLoginInput": {
             "type": "object",
@@ -184,11 +189,22 @@ const docTemplate = `{
                 }
             }
         },
-        "rest.HealthCheckResponse": {
-            "type": "object"
-        },
-        "rest.RegisterUserResponse": {
-            "type": "object"
+        "dto.UserToken": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "integer"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "token_type": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {

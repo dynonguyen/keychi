@@ -15,7 +15,7 @@ import (
 // @Summary Login
 // @Tags User
 // @Param user body dto.UserLoginInput false "User login input"
-// @Success 200 {object} dto.LoginResponse
+// @Success 200 {object} dto.UserToken
 // @Failure 400 {object} common.AppError
 // @Router /login [post]
 func HandleLogin(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {

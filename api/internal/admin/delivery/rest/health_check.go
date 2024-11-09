@@ -9,12 +9,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type HealthCheckResponse = common.AppResponse[dto.HealthCheckResponse]
-
 // @Summary	Health check
 // @Description
 // @Tags		Admin
-// @Success	200	{object}	HealthCheckResponse
+// @Success	200	{object}	dto.HealthCheckResponse
 // @Failure	401	{object}	common.AppError
 // @Router		/admin/health-check [post]
 // @Security	Bearer

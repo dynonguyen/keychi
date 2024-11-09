@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/dynonguyen/keychi/api/docs"
 	adminHandler "github.com/dynonguyen/keychi/api/internal/admin/delivery/rest"
@@ -14,6 +15,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
+	"golang.org/x/time/rate"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -44,6 +46,12 @@ func main() {
 	e.HTTPErrorHandler = middleware.HTTPErrorHandler
 
 	e.Use(echoMiddleware.Recover())
+
+	if (os.Getenv("RATE_LIMIT")) != "" {
+		limit, _ := strconv.ParseInt(os.Getenv("RATE_LIMIT"), 10, 0)
+		e.Use(echoMiddleware.RateLimiter(echoMiddleware.NewRateLimiterMemoryStore(rate.Limit(limit))))
+	}
+
 	e.Use(middleware.CustomLogger())
 
 	// Routes

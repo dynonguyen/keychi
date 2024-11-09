@@ -20,7 +20,10 @@ definitions:
     - CodeInternalServerError
     - CodeBadRequestError
     - CodeUnauthorizedError
-  dto.LoginResponse:
+  dto.HealthCheckResponse:
+    properties:
+      dbConnected:
+        type: boolean
     type: object
   dto.UserLoginInput:
     properties:
@@ -47,9 +50,16 @@ definitions:
     - name
     - password
     type: object
-  rest.HealthCheckResponse:
-    type: object
-  rest.RegisterUserResponse:
+  dto.UserToken:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      refresh_token:
+        type: string
+      token_type:
+        type: string
     type: object
 info:
   contact:
@@ -66,7 +76,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/rest.HealthCheckResponse'
+            $ref: '#/definitions/dto.HealthCheckResponse'
         "401":
           description: Unauthorized
           schema:
@@ -88,7 +98,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.LoginResponse'
+            $ref: '#/definitions/dto.UserToken'
         "400":
           description: Bad Request
           schema:
@@ -109,7 +119,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/rest.RegisterUserResponse'
+            type: string
         "400":
           description: Bad Request
           schema:

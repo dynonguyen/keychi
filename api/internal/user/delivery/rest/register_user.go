@@ -12,12 +12,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type RegisterUserResponse = common.AppResponse[string]
-
 // @Summary Register a new user
 // @Tags User
 // @Param user body dto.UserRegistrationInput true "dto.UserRegistrationInput"
-// @Success 201 {object} RegisterUserResponse
+// @Success 201 {object} string
 // @Failure 400 {object} common.AppError
 // @Router /user [post]
 func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {
