@@ -23,16 +23,9 @@ type keycloakAuthService struct {
 	clientSecret string
 }
 
-type keycloakToken struct {
-	AccessToken string `json:"access_token"`
-	ExpiresIn   int    `json:"expires_in"`
-	TokenType   string `json:"token_type"`
-	Scope       string `json:"scope"`
-}
-
-func (k *keycloakAuthService) getClientToken() (*keycloakToken, error) {
+func (k *keycloakAuthService) getClientToken() (*dto.UserToken, error) {
 	client := resty.New()
-	var result keycloakToken
+	var result dto.UserToken
 
 	_, err := client.R().
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
@@ -87,6 +80,29 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 	}
 
 	return nil
+}
+
+func (k *keycloakAuthService) GetUserToken(ctx context.Context, email string, password string) (*dto.UserToken, error) {
+	client := resty.New()
+	var result dto.UserToken
+
+	_, err := client.R().
+		SetHeader("Content-Type", "application/x-www-form-urlencoded").
+		SetFormData(map[string]string{
+			"client_id":     k.clientId,
+			"client_secret": k.clientSecret,
+			"username":      email,
+			"password":      password,
+			"grant_type":    "password",
+		}).
+		SetResult(&result).
+		Post(k.url + "/realms/" + k.realm + "/protocol/openid-connect/token")
+
+	if err != nil {
+		return nil, common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	return &result, nil
 }
 
 func NewKeycloakAuthService() *keycloakAuthService {

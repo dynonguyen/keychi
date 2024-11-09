@@ -12,27 +12,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// @Summary Register a new user
+// @Summary Login
 // @Tags User
-// @Param user body dto.UserRegistrationInput true "dto.UserRegistrationInput"
-// @Success 201 {object} string
+// @Param user body dto.UserLoginInput false "User login input"
+// @Success 200 {object} dto.UserToken
 // @Failure 400 {object} common.AppError
-// @Router /user [post]
-func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {
+// @Router /login [post]
+func HandleLogin(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var user dto.UserRegistrationInput
+		var user dto.UserLoginInput
 
 		if err := (&echo.DefaultBinder{}).BindBody(c, &user); err != nil {
 			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, common.CodeBadRequestError))
 		}
 
-		repo := postgres.NewRegisterUserRepo(s)
-		uc := usecase.NewRegisterUserUsecase(s, repo, authSvc)
+		repo := postgres.NewLoginRepository(s)
+		uc := usecase.NewLoginUsecase(repo, authSvc)
 
-		if err := uc.RegisterUser(c.Request().Context(), &user); err != nil {
-			return c.JSON(common.GetAppErrorStatus(err, http.StatusBadRequest), err)
+		userToken, err := uc.Login(c.Request().Context(), &user)
+
+		if err != nil {
+			return c.JSON(common.GetAppErrorStatus(err, http.StatusUnauthorized), err)
 		}
 
-		return c.JSON(http.StatusCreated, common.NewCreatedResponse("ok"))
+		return c.JSON(http.StatusOK, common.NewOkResponse(userToken))
 	}
 }

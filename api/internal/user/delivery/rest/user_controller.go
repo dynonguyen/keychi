@@ -8,4 +8,5 @@ import (
 
 func UserController(g *echo.Group, storage *infra.PgsqlStorage, authSvc service.AuthService) {
 	g.POST("/user", HandleRegisterUser(storage, authSvc))
+	g.POST("/login", HandleLogin(storage, authSvc))
 }

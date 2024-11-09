@@ -33,13 +33,45 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.appResponse"
+                            "$ref": "#/definitions/dto.HealthCheckResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.appError"
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "User login input",
+                        "name": "user",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserToken"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
                         }
                     }
                 }
@@ -47,14 +79,13 @@ const docTemplate = `{
         },
         "/user": {
             "post": {
-                "description": "Register a new user",
                 "tags": [
                     "User"
                 ],
                 "summary": "Register a new user",
                 "parameters": [
                     {
-                        "description": "User registration input",
+                        "description": "dto.UserRegistrationInput",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -67,13 +98,13 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/common.appResponse"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.appError"
+                            "$ref": "#/definitions/common.AppError"
                         }
                     }
                 }
@@ -81,20 +112,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "common.I18nCode": {
-            "type": "string",
-            "enum": [
-                "INTERNAL_SERVER_ERROR",
-                "BAD_REQUEST",
-                "UNAUTHORIZED"
-            ],
-            "x-enum-varnames": [
-                "CodeInternalServerError",
-                "CodeBadRequestError",
-                "CodeUnauthorizedError"
-            ]
-        },
-        "common.appError": {
+        "common.AppError": {
             "type": "object",
             "properties": {
                 "code": {
@@ -113,12 +131,39 @@ const docTemplate = `{
                 }
             }
         },
-        "common.appResponse": {
+        "common.I18nCode": {
+            "type": "string",
+            "enum": [
+                "INTERNAL_SERVER_ERROR",
+                "BAD_REQUEST",
+                "UNAUTHORIZED"
+            ],
+            "x-enum-varnames": [
+                "CodeInternalServerError",
+                "CodeBadRequestError",
+                "CodeUnauthorizedError"
+            ]
+        },
+        "dto.HealthCheckResponse": {
             "type": "object",
             "properties": {
-                "data": {},
-                "status": {
-                    "type": "integer"
+                "dbConnected": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dto.UserLoginInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         },
@@ -140,6 +185,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "pwdHint": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserToken": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "integer"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "token_type": {
                     "type": "string"
                 }
             }
