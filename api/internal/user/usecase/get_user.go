@@ -12,11 +12,15 @@ type getUserUsecase struct {
 	repo repository.UserInfoRepository
 }
 
+var (
+	codeUserNodFound common.I18nCode = "USER_NOT_FOUND"
+)
+
 func (uc *getUserUsecase) GetUser(ctx context.Context, email string) (*dto.UserInfo, error) {
 	user, err := uc.repo.FindUserByEmail(ctx, email)
 
 	if err != nil || user == nil {
-		return nil, common.NewBadRequestError(err, "USER_NOT_FOUND")
+		return nil, common.NewBadRequestError(err, codeUserNodFound)
 	}
 
 	return &dto.UserInfo{

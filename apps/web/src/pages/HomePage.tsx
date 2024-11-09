@@ -7,6 +7,7 @@ export const HomePage = () => {
   const { t } = useTranslation();
 
   usePageTitle(t('pageTitle.home'));
+
   return (
     <div>
       <p className="text-xl">Home page</p>

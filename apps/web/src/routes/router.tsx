@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { PATH } from '../constants/path';
+import AuthGuard from '../guards/AuthGuard';
 import MainLayout from '../layouts/main';
 import NotFoundPage from '../pages/NotFoundPage';
 import ServerErrorPage from '../pages/ServerErrorPage';
@@ -13,7 +14,11 @@ export const router = createBrowserRouter([
   // Protected routes
   {
     errorElement: <ServerErrorPage />,
-    element: <MainLayout />,
+    element: (
+      <AuthGuard>
+        <MainLayout />
+      </AuthGuard>
+    ),
     children: [{ path: PATH.HOME, element: <HomePage /> }]
   },
 

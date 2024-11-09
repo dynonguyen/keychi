@@ -12,13 +12,17 @@ type userInfoRepository struct {
 	storage *infra.PgsqlStorage
 }
 
+var (
+	codeUserNodFound common.I18nCode = "USER_NOT_FOUND"
+)
+
 func (r *userInfoRepository) FindUserByEmail(ctx context.Context, email string) (*model.UserModel, error) {
 	db := r.storage.DB
 	var user model.UserModel
 
 	result := db.Where("email = ?", email).Take(&user)
 	if result.Error != nil {
-		return nil, common.NewBadRequestError(result.Error, "USER_NOT_FOUND")
+		return nil, common.NewBadRequestError(result.Error, codeUserNodFound)
 	}
 
 	return &user, nil

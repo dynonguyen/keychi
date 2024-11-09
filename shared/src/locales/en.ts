@@ -2,7 +2,8 @@ const en = {
   pageTitle: {
     home: 'Home page',
     notFound: 'Page not found',
-    serverError: 'Server error'
+    serverError: 'Server error',
+    login: 'Login'
   },
   pageResultAction: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.',
   notFound: {
@@ -17,6 +18,13 @@ const en = {
     light: 'Light',
     dark: 'Dark',
     system: 'System'
+  },
+  error: {
+    INTERNAL_SERVER_ERROR: 'Internal server error',
+    BAD_REQUEST: 'Bad request',
+    UNAUTHORIZED: 'Unauthorized',
+    USER_NOT_FOUND: 'User not found',
+    EMAIL_DUPLICATE: 'Email already exists'
   }
 } as const;
 

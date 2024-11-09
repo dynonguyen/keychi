@@ -16,12 +16,16 @@ type registerUserRepo struct {
 	storage *infra.PgsqlStorage
 }
 
+var (
+	codeEmailDuplicate common.I18nCode = "EMAIL_DUPLICATE"
+)
+
 func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) error {
 	db := r.storage.GetInstance()
 
 	// Check if user existed
 	if result := db.Where("email = ?", user.Email).Take(&model.UserModel{}); result.Error != gorm.ErrRecordNotFound {
-		return common.NewBadRequestError(errors.New("email already existed"), "EMAIL_DUPLICATE")
+		return common.NewBadRequestError(errors.New("email already existed"), codeEmailDuplicate)
 	}
 
 	if err := db.Create(&model.UserModel{
