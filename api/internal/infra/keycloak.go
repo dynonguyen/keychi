@@ -7,13 +7,10 @@ import (
 	"os"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
 	"github.com/dynonguyen/keychi/api/internal/util"
 	"github.com/go-resty/resty/v2"
-)
-
-var (
-	ErrCreatedUserFailed = errors.New("failed to create user")
 )
 
 type keycloakAuthService struct {
@@ -76,7 +73,7 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 
 	status := resp.StatusCode()
 	if status != http.StatusCreated && status != http.StatusOK {
-		return common.NewInternalServerError(ErrCreatedUserFailed, common.CodeInternalServerError)
+		return common.NewInternalServerError(errors.New("failed to create user"), common.CodeInternalServerError)
 	}
 
 	return nil
@@ -84,11 +81,16 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 
 func (k *keycloakAuthService) GetUserToken(ctx context.Context, email string, password string) (*dto.UserToken, error) {
 	client := resty.New()
-	var result dto.UserToken
+	var result struct {
+		AccessToken  string `json:"access_token"`
+		RefreshToken string `json:"refresh_token"`
+		ExpiresIn    int    `json:"expires_in"`
+		TokenType    string `json:"token_type"`
+	}
 
 	_, err := client.R().
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
-		SetFormData(map[string]string{
+		SetFormData(common.JsonString{
 			"client_id":     k.clientId,
 			"client_secret": k.clientSecret,
 			"username":      email,
@@ -100,6 +102,32 @@ func (k *keycloakAuthService) GetUserToken(ctx context.Context, email string, pa
 
 	if err != nil {
 		return nil, common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	return &dto.UserToken{
+		AccessToken:  result.AccessToken,
+		RefreshToken: result.RefreshToken,
+		ExpireIn:     result.ExpiresIn,
+		TokenType:    result.TokenType,
+	}, nil
+}
+
+func (k *keycloakAuthService) DecodeToken(ctx context.Context, token string) (*service.TokenInfo, error) {
+	client := resty.New()
+	var result service.TokenInfo
+
+	_, err := client.R().
+		SetHeader("Content-Type", "application/x-www-form-urlencoded").
+		SetFormData(common.JsonString{
+			"client_id":     k.clientId,
+			"client_secret": k.clientSecret,
+			"token":         token,
+		}).
+		SetResult(&result).
+		Post(k.url + "/realms/" + k.realm + "/protocol/openid-connect/token/introspect")
+
+	if err != nil {
+		return nil, err
 	}
 
 	return &result, nil

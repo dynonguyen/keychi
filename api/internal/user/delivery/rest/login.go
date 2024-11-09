@@ -7,7 +7,6 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
-	"github.com/dynonguyen/keychi/api/internal/user/repository/postgres"
 	"github.com/dynonguyen/keychi/api/internal/user/usecase"
 	"github.com/labstack/echo/v4"
 )
@@ -26,8 +25,7 @@ func HandleLogin(s *infra.PgsqlStorage, authSvc service.AuthService) echo.Handle
 			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, common.CodeBadRequestError))
 		}
 
-		repo := postgres.NewLoginRepository(s)
-		uc := usecase.NewLoginUsecase(repo, authSvc)
+		uc := usecase.NewLoginUsecase(authSvc)
 
 		userToken, err := uc.Login(c.Request().Context(), &user)
 
@@ -35,6 +33,6 @@ func HandleLogin(s *infra.PgsqlStorage, authSvc service.AuthService) echo.Handle
 			return c.JSON(common.GetAppErrorStatus(err, http.StatusUnauthorized), err)
 		}
 
-		return c.JSON(http.StatusOK, common.NewOkResponse(userToken))
+		return c.JSON(http.StatusOK, common.NewOkResponse(&userToken))
 	}
 }

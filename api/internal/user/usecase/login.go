@@ -7,17 +7,11 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
-	"github.com/dynonguyen/keychi/api/internal/user/repository"
 )
 
 type loginUsecase struct {
-	repo    repository.LoginRepository
 	authSvc service.AuthService
 }
-
-var (
-	ErrInvalidUser = errors.New("invalid user or password")
-)
 
 func (uc *loginUsecase) Login(ctx context.Context, user *dto.UserLoginInput) (*dto.UserToken, error) {
 	userToken, err := uc.authSvc.GetUserToken(ctx, user.Email, user.Password)
@@ -27,15 +21,12 @@ func (uc *loginUsecase) Login(ctx context.Context, user *dto.UserLoginInput) (*d
 	}
 
 	if userToken != nil && userToken.AccessToken == "" {
-		return nil, common.NewUnauthorizedError(ErrInvalidUser, common.CodeUnauthorizedError)
+		return nil, common.NewUnauthorizedError(errors.New("invalid user or password"), common.CodeUnauthorizedError)
 	}
 
 	return userToken, nil
 }
 
-func NewLoginUsecase(repo repository.LoginRepository, authSvc service.AuthService) *loginUsecase {
-	return &loginUsecase{
-		repo:    repo,
-		authSvc: authSvc,
-	}
+func NewLoginUsecase(authSvc service.AuthService) *loginUsecase {
+	return &loginUsecase{authSvc: authSvc}
 }

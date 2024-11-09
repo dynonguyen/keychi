@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   KEYCHI_BASE_URL: string;
   KEYCHI_ASSET_URL: string;
+  KEYCHI_API_URL: string;
 }
 
 /** Access vite env via key */

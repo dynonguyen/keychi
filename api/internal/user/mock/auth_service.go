@@ -3,6 +3,7 @@ package mock
 import (
 	"context"
 
+	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
 )
 
@@ -13,6 +14,10 @@ func (m *mockAuthService) CreateUser(ctx context.Context, user *dto.UserRegistra
 }
 
 func (m *mockAuthService) GetUserToken(ctx context.Context, email string, password string) (*dto.UserToken, error) {
+	return nil, nil
+}
+
+func (m *mockAuthService) DecodeToken(ctx context.Context, token string) (*service.TokenInfo, error) {
 	return nil, nil
 }
 
