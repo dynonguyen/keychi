@@ -24,3 +24,14 @@ export type EnumValue<T extends string | number | bigint | boolean | null | unde
   `${T}` extends `${infer N extends string}` ? N : never;
 
 export type TFunction = typeof i18next.t;
+
+export type ApiErrorResponse = {
+  status: number;
+  message: string;
+  code: string;
+};
+
+export type ApiResponse<T = unknown> = {
+  data: T;
+  status: number;
+};

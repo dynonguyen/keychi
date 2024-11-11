@@ -24,7 +24,8 @@ const en = {
     BAD_REQUEST: 'Bad request',
     UNAUTHORIZED: 'Unauthorized',
     USER_NOT_FOUND: 'User not found',
-    EMAIL_DUPLICATE: 'Email already exists'
+    EMAIL_DUPLICATE: 'Email already exists',
+    INVALID_USER: 'Invalid email or password'
   }
 } as const;
 

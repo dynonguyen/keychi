@@ -17,7 +17,12 @@
     "baseUrl": ".",
     "types": ["./shared/src/types/i18next.d.ts"],
     "paths": {
-      "@shared/*": ["shared/src/*"]
+      "@shared/constants": ["shared/src/constants/index.ts"],
+      "@shared/utils": ["shared/src/utils/index.ts"],
+      "@shared/locales": ["shared/src/locales/index.ts"],
+      "@shared/types": ["shared/src/types/index.type.ts"],
+      "@shared/components/react": ["shared/src/components/react/index.ts"],
+      "@shared/hooks/react": ["shared/src/hooks/react/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,5 @@
-import type { User } from '@shared/types/entity.type';
+import { LS_KEY } from '@shared/constants';
+import { User } from '@shared/types';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { PATH } from '../constants/path';
@@ -12,7 +13,7 @@ type AuthState = User & {
 
 type AuthAction = {
   setAuth(auth: Partial<AuthState>): void;
-  logout(): void;
+  logout(shouldRedirect?: boolean): void;
 };
 
 export type AuthStore = AuthState & AuthAction;
@@ -27,9 +28,11 @@ export const useAuthStore = createWithEqualityFn<AuthStore>(
   (set) => ({
     ...defaultStore,
     setAuth: set,
-    logout() {
+    logout(shouldRedirect = true) {
+      // TODO: Call API logout
+      localStorage.removeItem(LS_KEY.ACCESS_TOKEN);
       set(defaultStore);
-      location.pathname = PATH.LOGIN;
+      if (shouldRedirect) location.pathname = PATH.LOGIN;
     }
   }),
   isEqual

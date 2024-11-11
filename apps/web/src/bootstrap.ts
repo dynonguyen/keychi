@@ -1,6 +1,6 @@
 import './main.css';
 
-import { i18nInit } from '@shared/locales/i18n';
+import { i18nInit } from '@shared/locales';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 

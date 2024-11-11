@@ -24,7 +24,8 @@ const vi = {
     BAD_REQUEST: 'Yêu cầu không hợp lệ',
     UNAUTHORIZED: 'Không có quyền truy cập',
     USER_NOT_FOUND: 'Người dùng không tồn tại',
-    EMAIL_DUPLICATE: 'Email đã tồn tại'
+    EMAIL_DUPLICATE: 'Email đã tồn tại',
+    INVALID_USER: 'Email hoặc mật khẩu không đúng'
   }
 } as const;
 

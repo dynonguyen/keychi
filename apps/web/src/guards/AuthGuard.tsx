@@ -1,10 +1,11 @@
-import { ReactChildren } from '@shared/types/react.type';
+import { ReactChildren } from '@shared/types';
 import { Navigate } from 'react-router-dom';
 import GlobalLoading from '../components/GlobalLoading';
 import { PATH } from '../constants/path';
 import useGetMe from '../hooks/useGetMe';
 import { useAuthStore } from '../stores/auth';
 
+// Protect the route from unauthorized access
 export const AuthGuard = ({ children }: ReactChildren) => {
   const { isLoading, isAuthenticated } = useAuthStore();
 

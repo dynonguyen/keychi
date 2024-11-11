@@ -1,21 +1,25 @@
 import { Button } from '@nextui-org/react';
+import { Flex } from '@shared/components/react';
 import { useTranslation } from 'react-i18next';
 import ThemeController from '../components/ThemeController';
 import usePageTitle from '../hooks/usePageTitle';
+import { useAuthStore } from '../stores/auth';
 
 export const HomePage = () => {
   const { t } = useTranslation();
+  const { name, logout } = useAuthStore();
 
   usePageTitle(t('pageTitle.home'));
 
   return (
-    <div>
+    <Flex className="gap-2 items-start" wrap center>
       <p className="text-xl">Home page</p>
-      <Button variant="solid" color="primary">
-        Hello
-      </Button>
-      <ThemeController />
-    </div>
+      <div>
+        <ThemeController />
+      </div>
+      <Button onClick={() => logout()}>Logout</Button>
+      <div>User: {name}</div>
+    </Flex>
   );
 };
 

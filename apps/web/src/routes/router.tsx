@@ -1,7 +1,9 @@
+import { LoadModule } from '@shared/components/react';
 import React from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { PATH } from '../constants/path';
 import AuthGuard from '../guards/AuthGuard';
+import LoginGuard from '../guards/LoginGuard';
 import MainLayout from '../layouts/main';
 import NotFoundPage from '../pages/NotFoundPage';
 import ServerErrorPage from '../pages/ServerErrorPage';
@@ -25,8 +27,21 @@ export const router = createBrowserRouter([
   // Public routes
   {
     errorElement: <ServerErrorPage />,
-    element: <Outlet />,
-    children: [{ path: PATH.LOGIN, element: <LoginPage /> }]
+    element: (
+      <LoadModule>
+        <Outlet />
+      </LoadModule>
+    ),
+    children: [
+      {
+        path: PATH.LOGIN,
+        element: (
+          <LoginGuard>
+            <LoginPage />
+          </LoginGuard>
+        )
+      }
+    ]
   },
 
   // Not found

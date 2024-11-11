@@ -1,4 +1,4 @@
-import type { ReactChildren } from '@shared/types/react.type';
+import type { ReactChildren } from '@shared/types';
 import { ErrorBoundary } from 'react-error-boundary';
 
 export const ErrorBoundaryWrapper = (props: ReactChildren) => {
