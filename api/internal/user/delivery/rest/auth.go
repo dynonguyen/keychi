@@ -12,7 +12,7 @@ import (
 
 // @Summary Login
 // @Tags User
-// @Param user body dto.UserLoginInput false "User login input"
+// @Param user body dto.UserLoginInput true "User login input"
 // @Success 200 {object} dto.UserToken
 // @Failure 400 {object} common.AppError
 // @Router /login [post]
@@ -38,7 +38,7 @@ func HandleLogin(authSvc service.AuthService) echo.HandlerFunc {
 
 // @Summary Logout
 // @Tags User
-// @Param user body dto.UserLoginInput false "User login input"
+// @Param user body dto.UserLogout true "User logout input"
 // @Success 200 {object} string
 // @Failure 400 {object} common.AppError
 // @Router /logout [post]

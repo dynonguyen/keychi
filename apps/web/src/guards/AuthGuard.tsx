@@ -11,13 +11,9 @@ export const AuthGuard = ({ children }: ReactChildren) => {
 
   useGetMe(!isAuthenticated);
 
-  if (isLoading) {
-    return <GlobalLoading />;
-  }
+  if (isLoading) return <GlobalLoading />;
 
-  if (!isAuthenticated) {
-    return <Navigate to={PATH.LOGIN} />;
-  }
+  if (!isAuthenticated) return <Navigate to={PATH.LOGIN} />;
 
   return children;
 };

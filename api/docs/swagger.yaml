@@ -46,6 +46,13 @@ definitions:
     - email
     - password
     type: object
+  dto.UserLogout:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
   dto.UserRegistrationInput:
     properties:
       email:
@@ -103,6 +110,7 @@ paths:
       - description: User login input
         in: body
         name: user
+        required: true
         schema:
           $ref: '#/definitions/dto.UserLoginInput'
       responses:
@@ -115,6 +123,27 @@ paths:
           schema:
             $ref: '#/definitions/common.AppError'
       summary: Login
+      tags:
+      - User
+  /logout:
+    post:
+      parameters:
+      - description: User logout input
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserLogout'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+      summary: Logout
       tags:
       - User
   /user:

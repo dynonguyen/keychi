@@ -30,7 +30,7 @@ export const PageResult = (props: PageResultProps) => {
               i18nKey="pageResultAction"
               components={{
                 toHome: <Link className="underline" to={PATH.HOME} />,
-                toContact: <Link className="underline" to={PATH.HOME} /> // TODO: Change to contact page
+                toContact: <Link className="underline" to={PATH.ABOUT} />
               }}
             />
           </p>
