@@ -2,5 +2,6 @@
 export const LS_KEY = {
   LANGUAGE: 'keychi-language',
   THEME: 'keychi-theme',
-  ACCESS_TOKEN: 'accessToken'
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken'
 };

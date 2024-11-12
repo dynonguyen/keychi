@@ -25,3 +25,7 @@ type UserInfo struct {
 	Email  string `json:"email"`
 	Avatar string `json:"avatar"`
 }
+
+type UserLogout struct {
+	RefreshToken string `json:"refreshToken" validate:"required"`
+}

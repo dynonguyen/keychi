@@ -9,6 +9,7 @@ import (
 
 func UserController(g *echo.Group, storage *infra.PgsqlStorage, authSvc service.AuthService) {
 	g.POST("/user", HandleRegisterUser(storage, authSvc))
-	g.POST("/login", HandleLogin(storage, authSvc))
 	g.GET("/user", HandleGetUser(storage), middleware.UserAuth(authSvc))
+	g.POST("/login", HandleLogin(authSvc))
+	g.POST("/logout", HandleLogout(authSvc))
 }

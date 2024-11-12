@@ -21,6 +21,10 @@ func (m *mockAuthService) DecodeToken(ctx context.Context, token string) (*servi
 	return nil, nil
 }
 
+func (m *mockAuthService) Logout(ctx context.Context, token string) error {
+	return nil
+}
+
 func NewMockAuthService() *mockAuthService {
 	return &mockAuthService{}
 }

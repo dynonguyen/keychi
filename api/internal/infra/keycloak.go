@@ -133,6 +133,26 @@ func (k *keycloakAuthService) DecodeToken(ctx context.Context, token string) (*s
 	return &result, nil
 }
 
+func (k *keycloakAuthService) Logout(ctx context.Context, token string) error {
+	client := resty.New()
+
+	resp, _ := client.R().
+		SetHeader("Content-Type", "application/x-www-form-urlencoded").
+		SetFormData(common.JsonString{
+			"client_id":     k.clientId,
+			"client_secret": k.clientSecret,
+			"refresh_token": token,
+		}).
+		Post(k.url + "/realms/" + k.realm + "/protocol/openid-connect/logout")
+
+	status := resp.StatusCode()
+	if status == http.StatusNoContent || status == http.StatusOK {
+		return nil
+	}
+
+	return errors.New("Failed to logout")
+}
+
 func NewKeycloakAuthService() *keycloakAuthService {
 	return &keycloakAuthService{
 		url:          os.Getenv("KEYCLOAK_URL"),

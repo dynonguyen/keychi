@@ -26,6 +26,8 @@ export const Login = () => {
     }
 
     localStorage.setItem(LS_KEY.ACCESS_TOKEN, response.data.accessToken);
+    localStorage.setItem(LS_KEY.REFRESH_TOKEN, response.data.refreshToken);
+
     location.href = PATH.HOME;
   };
 
