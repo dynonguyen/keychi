@@ -12,6 +12,7 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/dynonguyen/keychi/api/internal/middleware"
 	userHandler "github.com/dynonguyen/keychi/api/internal/user/delivery/rest"
+	vaultHandler "github.com/dynonguyen/keychi/api/internal/vault/delivery/rest"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
@@ -57,13 +58,16 @@ func main() {
 	basePath := os.Getenv("BASE_URL") + "/v1"
 	v1 := e.Group(basePath)
 	adminGroup := v1.Group("/admin")
+	vaultGroup := v1.Group("/vault")
 
 	// Route middleware
 	adminGroup.Use(middleware.AdminAuth)
+	vaultGroup.Use(middleware.UserAuth(pgStorage, keycloakAuthSvc))
 
 	// Route controller
 	adminHandler.AdminController(adminGroup, pgStorage)
 	userHandler.UserController(v1, pgStorage, keycloakAuthSvc)
+	vaultHandler.VaultController(vaultGroup)
 
 	// API docs
 	if os.Getenv("ENV_MODE") != string(common.EnvProd) {
