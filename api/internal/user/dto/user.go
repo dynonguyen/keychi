@@ -13,8 +13,19 @@ type UserLoginInput struct {
 }
 
 type UserToken struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	ExpireIn     int    `json:"expires_in"`
-	TokenType    string `json:"token_type"`
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+	ExpireIn     int    `json:"expiresIn"`
+	TokenType    string `json:"tokenType"`
+}
+
+type UserInfo struct {
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+	Avatar string `json:"avatar"`
+}
+
+type UserLogout struct {
+	RefreshToken string `json:"refreshToken" validate:"required"`
 }

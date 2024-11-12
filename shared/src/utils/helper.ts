@@ -1,4 +1,5 @@
-import { Any } from '../types/common.type';
+import i18next from 'i18next';
+import { Any, ApiErrorResponse } from '../types/common.type';
 
 export function toNumber(
   value: Any,
@@ -24,4 +25,11 @@ export function toNumber(
 
 export function emitCustomEvent<T>(key: string, data?: T, opts?: EventInit) {
   window.dispatchEvent(new CustomEvent(key, { ...opts, detail: data }));
+}
+
+export function getErrorMessage(error: ApiErrorResponse): string {
+  const errorKey = `error.${error.code}`;
+  const errorMsg = i18next.t(errorKey as Any);
+
+  return errorMsg === errorKey ? error.message : errorMsg;
 }

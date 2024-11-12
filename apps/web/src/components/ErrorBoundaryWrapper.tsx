@@ -1,7 +1,7 @@
-import type { ReactChildrenProps } from '@shared/types/react.type';
+import type { ReactChildren } from '@shared/types';
 import { ErrorBoundary } from 'react-error-boundary';
 
-export const ErrorBoundaryWrapper = (props: ReactChildrenProps) => {
+export const ErrorBoundaryWrapper = (props: ReactChildren) => {
   const { children } = props;
 
   return <ErrorBoundary fallback={<div>Something went wrong</div>}>{children}</ErrorBoundary>;

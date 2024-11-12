@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/dynonguyen/keychi/api/internal/mock"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
-	"github.com/dynonguyen/keychi/api/internal/user/mock"
 	"github.com/stretchr/testify/assert"
 )
 

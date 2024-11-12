@@ -1,4 +1,4 @@
-import { APP_NAME } from '@shared/constants/common';
+import { APP_NAME } from '@shared/constants';
 import React from 'react';
 
 export const usePageTitle = (title?: string) => {

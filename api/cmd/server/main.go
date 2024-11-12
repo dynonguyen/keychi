@@ -43,16 +43,15 @@ func main() {
 	e := echo.New()
 
 	// Global middlewares
-	e.HTTPErrorHandler = middleware.HTTPErrorHandler
-
 	e.Use(echoMiddleware.Recover())
-
+	e.Use(echoMiddleware.CORS())
 	if (os.Getenv("RATE_LIMIT")) != "" {
 		limit, _ := strconv.ParseInt(os.Getenv("RATE_LIMIT"), 10, 0)
 		e.Use(echoMiddleware.RateLimiter(echoMiddleware.NewRateLimiterMemoryStore(rate.Limit(limit))))
 	}
 
 	e.Use(middleware.CustomLogger())
+	e.HTTPErrorHandler = middleware.HTTPErrorHandler
 
 	// Routes
 	basePath := os.Getenv("BASE_URL") + "/v1"

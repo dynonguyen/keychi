@@ -25,6 +25,17 @@ definitions:
       dbConnected:
         type: boolean
     type: object
+  dto.UserInfo:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   dto.UserLoginInput:
     properties:
       email:
@@ -52,13 +63,13 @@ definitions:
     type: object
   dto.UserToken:
     properties:
-      access_token:
+      accessToken:
         type: string
-      expires_in:
+      expiresIn:
         type: integer
-      refresh_token:
+      refreshToken:
         type: string
-      token_type:
+      tokenType:
         type: string
     type: object
 info:
@@ -107,6 +118,25 @@ paths:
       tags:
       - User
   /user:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+      security:
+      - Bearer: []
+      summary: Get User
+      tags:
+      - User
     post:
       parameters:
       - description: dto.UserRegistrationInput

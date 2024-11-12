@@ -14,8 +14,8 @@ import (
 // @Tags		Admin
 // @Success	200	{object}	dto.HealthCheckResponse
 // @Failure	401	{object}	common.AppError
-// @Router		/admin/health-check [post]
 // @Security	Bearer
+// @Router		/admin/health-check [post]
 func HandleHealthCheck(s *infra.PgsqlStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		connection := dto.HealthCheckResponse{DbConnected: true}

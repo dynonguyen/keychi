@@ -1,11 +1,11 @@
-import React from 'react';
+import { LoadModule } from '@shared/components/react';
 import { Outlet } from 'react-router-dom';
 
 export const MainLayout = () => {
   return (
-    <React.Suspense fallback={null}>
+    <LoadModule fallback={null} suspense={null}>
       <Outlet />
-    </React.Suspense>
+    </LoadModule>
   );
 };
 

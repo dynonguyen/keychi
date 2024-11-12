@@ -11,6 +11,6 @@ type RegisterUserRepository interface {
 	InsertUser(ctx context.Context, user *dto.UserRegistrationInput) error
 }
 
-type LoginRepository interface {
+type UserInfoRepository interface {
 	FindUserByEmail(ctx context.Context, email string) (*model.UserModel, error)
 }
