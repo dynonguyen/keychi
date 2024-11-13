@@ -8,7 +8,8 @@ import (
 )
 
 type RegisterUserRepository interface {
-	InsertUser(ctx context.Context, user *dto.UserRegistrationInput) error
+	InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (error, int)
+	CreateDefaultUserSettings(ctx context.Context, userId int) error
 }
 
 type UserInfoRepository interface {

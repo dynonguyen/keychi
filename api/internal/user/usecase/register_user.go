@@ -24,7 +24,13 @@ func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserR
 	}
 
 	return uc.txm.WithTransaction(func() error {
-		if err := uc.repo.InsertUser(ctx, user); err != nil {
+		err, userId := uc.repo.InsertUser(ctx, user)
+
+		if err != nil {
+			return err
+		}
+
+		if err := uc.repo.CreateDefaultUserSettings(ctx, userId); err != nil {
 			return err
 		}
 

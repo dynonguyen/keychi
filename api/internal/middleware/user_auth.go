@@ -1,20 +1,27 @@
 package middleware
 
 import (
+	"context"
 	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/dynonguyen/keychi/api/internal/service"
+	"github.com/dynonguyen/keychi/api/internal/user/model"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 var (
 	errInvalidToken = common.NewUnauthorizedError(errors.New("invalid token"), common.CodeUnauthorizedError)
 )
 
-func UserAuth(authSvc service.AuthService) func(next echo.HandlerFunc) echo.HandlerFunc {
+var userIdCache = make(map[string]string)
+
+func UserAuth(storage *infra.PgsqlStorage, authSvc service.AuthService) func(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			bearerKey := c.Request().Header.Get("Authorization")
@@ -30,7 +37,23 @@ func UserAuth(authSvc service.AuthService) func(next echo.HandlerFunc) echo.Hand
 				return c.JSON(http.StatusUnauthorized, errInvalidToken)
 			}
 
-			c.Set("userEmail", tokenInfo.Email)
+			userEmail := tokenInfo.Email
+			userId, ok := userIdCache[userEmail]
+			if !ok {
+				user := model.UserModel{}
+				result := storage.DB.Where("email = ?", userEmail).Select("id").Take(&user)
+
+				if result.Error == gorm.ErrRecordNotFound {
+					return c.JSON(http.StatusUnauthorized, errInvalidToken)
+				}
+
+				userId = strconv.Itoa(user.ID)
+				userIdCache[userEmail] = userId
+			}
+
+			c.Set("userId", userId)
+			c.Set("userEmail", userEmail)
+			context.WithValue(c.Request().Context(), "userId", userId)
 
 			return next(c)
 		}
