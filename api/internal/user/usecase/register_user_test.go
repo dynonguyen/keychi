@@ -32,13 +32,17 @@ func (m *mockTransactionManager) WithTransaction(fn func() error) error {
 	return fn()
 }
 
-func (m *mockRepository) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) error {
+func (m *mockRepository) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (error, int) {
 	if slices.ContainsFunc(mockStorage, func(item *dto.UserRegistrationInput) bool { return item.Email == user.Email }) {
-		return common.NewBadRequestError(fmt.Errorf("user already exists"), common.CodeBadRequestError)
+		return common.NewBadRequestError(fmt.Errorf("user already exists"), common.CodeBadRequestError), -1
 	}
 
 	mockStorage = append(mockStorage, user)
 
+	return nil, 1
+}
+
+func (m *mockRepository) CreateDefaultUserSettings(ctx context.Context, userID int) error {
 	return nil
 }
 

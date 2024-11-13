@@ -20,13 +20,29 @@ type keycloakAuthService struct {
 	clientSecret string
 }
 
+type keycloakToken struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int    `json:"expires_in"`
+	TokenType    string `json:"token_type"`
+}
+
+func keycloakTokenToUserToken(token *keycloakToken) *dto.UserToken {
+	return &dto.UserToken{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+		ExpireIn:     token.ExpiresIn,
+		TokenType:    token.TokenType,
+	}
+}
+
 func (k *keycloakAuthService) getClientToken() (*dto.UserToken, error) {
 	client := resty.New()
-	var result dto.UserToken
+	var result keycloakToken
 
 	_, err := client.R().
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
-		SetFormData(map[string]string{
+		SetFormData(common.JsonString{
 			"client_id":     k.clientId,
 			"client_secret": k.clientSecret,
 			"grant_type":    "client_credentials",
@@ -38,7 +54,7 @@ func (k *keycloakAuthService) getClientToken() (*dto.UserToken, error) {
 		return nil, common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 
-	return &result, nil
+	return keycloakTokenToUserToken(&result), nil
 }
 
 // Implementing the AuthService interface
@@ -81,12 +97,7 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 
 func (k *keycloakAuthService) GetUserToken(ctx context.Context, email string, password string) (*dto.UserToken, error) {
 	client := resty.New()
-	var result struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-		ExpiresIn    int    `json:"expires_in"`
-		TokenType    string `json:"token_type"`
-	}
+	var result keycloakToken
 
 	_, err := client.R().
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
@@ -104,12 +115,7 @@ func (k *keycloakAuthService) GetUserToken(ctx context.Context, email string, pa
 		return nil, common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 
-	return &dto.UserToken{
-		AccessToken:  result.AccessToken,
-		RefreshToken: result.RefreshToken,
-		ExpireIn:     result.ExpiresIn,
-		TokenType:    result.TokenType,
-	}, nil
+	return keycloakTokenToUserToken(&result), nil
 }
 
 func (k *keycloakAuthService) DecodeToken(ctx context.Context, token string) (*service.TokenInfo, error) {
