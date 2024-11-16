@@ -1,10 +1,8 @@
 package middleware
 
 import (
-	"context"
 	"errors"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
@@ -19,7 +17,7 @@ var (
 	errInvalidToken = common.NewUnauthorizedError(errors.New("invalid token"), common.CodeUnauthorizedError)
 )
 
-var userIdCache = make(map[string]string)
+var userIdCache = make(map[string]int)
 
 func UserAuth(storage *infra.PgsqlStorage, authSvc service.AuthService) func(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -47,13 +45,12 @@ func UserAuth(storage *infra.PgsqlStorage, authSvc service.AuthService) func(nex
 					return c.JSON(http.StatusUnauthorized, errInvalidToken)
 				}
 
-				userId = strconv.Itoa(user.ID)
+				userId = user.ID
 				userIdCache[userEmail] = userId
 			}
 
 			c.Set("userId", userId)
 			c.Set("userEmail", userEmail)
-			context.WithValue(c.Request().Context(), "userId", userId)
 
 			return next(c)
 		}

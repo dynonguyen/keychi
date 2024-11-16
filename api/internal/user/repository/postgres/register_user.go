@@ -21,13 +21,12 @@ var (
 	codeEmailDuplicate common.I18nCode = "EMAIL_DUPLICATE"
 )
 
-func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (error, int) {
+func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (int, error) {
 	db := r.storage.GetInstance()
-	failedUserId := -1
 
 	// Check if user existed
 	if result := db.Where("email = ?", user.Email).Take(&model.UserModel{}); result.Error != gorm.ErrRecordNotFound {
-		return common.NewBadRequestError(errors.New("email already existed"), codeEmailDuplicate), failedUserId
+		return common.FailedCreationId, common.NewBadRequestError(errors.New("email already existed"), codeEmailDuplicate)
 	}
 
 	inserted := &model.UserModel{
@@ -37,10 +36,10 @@ func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistr
 	}
 
 	if err := db.Create(inserted).Error; err != nil {
-		return common.NewBadRequestError(err, common.CodeInternalServerError), failedUserId
+		return common.FailedCreationId, common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 
-	return nil, inserted.ID
+	return inserted.ID, nil
 }
 
 func (r *registerUserRepo) CreateDefaultUserSettings(ctx context.Context, userId int) error {

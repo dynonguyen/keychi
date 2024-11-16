@@ -174,6 +174,45 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/vault/folder": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Create a new folder",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NewFolderInput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -214,6 +253,27 @@ const docTemplate = `{
             "properties": {
                 "dbConnected": {
                     "type": "boolean"
+                }
+            }
+        },
+        "dto.NewFolderInput": {
+            "type": "object",
+            "required": [
+                "name",
+                "userId"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
