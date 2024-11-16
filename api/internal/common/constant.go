@@ -10,3 +10,7 @@ const (
 const (
 	KeyAccessTokenCookie = "access_token"
 )
+
+const (
+	FailedCreationId int = -1
+)

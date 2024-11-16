@@ -67,7 +67,7 @@ func main() {
 	// Route controller
 	adminHandler.AdminController(adminGroup, pgStorage)
 	userHandler.UserController(v1, pgStorage, keycloakAuthSvc)
-	vaultHandler.VaultController(vaultGroup)
+	vaultHandler.VaultController(vaultGroup, pgStorage)
 
 	// API docs
 	if os.Getenv("ENV_MODE") != string(common.EnvProd) {

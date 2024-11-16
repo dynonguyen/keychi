@@ -23,7 +23,7 @@ func HandleGetUser(s *infra.PgsqlStorage) echo.HandlerFunc {
 		repo := postgres.NewUserInfoRepository(s)
 		uc := usecase.NewGetUserUsecase(repo)
 
-		email := util.GetUserFromContext(c)
+		email := util.GetUserFromContext(c).Email
 
 		user, err := uc.GetUser(c.Request().Context(), email)
 

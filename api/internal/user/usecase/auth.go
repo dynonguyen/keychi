@@ -7,7 +7,7 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
-	"github.com/go-playground/validator/v10"
+	"github.com/dynonguyen/keychi/api/internal/util"
 )
 
 type authUsecase struct {
@@ -19,7 +19,7 @@ var (
 )
 
 func (uc *authUsecase) Login(ctx context.Context, user *dto.UserLoginInput) (*dto.UserToken, error) {
-	validate := validator.New(validator.WithRequiredStructEnabled())
+	validate := util.GetValidator()
 
 	if err := validate.Struct(user); err != nil {
 		return nil, common.NewBadRequestError(err, common.CodeBadRequestError)

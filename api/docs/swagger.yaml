@@ -25,6 +25,20 @@ definitions:
       dbConnected:
         type: boolean
     type: object
+  dto.NewFolderInput:
+    properties:
+      color:
+        type: string
+      icon:
+        type: string
+      name:
+        type: string
+      userId:
+        type: integer
+    required:
+    - name
+    - userId
+    type: object
   dto.UserInfo:
     properties:
       avatar:
@@ -186,6 +200,30 @@ paths:
       summary: Register a new user
       tags:
       - User
+  /vault/folder:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.NewFolderInput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
+      security:
+      - Bearer: []
+      summary: Create a new folder
+      tags:
+      - Vault
 schemes:
 - http
 - https

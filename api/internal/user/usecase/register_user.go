@@ -7,7 +7,7 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/service"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
 	"github.com/dynonguyen/keychi/api/internal/user/repository"
-	"github.com/go-playground/validator/v10"
+	"github.com/dynonguyen/keychi/api/internal/util"
 )
 
 type registerUserUsecase struct {
@@ -17,14 +17,14 @@ type registerUserUsecase struct {
 }
 
 func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserRegistrationInput) error {
-	validate := validator.New(validator.WithRequiredStructEnabled())
+	validate := util.GetValidator()
 
 	if err := validate.Struct(user); err != nil {
 		return common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
 	return uc.txm.WithTransaction(func() error {
-		err, userId := uc.repo.InsertUser(ctx, user)
+		userId, err := uc.repo.InsertUser(ctx, user)
 
 		if err != nil {
 			return err

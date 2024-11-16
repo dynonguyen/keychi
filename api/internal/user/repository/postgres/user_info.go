@@ -29,7 +29,5 @@ func (r *userInfoRepository) FindUserByEmail(ctx context.Context, email string) 
 }
 
 func NewUserInfoRepository(s *infra.PgsqlStorage) *userInfoRepository {
-	return &userInfoRepository{
-		storage: s,
-	}
+	return &userInfoRepository{storage: s}
 }
