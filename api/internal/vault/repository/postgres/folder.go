@@ -50,6 +50,17 @@ func (r *folderRepository) DeleteFolder(ctx context.Context, folder *dto.DeleteF
 	return nil
 }
 
+func (r *folderRepository) FindAllFolders(ctx context.Context, userID int) ([]model.Folder, error) {
+	db := r.storage.GetInstance()
+
+	var folders []model.Folder
+	if err := db.Where("user_id = ?", userID).Find(&folders).Error; err != nil {
+		return nil, common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	return folders, nil
+}
+
 func NewFolderRepository(s *infra.PgsqlStorage) *folderRepository {
 	return &folderRepository{storage: s}
 }
