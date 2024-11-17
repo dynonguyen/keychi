@@ -8,4 +8,5 @@ import (
 // Root path: /vault
 func VaultController(g *echo.Group, storage *infra.PgsqlStorage) {
 	g.POST("/folder", HandleCreateFolder(storage))
+	g.DELETE("/folder/:id", HandleDeleteFolder(storage))
 }

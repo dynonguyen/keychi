@@ -202,11 +202,18 @@ paths:
       - User
   /vault/folder:
     post:
+      parameters:
+      - description: User login input
+        in: body
+        name: folder
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewFolderInput'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.NewFolderInput'
+            type: string
         "400":
           description: Bad Request
           schema:
@@ -222,6 +229,36 @@ paths:
       security:
       - Bearer: []
       summary: Create a new folder
+      tags:
+      - Vault
+  /vault/folder/{id}:
+    delete:
+      parameters:
+      - description: Folder ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
+      security:
+      - Bearer: []
+      summary: Delete a folder
       tags:
       - Vault
 schemes:

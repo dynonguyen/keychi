@@ -8,4 +8,5 @@ import (
 
 type FolderRepository interface {
 	InsertFolder(ctx context.Context, folder *dto.NewFolderInput) (int, error)
+	DeleteFolder(ctx context.Context, folder *dto.DeleteFolderInput) error
 }

@@ -1,5 +1,7 @@
 package entity
 
+import "time"
+
 type UserThemeMode string
 type UserLanguage string
 type KdfAlgorithm string
@@ -35,6 +37,8 @@ type UserSetting struct {
 	Language           UserLanguage  `json:"language"`
 	KdfAlgorithm       KdfAlgorithm  `json:"kdfAlgorithm"`
 	KdfIterations      int           `json:"kdfIterations"`
+	CreatedAt          *time.Time    `json:"createdAt"`
+	UpdatedAt          *time.Time    `json:"updatedAt"`
 }
 
 var DefaultUserSetting = &UserSetting{

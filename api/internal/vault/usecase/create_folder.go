@@ -26,7 +26,5 @@ func (uc *createFolderUsecase) CreateFolder(ctx context.Context, folder *dto.New
 }
 
 func NewCreateFolderUsecase(repo repository.FolderRepository) *createFolderUsecase {
-	return &createFolderUsecase{
-		repo: repo,
-	}
+	return &createFolderUsecase{repo: repo}
 }

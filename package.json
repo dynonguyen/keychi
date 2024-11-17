@@ -20,6 +20,7 @@
     "api:doc": "cd api && swag init --parseInternal=true --quiet --dir internal -g config/swagger.go -o ./docs",
     "api:dev": "yarn api:doc && cd api && gow run cmd/server/main.go",
     "api:start": "cd api && go run cmd/server/main.go",
+    "api:build": "cd api && go build -o keychi-server cmd/server/main.go",
     "api:test": "cd api && go test ./..."
   },
   "dependencies": {

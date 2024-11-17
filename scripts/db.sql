@@ -30,15 +30,17 @@ CREATE TABLE IF NOT EXISTS vaults (
 	folder_id INTEGER,
 
 	name VARCHAR(512) NOT NULL,
-	type SMALLINT NOT NULL,
+	type VARCHAR(10) NOT NULL,
 	custom_fields JSONB DEFAULT '[]'::jsonb,
 	properties JSONB DEFAULT '{}'::jsonb,
 	note VARCHAR(1024),
+	deleted BOOLEAN NOT NULL DEFAULT FALSE,
+	update_histories JSONB DEFAULT '[]'::jsonb,
 
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-	CONSTRAINT fk_vault_folder FOREIGN KEY (folder_id) REFERENCES folders(id),
+	CONSTRAINT fk_vault_folder FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE SET NULL,
 	CONSTRAINT fk_vault_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
 

@@ -6,3 +6,8 @@ type NewFolderInput struct {
 	Icon   *string `json:"icon"`
 	Color  *string `json:"color"`
 }
+
+type DeleteFolderInput struct {
+	UserID   int `json:"userId" validate:"required"`
+	FolderID int `json:"folderId" validate:"required"`
+}
