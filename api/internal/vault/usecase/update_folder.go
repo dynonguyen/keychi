@@ -9,22 +9,20 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/vault/repository"
 )
 
-type createFolderUsecase struct {
+type updateFolderUsecase struct {
 	repo repository.FolderRepository
 }
 
-func (uc *createFolderUsecase) CreateFolder(ctx context.Context, userID int, folder *dto.NewFolderInput) error {
+func (uc *updateFolderUsecase) UpdateFolder(ctx context.Context, userID int, folder *dto.UpdateFolderInput) error {
 	validate := util.GetValidator()
 
 	if err := validate.Struct(folder); err != nil {
 		return common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
-	_, err := uc.repo.InsertFolder(ctx, userID, folder)
-
-	return err
+	return uc.repo.UpdateFolder(ctx, userID, folder)
 }
 
-func NewCreateFolderUsecase(repo repository.FolderRepository) *createFolderUsecase {
-	return &createFolderUsecase{repo: repo}
+func NewUpdateFolderUsecase(repo repository.FolderRepository) *updateFolderUsecase {
+	return &updateFolderUsecase{repo: repo}
 }

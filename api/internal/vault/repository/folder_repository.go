@@ -8,7 +8,8 @@ import (
 )
 
 type FolderRepository interface {
-	InsertFolder(ctx context.Context, folder *dto.NewFolderInput) (int, error)
-	DeleteFolder(ctx context.Context, folder *dto.DeleteFolderInput) error
+	InsertFolder(ctx context.Context, userID int, folder *dto.NewFolderInput) (int, error)
+	DeleteFolder(ctx context.Context, userID int, folderID int) error
 	FindAllFolders(ctx context.Context, userID int) ([]model.Folder, error)
+	UpdateFolder(ctx context.Context, userID int, folder *dto.UpdateFolderInput) error
 }

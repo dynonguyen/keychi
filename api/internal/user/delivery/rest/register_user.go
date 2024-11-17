@@ -17,6 +17,7 @@ import (
 // @Param user body dto.UserRegistrationInput true "dto.UserRegistrationInput"
 // @Success 201 {object} string
 // @Failure 400 {object} common.AppError
+// @Failure 500 {object} common.AppError
 // @Router /user [post]
 func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {
 	return func(c echo.Context) error {

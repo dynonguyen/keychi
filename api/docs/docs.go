@@ -74,6 +74,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.AppError"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
                     }
                 }
             }
@@ -104,6 +110,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/common.AppError"
                         }
@@ -140,6 +152,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.AppError"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
                     }
                 }
             },
@@ -171,6 +189,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.AppError"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
                     }
                 }
             }
@@ -188,12 +212,60 @@ const docTemplate = `{
                 "summary": "Create a new folder",
                 "parameters": [
                     {
-                        "description": "User login input",
+                        "description": "New folder information",
                         "name": "folder",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/dto.NewFolderInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Update a folder",
+                "parameters": [
+                    {
+                        "description": "updated folder information",
+                        "name": "folder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateFolderInput"
                         }
                     }
                 ],
@@ -360,8 +432,7 @@ const docTemplate = `{
         "dto.NewFolderInput": {
             "type": "object",
             "required": [
-                "name",
-                "userId"
+                "name"
             ],
             "properties": {
                 "color": {
@@ -372,9 +443,26 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.UpdateFolderInput": {
+            "type": "object",
+            "required": [
+                "folderId"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string"
                 },
-                "userId": {
+                "folderId": {
                     "type": "integer"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

@@ -15,6 +15,7 @@ import (
 // @Param user body dto.UserLoginInput true "User login input"
 // @Success 200 {object} dto.UserToken
 // @Failure 400 {object} common.AppError
+// @Failure 500 {object} common.AppError
 // @Router /login [post]
 func HandleLogin(authSvc service.AuthService) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -41,6 +42,7 @@ func HandleLogin(authSvc service.AuthService) echo.HandlerFunc {
 // @Param user body dto.UserLogout true "User logout input"
 // @Success 200 {object} string
 // @Failure 400 {object} common.AppError
+// @Failure 500 {object} common.AppError
 // @Router /logout [post]
 func HandleLogout(authSvc service.AuthService) echo.HandlerFunc {
 	return func(c echo.Context) error {

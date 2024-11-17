@@ -9,7 +9,7 @@ type Folder struct {
 	Icon      *string    `json:"icon"`
 	Color     *string    `json:"color"`
 	CreatedAt *time.Time `json:"createdAt"`
-	UpdatedAt *time.Time `json:"updatedAt"`
+	UpdatedAt *time.Time `json:"updatedAt" gorm:"column:updated_at;autoUpdateTime:true"`
 }
 
 func (Folder) TableName() string {

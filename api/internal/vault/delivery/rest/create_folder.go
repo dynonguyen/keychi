@@ -14,7 +14,7 @@ import (
 
 // @Summary Create a new folder
 // @Tags Vault
-// @Param folder body dto.NewFolderInput true "User login input"
+// @Param folder body dto.NewFolderInput true "New folder information"
 // @Success 200 {object} string
 // @Failure 401 {object} common.AppError
 // @Failure 400 {object} common.AppError
@@ -24,7 +24,6 @@ import (
 func HandleCreateFolder(s *infra.PgsqlStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var folder dto.NewFolderInput
-		folder.UserID = util.GetUserFromContext(c).ID
 
 		if err := (&echo.DefaultBinder{}).BindBody(c, &folder); err != nil {
 			return c.JSON(http.StatusBadRequest, common.NewBadRequestError(err, common.CodeBadRequestError))
@@ -32,8 +31,9 @@ func HandleCreateFolder(s *infra.PgsqlStorage) echo.HandlerFunc {
 
 		repo := postgres.NewFolderRepository(s)
 		uc := usecase.NewCreateFolderUsecase(repo)
+		userID := util.GetUserFromContext(c).ID
 
-		if err := uc.CreateFolder(c.Request().Context(), &folder); err != nil {
+		if err := uc.CreateFolder(c.Request().Context(), userID, &folder); err != nil {
 			return c.JSON(common.GetAppErrorStatus(err, http.StatusBadRequest), err)
 		}
 

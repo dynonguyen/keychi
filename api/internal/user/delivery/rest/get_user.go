@@ -16,6 +16,7 @@ import (
 // @Success 200 {object} dto.UserInfo
 // @Failure 401 {object} common.AppError
 // @Failure 400 {object} common.AppError
+// @Failure 500 {object} common.AppError
 // @Security	Bearer
 // @Router /user [get]
 func HandleGetUser(s *infra.PgsqlStorage) echo.HandlerFunc {

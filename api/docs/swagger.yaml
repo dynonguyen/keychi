@@ -33,11 +33,21 @@ definitions:
         type: string
       name:
         type: string
-      userId:
-        type: integer
     required:
     - name
-    - userId
+    type: object
+  dto.UpdateFolderInput:
+    properties:
+      color:
+        type: string
+      folderId:
+        type: integer
+      icon:
+        type: string
+      name:
+        type: string
+    required:
+    - folderId
     type: object
   dto.UserInfo:
     properties:
@@ -153,6 +163,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
       summary: Login
       tags:
       - User
@@ -174,6 +188,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
       summary: Logout
       tags:
       - User
@@ -190,6 +208,10 @@ paths:
             $ref: '#/definitions/common.AppError'
         "401":
           description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/common.AppError'
       security:
@@ -214,13 +236,47 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
       summary: Register a new user
       tags:
       - User
   /vault/folder:
+    patch:
+      parameters:
+      - description: updated folder information
+        in: body
+        name: folder
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateFolderInput'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
+      security:
+      - Bearer: []
+      summary: Update a folder
+      tags:
+      - Vault
     post:
       parameters:
-      - description: User login input
+      - description: New folder information
         in: body
         name: folder
         required: true
