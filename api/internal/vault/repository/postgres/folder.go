@@ -2,13 +2,11 @@ package postgres
 
 import (
 	"context"
-	"errors"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/dynonguyen/keychi/api/internal/vault/dto"
 	"github.com/dynonguyen/keychi/api/internal/vault/model"
-	"gorm.io/gorm"
 )
 
 type folderRepository struct {
@@ -21,10 +19,6 @@ var (
 
 func (r *folderRepository) InsertFolder(ctx context.Context, userID int, folder *dto.NewFolderInput) (int, error) {
 	db := r.storage.GetInstance()
-
-	if result := db.Where("name = ? AND user_id = ?", folder.Name, userID).Take(&model.Folder{}); result.Error != gorm.ErrRecordNotFound {
-		return common.FailedCreationId, common.NewBadRequestError(errors.New("folder already existed"), codeEmailDuplicate)
-	}
 
 	inserted := &model.Folder{
 		UserID: userID,
