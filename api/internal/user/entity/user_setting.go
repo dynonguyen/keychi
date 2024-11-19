@@ -37,6 +37,8 @@ type UserSetting struct {
 	Language           UserLanguage  `json:"language"`
 	KdfAlgorithm       KdfAlgorithm  `json:"kdfAlgorithm"`
 	KdfIterations      int           `json:"kdfIterations"`
+	KdfMemory          *int          `json:"kdfMemory"`
+	KdfParallelism     *int          `json:"kdfParallelism"`
 	CreatedAt          *time.Time    `json:"createdAt"`
 	UpdatedAt          *time.Time    `json:"updatedAt"`
 }

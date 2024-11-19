@@ -1,9 +1,3 @@
-export enum ThemeMode {
-  Light = 'light',
-  Dark = 'dark',
-  System = 'system'
-}
-
 export const COLOR_PALETTE = {
   light: {
     background: {

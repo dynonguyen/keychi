@@ -1,9 +1,10 @@
 import { LS_KEY } from '@shared/constants';
-import { Any, ApiErrorResponse, ApiResponse } from '@shared/types';
+import { Any } from '@shared/types';
 import { getEnv } from '@shared/utils';
 import { MutationFunction, QueryClient } from '@tanstack/react-query';
 import to from 'await-to-js';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, HttpStatusCode } from 'axios';
+import { ApiErrorResponse, ApiResponse } from 'shared/src/types/common.type';
 import { useAuthStore } from '../stores/auth';
 
 function createAxiosInstance() {

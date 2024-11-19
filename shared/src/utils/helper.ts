@@ -1,5 +1,6 @@
 import i18next from 'i18next';
-import { Any, ApiErrorResponse } from '../types/common.type';
+import { ApiErrorResponse } from '../types/common.type';
+import { Any } from '../types/util.type';
 
 export function toNumber(
   value: Any,
@@ -32,4 +33,16 @@ export function getErrorMessage(error: ApiErrorResponse): string {
   const errorMsg = i18next.t(errorKey as Any);
 
   return errorMsg === errorKey ? error.message : errorMsg;
+}
+
+export function arrayBufferToHex(buffer: ArrayBuffer): string {
+  const view = new Uint8Array(buffer);
+  let hexString = '';
+
+  for (let i = 0; i < view.length; i++) {
+    const hex = view[i].toString(16).padStart(2, '0');
+    hexString += hex;
+  }
+
+  return hexString;
 }

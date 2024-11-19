@@ -1,4 +1,4 @@
-import { ThemeMode } from '@shared/constants';
+import { ThemeMode } from '@shared/types';
 import { themeMapping } from '@shared/utils';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';

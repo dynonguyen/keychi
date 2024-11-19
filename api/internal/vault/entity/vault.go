@@ -42,7 +42,7 @@ type Vault struct {
 	Name            string               `json:"name"`
 	Type            VaultType            `json:"type"`
 	CustomFields    []VaultCustomField   `json:"customFields"`
-	Properties      []any                `json:"properties"`
+	Properties      any                  `json:"properties"`
 	Note            *string              `json:"note"`
 	Deleted         bool                 `json:"deleted"`
 	UpdateHistories []VaultUpdateHistory `json:"updateHistories"`

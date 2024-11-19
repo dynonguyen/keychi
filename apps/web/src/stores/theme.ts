@@ -1,4 +1,5 @@
-import { LS_KEY, ThemeMode } from '@shared/constants';
+import { DEFAULT, LS_KEY } from '@shared/constants';
+import { ThemeMode } from '@shared/types';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
 
@@ -30,7 +31,7 @@ const initTheme = (): ThemeMode => {
   const savedTheme = localStorage.getItem(LS_KEY.THEME) as ThemeMode | undefined;
 
   const newTheme =
-    savedTheme && Object.values(ThemeMode).some((value) => value === savedTheme) ? savedTheme : ThemeMode.System;
+    savedTheme && Object.values(ThemeMode).some((value) => value === savedTheme) ? savedTheme : DEFAULT.USER_THEME;
 
   setPersistedTheme(newTheme);
 
