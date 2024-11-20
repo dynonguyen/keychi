@@ -1,5 +1,5 @@
-import { ThemeMode } from '../constants/theme';
-import { TFunction } from '../types/common.type';
+import { ThemeMode } from '../types/entity.type';
+import { TFunction } from '../types/util.type';
 
 export function themeMapping(t: TFunction, theme?: ThemeMode) {
   const mapping: Record<ThemeMode, { label: string; icon: string }> = {

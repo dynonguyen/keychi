@@ -18,8 +18,8 @@ const root = __dirname;
 
 export default defineConfig({
   root,
-  base: process.env.KEYCHI_BASE_URL,
-  envPrefix: 'KEYCHI_',
+  base: process.env.WEB_BASE_URL,
+  envPrefix: 'WEB_',
   envDir: path.join(root, '.env'),
 
   plugins: [
@@ -28,9 +28,9 @@ export default defineConfig({
     viteEjsPlugin({
       releaseDate,
       releaseVersion: version,
-      baseUrl: process.env.KEYCHI_BASE_URL,
-      logoUrl: process.env.KEYCHI_ASSET_URL + '/img/app-logo.svg',
-      faviconUrl: process.env.KEYCHI_ASSET_URL + '/img/logo.svg'
+      baseUrl: process.env.WEB_BASE_URL,
+      logoUrl: process.env.WEB_ASSET_URL + '/img/app-logo.svg',
+      faviconUrl: process.env.WEB_ASSET_URL + '/img/logo.svg'
     })
   ],
 

@@ -19,6 +19,7 @@
     "supabase",
     "swaggo",
     "tailwindcss",
+    "tanstack",
     "toastify",
     "usecase",
     "zustand"

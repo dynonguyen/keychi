@@ -1,5 +1,5 @@
-import { ThemeMode } from '@shared/constants/theme';
-import { themeMapping } from '@shared/utils/mapping';
+import { ThemeMode } from '@shared/types';
+import { themeMapping } from '@shared/utils';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../stores/theme';

@@ -10,10 +10,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var (
-	ErrInvalidToken = errors.New("invalid token")
-)
-
 func AdminAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		bearerKey := c.Request().Header.Get("Authorization")
@@ -23,6 +19,6 @@ func AdminAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			return next(c)
 		}
 
-		return c.JSON(http.StatusUnauthorized, common.NewUnauthorizedError(ErrInvalidToken, common.CodeUnauthorizedError))
+		return c.JSON(http.StatusUnauthorized, common.NewUnauthorizedError(errors.New("invalid token"), common.CodeUnauthorizedError))
 	}
 }

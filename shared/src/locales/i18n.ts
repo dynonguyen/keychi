@@ -1,5 +1,6 @@
 import i18next, { i18n, InitOptions } from 'i18next';
-import { Language } from '../constants/common';
+import { DEFAULT } from '../constants/default';
+import { Language } from '../types/entity.type';
 import en from './en';
 import vi from './vi';
 
@@ -13,11 +14,11 @@ const resources = { en: { ns1: en }, vi: { ns1: vi } };
 const defaultNS = 'ns1';
 
 export const i18nInit = (options?: I18nInitOptions) => {
-  const { defaultLang = Language.En, i18nModule = i18next, initOptions } = options || {};
+  const { defaultLang = DEFAULT.USER_LANGUAGE, i18nModule = i18next, initOptions } = options || {};
 
   return i18nModule.init({
     lng: defaultLang,
-    fallbackLng: Language.En,
+    fallbackLng: DEFAULT.USER_LANGUAGE,
     defaultNS,
     debug: false,
     interpolation: { escapeValue: true, prefix: '{{', suffix: '}}' },

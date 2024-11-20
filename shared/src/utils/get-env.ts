@@ -1,8 +1,12 @@
 /// <reference types="vite/client" />
 
+import { EnvMode } from '../constants/common';
+
 interface ImportMetaEnv {
-  KEYCHI_BASE_URL: string;
-  KEYCHI_ASSET_URL: string;
+  WEB_BASE_URL: string;
+  WEB_ASSET_URL: string;
+  WEB_API_URL: string;
+  WEB_ENV_MODE: EnvMode;
 }
 
 /** Access vite env via key */

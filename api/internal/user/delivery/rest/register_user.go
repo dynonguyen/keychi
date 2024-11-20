@@ -13,11 +13,11 @@ import (
 )
 
 // @Summary Register a new user
-// @Description Register a new user
 // @Tags User
-// @Param user body dto.UserRegistrationInput true "User registration input"
-// @Success 201 {object} common.appResponse
-// @Failure 400 {object} common.appError
+// @Param user body dto.UserRegistrationInput true "dto.UserRegistrationInput"
+// @Success 201 {object} string
+// @Failure 400 {object} common.AppError
+// @Failure 500 {object} common.AppError
 // @Router /user [post]
 func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -28,7 +28,7 @@ func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo
 		}
 
 		repo := postgres.NewRegisterUserRepo(s)
-		uc := usecase.NewRegisterUserUsecase(repo, authSvc)
+		uc := usecase.NewRegisterUserUsecase(s, repo, authSvc)
 
 		if err := uc.RegisterUser(c.Request().Context(), &user); err != nil {
 			return c.JSON(common.GetAppErrorStatus(err, http.StatusBadRequest), err)

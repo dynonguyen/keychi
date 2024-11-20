@@ -2,7 +2,7 @@ import { omitBy } from 'lodash-es';
 import React from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { SetURLSearchParams, useSearchParams } from 'react-router-dom';
-import { Any } from '../../types/common.type';
+import { Any } from '../../types/util.type';
 import { toNumber } from '../../utils/helper';
 
 export type SafeSearchParams<E = Record<string, Any>> = {

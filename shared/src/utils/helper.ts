@@ -1,4 +1,6 @@
-import { Any } from '../types/common.type';
+import i18next from 'i18next';
+import { ApiErrorResponse } from '../types/common.type';
+import { Any } from '../types/util.type';
 
 export function toNumber(
   value: Any,
@@ -24,4 +26,23 @@ export function toNumber(
 
 export function emitCustomEvent<T>(key: string, data?: T, opts?: EventInit) {
   window.dispatchEvent(new CustomEvent(key, { ...opts, detail: data }));
+}
+
+export function getErrorMessage(error: ApiErrorResponse): string {
+  const errorKey = `error.${error.code}`;
+  const errorMsg = i18next.t(errorKey as Any);
+
+  return errorMsg === errorKey ? error.message : errorMsg;
+}
+
+export function arrayBufferToHex(buffer: ArrayBuffer): string {
+  const view = new Uint8Array(buffer);
+  let hexString = '';
+
+  for (let i = 0; i < view.length; i++) {
+    const hex = view[i].toString(16).padStart(2, '0');
+    hexString += hex;
+  }
+
+  return hexString;
 }
