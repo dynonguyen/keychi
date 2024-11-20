@@ -3,7 +3,8 @@ const en = {
     home: 'Home page',
     notFound: 'Page not found',
     serverError: 'Server error',
-    login: 'Login'
+    login: 'Login',
+    register: 'Register'
   },
   pageResultAction: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.',
   notFound: {

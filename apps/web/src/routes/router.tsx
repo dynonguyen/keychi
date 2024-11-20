@@ -10,6 +10,7 @@ import ServerErrorPage from '../pages/ServerErrorPage';
 
 const HomePage = React.lazy(() => import('../pages/HomePage'));
 const LoginPage = React.lazy(() => import('../pages/LoginPage'));
+const RegisterPage = React.lazy(() => import('../pages/RegisterPage'));
 
 // -----------------------------
 export const router = createBrowserRouter([
@@ -38,6 +39,14 @@ export const router = createBrowserRouter([
         element: (
           <LoginGuard>
             <LoginPage />
+          </LoginGuard>
+        )
+      },
+      {
+        path: PATH.REGISTER,
+        element: (
+          <LoginGuard>
+            <RegisterPage />
           </LoginGuard>
         )
       }

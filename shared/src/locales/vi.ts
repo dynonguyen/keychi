@@ -3,7 +3,8 @@ const vi = {
     home: 'Trang chủ',
     notFound: 'Không tìm thấy trang',
     serverError: 'Đã xảy ra lỗi',
-    login: 'Đăng nhập'
+    login: 'Đăng nhập',
+    register: 'Đăng ký'
   },
   pageResultAction: 'Quay về <toHome>trang chủ</toHome> hoặc <toContact>liên hệ với chúng tôi</toContact>.',
   notFound: {

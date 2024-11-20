@@ -19,9 +19,6 @@ export const Login = () => {
   });
 
   const handleLogin = async () => {
-    const { email, password } = getValues();
-    console.log(`☕ DYNO LOG ~ index.tsx:23 🥺`, email, password);
-
     const [error, response] = await loginMutation.mutateAsync(getValues());
 
     if (error) {

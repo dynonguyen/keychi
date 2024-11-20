@@ -9,3 +9,10 @@ export type LoginRespDto = {
   expiresIn: number;
   tokenType: string;
 };
+
+export type RegisterReqDto = {
+  email: string;
+  password: string;
+  name: string;
+  pwdHint: string;
+};
