@@ -15,3 +15,7 @@ type RegisterUserRepository interface {
 type UserInfoRepository interface {
 	FindUserByEmail(ctx context.Context, email string) (*model.UserModel, error)
 }
+
+type AuthRepository interface {
+	FindPreLoginSettingByEmail(ctx context.Context, email string) (*dto.PreLoginResponse, error)
+}

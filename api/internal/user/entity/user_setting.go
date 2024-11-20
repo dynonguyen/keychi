@@ -35,6 +35,7 @@ type UserSetting struct {
 	VaultTimeout       int           `json:"vaultTimeout"`
 	VaultTimeoutAction VaultAction   `json:"vaultTimeoutAction"`
 	Language           UserLanguage  `json:"language"`
+	KdfSalt            string        `json:"kdfSalt"`
 	KdfAlgorithm       KdfAlgorithm  `json:"kdfAlgorithm"`
 	KdfIterations      int           `json:"kdfIterations"`
 	KdfMemory          *int          `json:"kdfMemory"`

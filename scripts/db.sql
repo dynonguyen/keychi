@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS settings (
 	vault_timeout INTEGER NOT NULL DEFAULT 0,
 	vault_timeout_action VARCHAR(10) NOT NULL DEFAULT 'lock',
 	language VARCHAR(3) NOT NULL DEFAULT 'en',
+	kdf_salt CHAR(16) NOT NULL,
 	kdf_algorithm VARCHAR(10) NOT NULL DEFAULT 'pbkdf2',
 	kdf_iterations INTEGER NOT NULL DEFAULT 600000,
 	kdf_memory INTEGER,

@@ -10,6 +10,7 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/user/entity"
 	"github.com/dynonguyen/keychi/api/internal/user/model"
 	"github.com/dynonguyen/keychi/api/internal/user/repository"
+	"github.com/dynonguyen/keychi/api/internal/util"
 	"gorm.io/gorm"
 )
 
@@ -53,6 +54,7 @@ func (r *registerUserRepo) CreateDefaultUserSettings(ctx context.Context, userId
 		Language:           entity.DefaultUserSetting.Language,
 		KdfAlgorithm:       entity.DefaultUserSetting.KdfAlgorithm,
 		KdfIterations:      entity.DefaultUserSetting.KdfIterations,
+		KdfSalt:            util.GenerateUniqueString(16),
 	}).Error; err != nil {
 		return common.NewBadRequestError(err, common.CodeInternalServerError)
 	}

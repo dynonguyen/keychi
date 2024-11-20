@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -39,4 +41,17 @@ func GetValidator() *validator.Validate {
 
 	_singletonValidate = validator.New(validator.WithRequiredStructEnabled())
 	return _singletonValidate
+}
+
+func GenerateUniqueString(length int) string {
+	// Calculate the number of bytes needed
+	byteLength := (length*6 + 7) / 8
+	randomBytes := make([]byte, byteLength)
+
+	if _, err := rand.Read(randomBytes); err != nil {
+		return ""
+	}
+
+	// Encode to Base64 and trim to the desired length
+	return base64.URLEncoding.EncodeToString(randomBytes)[:length]
 }

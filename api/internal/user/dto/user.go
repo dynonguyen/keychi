@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/dynonguyen/keychi/api/internal/user/entity"
+
 type UserRegistrationInput struct {
 	Name     string `json:"name" validate:"required" gorm:"column:name"`
 	Email    string `json:"email" validate:"required,email" gorm:"column:email"`
@@ -10,6 +12,10 @@ type UserRegistrationInput struct {
 type UserLoginInput struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
+}
+
+type PreLoginInput struct {
+	Email string `json:"email" validate:"required,email"`
 }
 
 type UserToken struct {
@@ -28,4 +34,11 @@ type UserInfo struct {
 
 type UserLogout struct {
 	RefreshToken string `json:"refreshToken" validate:"required"`
+}
+
+type PreLoginResponse struct {
+	KdfAlgorithm   entity.KdfAlgorithm `json:"kdfAlgorithm"`
+	KdfIterations  int                 `json:"kdfIterations"`
+	KdfMemory      *int                `json:"kdfMemory"`
+	KdfParallelism *int                `json:"kdfParallelism"`
 }

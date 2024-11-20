@@ -13,8 +13,11 @@ type UserSettingModel struct {
 	VaultTimeout       int                  `json:"vaultTimeout"`
 	VaultTimeoutAction entity.VaultAction   `json:"vaultTimeoutAction"`
 	Language           entity.UserLanguage  `json:"language"`
+	KdfSalt            string               `json:"kdfSalt"`
 	KdfAlgorithm       entity.KdfAlgorithm  `json:"kdfAlgorithm"`
 	KdfIterations      int                  `json:"kdfIterations"`
+	KdfMemory          *int                 `json:"kdfMemory"`
+	KdfParallelism     *int                 `json:"kdfParallelism"`
 	CreatedAt          *time.Time           `json:"createdAt"`
 	UpdatedAt          *time.Time           `json:"updatedAt"`
 }
