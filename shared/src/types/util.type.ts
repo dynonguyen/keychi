@@ -24,3 +24,5 @@ export type EnumValue<T extends string | number | bigint | boolean | null | unde
   `${T}` extends `${infer N extends string}` ? N : never;
 
 export type TFunction = typeof i18next.t;
+
+export type Maybe<T> = T | null | undefined;

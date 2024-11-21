@@ -18,8 +18,8 @@ const root = __dirname;
 
 export default defineConfig({
   root,
-  base: process.env.WEB_BASE_URL,
-  envPrefix: 'WEB_',
+  base: process.env.VITE_BASE_URL,
+  envPrefix: 'VITE_',
   envDir: path.join(root, '.env'),
 
   plugins: [
@@ -28,9 +28,9 @@ export default defineConfig({
     viteEjsPlugin({
       releaseDate,
       releaseVersion: version,
-      baseUrl: process.env.WEB_BASE_URL,
-      logoUrl: process.env.WEB_ASSET_URL + '/img/app-logo.svg',
-      faviconUrl: process.env.WEB_ASSET_URL + '/img/logo.svg'
+      baseUrl: process.env.VITE_BASE_URL,
+      logoUrl: process.env.VITE_ASSET_URL + '/img/app-logo.svg',
+      faviconUrl: process.env.VITE_ASSET_URL + '/img/logo.svg'
     })
   ],
 

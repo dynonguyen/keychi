@@ -3,10 +3,11 @@
 import { EnvMode } from '../constants/common';
 
 interface ImportMetaEnv {
-  WEB_BASE_URL: string;
-  WEB_ASSET_URL: string;
-  WEB_API_URL: string;
-  WEB_ENV_MODE: EnvMode;
+  VITE_BASE_URL: string;
+  VITE_ASSET_URL: string;
+  VITE_API_URL: string;
+  VITE_ENV_MODE: EnvMode;
+  VITE_AUTH_KDF_SALT: string;
 }
 
 /** Access vite env via key */

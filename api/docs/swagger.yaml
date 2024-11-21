@@ -36,6 +36,24 @@ definitions:
     required:
     - name
     type: object
+  dto.PreLoginInput:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  dto.PreLoginResponse:
+    properties:
+      kdfAlgorithm:
+        $ref: '#/definitions/entity.KdfAlgorithm'
+      kdfIterations:
+        type: integer
+      kdfMemory:
+        type: integer
+      kdfParallelism:
+        type: integer
+    type: object
   dto.UpdateFolderInput:
     properties:
       color:
@@ -103,6 +121,14 @@ definitions:
       tokenType:
         type: string
     type: object
+  entity.KdfAlgorithm:
+    enum:
+    - pbkdf2
+    - argon2
+    type: string
+    x-enum-varnames:
+    - PBKDF2
+    - Argon2
   model.Folder:
     properties:
       color:
@@ -148,12 +174,12 @@ paths:
   /login:
     post:
       parameters:
-      - description: User login input
+      - description: pre login input
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/dto.UserLoginInput'
+          $ref: '#/definitions/dto.PreLoginInput'
       responses:
         "200":
           description: OK

@@ -9,7 +9,7 @@ import { useAuthStore } from '../stores/auth';
 
 function createAxiosInstance() {
   const instance = axios.create({
-    baseURL: getEnv('WEB_API_URL'),
+    baseURL: getEnv('VITE_API_URL'),
     headers: { 'Content-Type': 'application/json' }
   });
 

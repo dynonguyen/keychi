@@ -1,3 +1,5 @@
+import { Maybe } from './util.type';
+
 type Entity<T> = {
   id: number;
   createdAt: string;
@@ -62,6 +64,14 @@ export type VaultUpdateHistory = {
   value: object;
 };
 
+export type KdfParams = {
+  kdfSalt: string;
+  kdfAlgorithm: KdfAlgorithm;
+  kdfIterations: number;
+  kdfMemory?: Maybe<number>;
+  kdfParallelism?: Maybe<number>;
+};
+
 // -----------------------------
 export type User = Entity<{
   email: string;
@@ -70,31 +80,30 @@ export type User = Entity<{
   pwdHint?: string;
 }>;
 
-export type UserSetting = Entity<{
-  userId: number;
-  theme: ThemeMode;
-  vaultTimeout: number;
-  vaultTimeoutAction: VaultTimeoutAction;
-  language: Language;
-  kdfAlgorithm: KdfAlgorithm;
-  kdfIterations: number;
-}>;
+export type UserSetting = KdfParams &
+  Entity<{
+    userId: number;
+    theme: ThemeMode;
+    vaultTimeout: number;
+    vaultTimeoutAction: VaultTimeoutAction;
+    language: Language;
+  }>;
 
 export type Folder = Entity<{
   userId: number;
   name: string;
-  icon?: string | null;
-  color?: string | null;
+  icon?: Maybe<string>;
+  color?: Maybe<string>;
 }>;
 
 export type Vault = Entity<{
   userId: number;
-  folderId?: number | null;
+  folderId?: Maybe<number>;
   name: string;
   type: VaultType;
   customFields?: VaultCustomField[];
   properties: VaultLoginProperty | VaultCardProperty;
-  note?: string | null;
+  note?: Maybe<string>;
   deleted: boolean;
   updateHistories: VaultUpdateHistory[];
 }>;

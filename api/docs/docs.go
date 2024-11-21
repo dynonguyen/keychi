@@ -53,12 +53,12 @@ const docTemplate = `{
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "User login input",
+                        "description": "pre login input",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UserLoginInput"
+                            "$ref": "#/definitions/dto.PreLoginInput"
                         }
                     }
                 ],
@@ -446,6 +446,34 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.PreLoginInput": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.PreLoginResponse": {
+            "type": "object",
+            "properties": {
+                "kdfAlgorithm": {
+                    "$ref": "#/definitions/entity.KdfAlgorithm"
+                },
+                "kdfIterations": {
+                    "type": "integer"
+                },
+                "kdfMemory": {
+                    "type": "integer"
+                },
+                "kdfParallelism": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UpdateFolderInput": {
             "type": "object",
             "required": [
@@ -547,6 +575,17 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "entity.KdfAlgorithm": {
+            "type": "string",
+            "enum": [
+                "pbkdf2",
+                "argon2"
+            ],
+            "x-enum-varnames": [
+                "PBKDF2",
+                "Argon2"
+            ]
         },
         "model.Folder": {
             "type": "object",

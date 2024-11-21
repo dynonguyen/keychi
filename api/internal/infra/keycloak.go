@@ -68,6 +68,7 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 	client := resty.New()
 
 	firstName, lastName := util.SplitFullName(user.Name)
+
 	payload := common.Json{
 		"username":      user.Email,
 		"email":         user.Email,
