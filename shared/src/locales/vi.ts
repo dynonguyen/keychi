@@ -4,7 +4,8 @@ const vi = {
     notFound: 'Không tìm thấy trang',
     serverError: 'Đã xảy ra lỗi',
     login: 'Đăng nhập',
-    register: 'Đăng ký'
+    register: 'Đăng ký',
+    lock: 'Vault của bạn đã bị khóa'
   },
   pageResultAction: 'Quay về <toHome>trang chủ</toHome> hoặc <toContact>liên hệ với chúng tôi</toContact>.',
   notFound: {

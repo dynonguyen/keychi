@@ -1,6 +1,7 @@
 import { LoadModule } from '@shared/components/react';
 import React from 'react';
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
+import LockPageDetector from '../components/LockPageDetector';
 import { PATH } from '../constants/path';
 import AuthGuard from '../guards/AuthGuard';
 import LoginGuard from '../guards/LoginGuard';
@@ -10,49 +11,50 @@ import ServerErrorPage from '../pages/ServerErrorPage';
 
 const HomePage = React.lazy(() => import('../pages/HomePage'));
 const LoginPage = React.lazy(() => import('../pages/LoginPage'));
+const LockPage = React.lazy(() => import('../pages/LockPage'));
 const RegisterPage = React.lazy(() => import('../pages/RegisterPage'));
 
 // -----------------------------
-export const router = createBrowserRouter([
-  // Protected routes
-  {
-    errorElement: <ServerErrorPage />,
-    element: (
-      <AuthGuard>
-        <MainLayout />
-      </AuthGuard>
-    ),
-    children: [{ path: PATH.HOME, element: <HomePage /> }]
-  },
+const protectedRoutes: RouteObject = {
+  errorElement: <ServerErrorPage />,
+  element: (
+    <AuthGuard>
+      <MainLayout />
+    </AuthGuard>
+  ),
+  children: [{ path: PATH.HOME, element: <HomePage /> }]
+};
 
-  // Public routes
-  {
-    errorElement: <ServerErrorPage />,
-    element: (
-      <LoadModule>
+const authRoutes: RouteObject = {
+  errorElement: <ServerErrorPage />,
+  element: (
+    <LoadModule>
+      <LoginGuard>
         <Outlet />
-      </LoadModule>
-    ),
-    children: [
-      {
-        path: PATH.LOGIN,
-        element: (
-          <LoginGuard>
-            <LoginPage />
-          </LoginGuard>
-        )
-      },
-      {
-        path: PATH.REGISTER,
-        element: (
-          <LoginGuard>
-            <RegisterPage />
-          </LoginGuard>
-        )
-      }
-    ]
-  },
+      </LoginGuard>
+    </LoadModule>
+  ),
+  children: [
+    { path: PATH.LOGIN, element: <LoginPage /> },
+    { path: PATH.REGISTER, element: <RegisterPage /> }
+  ]
+};
 
-  // Not found
+const publicRoutes: RouteObject = {
+  errorElement: <ServerErrorPage />,
+  element: (
+    <LoadModule>
+      <Outlet />
+    </LoadModule>
+  ),
+  children: [{ path: PATH.LOCK, element: <LockPage /> }]
+};
+
+export const router = createBrowserRouter([
+  {
+    element: <LockPageDetector />,
+    children: [protectedRoutes, authRoutes]
+  },
+  publicRoutes,
   { path: '*', element: <NotFoundPage /> }
 ]);

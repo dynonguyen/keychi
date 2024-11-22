@@ -4,7 +4,8 @@ const en = {
     notFound: 'Page not found',
     serverError: 'Server error',
     login: 'Login',
-    register: 'Register'
+    register: 'Register',
+    lock: 'Your vault is locked'
   },
   pageResultAction: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.',
   notFound: {

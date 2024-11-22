@@ -1,12 +1,11 @@
-import { ENDPOINT, LS_KEY } from '@shared/constants';
-import { User } from '@shared/types';
+import { ENDPOINT, LS_KEY, SS_KEY } from '@shared/constants';
 import isEqual from 'react-fast-compare';
 import { toast } from 'react-toastify';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { PATH } from '../constants/path';
 import { mutation } from '../libs/query-client';
 
-type AuthState = User & {
+type AuthState = {
   isLoading: boolean;
   isInitiated: boolean;
   isAuthenticated: boolean;
@@ -32,7 +31,9 @@ const defaultStore = {
 export const useAuthStore = createWithEqualityFn<AuthStore>(
   (set, get) => ({
     ...defaultStore,
+
     setAuth: set,
+
     async logout(shouldRedirect = true) {
       const { refreshToken } = get();
       const [error] = await mutation<string, { refreshToken: string }>(ENDPOINT.POST_LOGOUT)({ refreshToken });
@@ -41,8 +42,10 @@ export const useAuthStore = createWithEqualityFn<AuthStore>(
 
       localStorage.removeItem(LS_KEY.ACCESS_TOKEN);
       localStorage.removeItem(LS_KEY.REFRESH_TOKEN);
+      sessionStorage.removeItem(SS_KEY.LOGGED_USER);
 
       set(defaultStore);
+
       if (shouldRedirect) location.pathname = PATH.LOGIN;
     }
   }),

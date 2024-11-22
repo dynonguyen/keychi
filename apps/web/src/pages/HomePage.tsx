@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 import ThemeController from '../components/ThemeController';
 import usePageTitle from '../hooks/usePageTitle';
 import { useAuthStore } from '../stores/auth';
+import { useProfileStore } from '../stores/profile';
 
 export const HomePage = () => {
   const { t } = useTranslation();
-  const { name, logout } = useAuthStore();
+  const { logout } = useAuthStore();
+  const { name } = useProfileStore();
 
   usePageTitle(t('pageTitle.home'));
 

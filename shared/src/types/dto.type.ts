@@ -1,3 +1,5 @@
+import { User, UserPreferences } from './entity.type';
+
 export type RegisterReqDto = {
   email: string;
   password: string;
@@ -15,3 +17,5 @@ export type LoginRespDto = {
   expiresIn: number;
   tokenType: string;
 };
+
+export type UserProfile = User & { preferences: UserPreferences };
