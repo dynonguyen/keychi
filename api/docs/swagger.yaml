@@ -36,24 +36,6 @@ definitions:
     required:
     - name
     type: object
-  dto.PreLoginInput:
-    properties:
-      email:
-        type: string
-    required:
-    - email
-    type: object
-  dto.PreLoginResponse:
-    properties:
-      kdfAlgorithm:
-        $ref: '#/definitions/entity.KdfAlgorithm'
-      kdfIterations:
-        type: integer
-      kdfMemory:
-        type: integer
-      kdfParallelism:
-        type: integer
-    type: object
   dto.UpdateFolderInput:
     properties:
       color:
@@ -66,17 +48,6 @@ definitions:
         type: string
     required:
     - folderId
-    type: object
-  dto.UserInfo:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
     type: object
   dto.UserLoginInput:
     properties:
@@ -94,6 +65,25 @@ definitions:
         type: string
     required:
     - refreshToken
+    type: object
+  dto.UserProfile:
+    properties:
+      avatar:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      preferences:
+        $ref: '#/definitions/model.UserPreferencesModel'
+      pwdHint:
+        type: string
+      updatedAt:
+        type: string
     type: object
   dto.UserRegistrationInput:
     properties:
@@ -129,6 +119,32 @@ definitions:
     x-enum-varnames:
     - PBKDF2
     - Argon2
+  entity.UserLanguage:
+    enum:
+    - en
+    - vi
+    type: string
+    x-enum-varnames:
+    - English
+    - Vietnamese
+  entity.UserThemeMode:
+    enum:
+    - light
+    - dark
+    - system
+    type: string
+    x-enum-varnames:
+    - Light
+    - Dark
+    - System
+  entity.VaultAction:
+    enum:
+    - lock
+    - logout
+    type: string
+    x-enum-varnames:
+    - Lock
+    - Logout
   model.Folder:
     properties:
       color:
@@ -145,6 +161,35 @@ definitions:
         type: string
       userId:
         type: integer
+    type: object
+  model.UserPreferencesModel:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      kdfAlgorithm:
+        $ref: '#/definitions/entity.KdfAlgorithm'
+      kdfIterations:
+        type: integer
+      kdfMemory:
+        type: integer
+      kdfParallelism:
+        type: integer
+      kdfSalt:
+        type: string
+      language:
+        $ref: '#/definitions/entity.UserLanguage'
+      theme:
+        $ref: '#/definitions/entity.UserThemeMode'
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+      vaultTimeout:
+        type: integer
+      vaultTimeoutAction:
+        $ref: '#/definitions/entity.VaultAction'
     type: object
 info:
   contact:
@@ -174,12 +219,12 @@ paths:
   /login:
     post:
       parameters:
-      - description: pre login input
+      - description: Login input
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/dto.PreLoginInput'
+          $ref: '#/definitions/dto.UserLoginInput'
       responses:
         "200":
           description: OK
@@ -221,13 +266,13 @@ paths:
       summary: Logout
       tags:
       - User
-  /user:
+  /profile:
     get:
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.UserInfo'
+            $ref: '#/definitions/dto.UserProfile'
         "400":
           description: Bad Request
           schema:
@@ -242,9 +287,10 @@ paths:
             $ref: '#/definitions/common.AppError'
       security:
       - Bearer: []
-      summary: Get User
+      summary: Get User Profile
       tags:
       - User
+  /user:
     post:
       parameters:
       - description: dto.UserRegistrationInput

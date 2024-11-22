@@ -53,12 +53,12 @@ const docTemplate = `{
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "pre login input",
+                        "description": "Login input",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PreLoginInput"
+                            "$ref": "#/definitions/dto.UserLoginInput"
                         }
                     }
                 ],
@@ -123,7 +123,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/profile": {
             "get": {
                 "security": [
                     {
@@ -133,12 +133,12 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Get User",
+                "summary": "Get User Profile",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.UserInfo"
+                            "$ref": "#/definitions/dto.UserProfile"
                         }
                     },
                     "400": {
@@ -160,7 +160,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/user": {
             "post": {
                 "tags": [
                     "User"
@@ -446,34 +448,6 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.PreLoginInput": {
-            "type": "object",
-            "required": [
-                "email"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.PreLoginResponse": {
-            "type": "object",
-            "properties": {
-                "kdfAlgorithm": {
-                    "$ref": "#/definitions/entity.KdfAlgorithm"
-                },
-                "kdfIterations": {
-                    "type": "integer"
-                },
-                "kdfMemory": {
-                    "type": "integer"
-                },
-                "kdfParallelism": {
-                    "type": "integer"
-                }
-            }
-        },
         "dto.UpdateFolderInput": {
             "type": "object",
             "required": [
@@ -488,23 +462,6 @@ const docTemplate = `{
                 },
                 "icon": {
                     "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UserInfo": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -533,6 +490,35 @@ const docTemplate = `{
             ],
             "properties": {
                 "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserProfile": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "preferences": {
+                    "$ref": "#/definitions/model.UserPreferencesModel"
+                },
+                "pwdHint": {
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }
@@ -587,6 +573,41 @@ const docTemplate = `{
                 "Argon2"
             ]
         },
+        "entity.UserLanguage": {
+            "type": "string",
+            "enum": [
+                "en",
+                "vi"
+            ],
+            "x-enum-varnames": [
+                "English",
+                "Vietnamese"
+            ]
+        },
+        "entity.UserThemeMode": {
+            "type": "string",
+            "enum": [
+                "light",
+                "dark",
+                "system"
+            ],
+            "x-enum-varnames": [
+                "Light",
+                "Dark",
+                "System"
+            ]
+        },
+        "entity.VaultAction": {
+            "type": "string",
+            "enum": [
+                "lock",
+                "logout"
+            ],
+            "x-enum-varnames": [
+                "Lock",
+                "Logout"
+            ]
+        },
         "model.Folder": {
             "type": "object",
             "properties": {
@@ -610,6 +631,50 @@ const docTemplate = `{
                 },
                 "userId": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.UserPreferencesModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kdfAlgorithm": {
+                    "$ref": "#/definitions/entity.KdfAlgorithm"
+                },
+                "kdfIterations": {
+                    "type": "integer"
+                },
+                "kdfMemory": {
+                    "type": "integer"
+                },
+                "kdfParallelism": {
+                    "type": "integer"
+                },
+                "kdfSalt": {
+                    "type": "string"
+                },
+                "language": {
+                    "$ref": "#/definitions/entity.UserLanguage"
+                },
+                "theme": {
+                    "$ref": "#/definitions/entity.UserThemeMode"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                },
+                "vaultTimeout": {
+                    "type": "integer"
+                },
+                "vaultTimeoutAction": {
+                    "$ref": "#/definitions/entity.VaultAction"
                 }
             }
         }

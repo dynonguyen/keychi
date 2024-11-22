@@ -30,7 +30,7 @@ func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserR
 			return err
 		}
 
-		if err := uc.repo.CreateDefaultUserSettings(ctx, userId); err != nil {
+		if err := uc.repo.CreateDefaultUserPreferences(ctx, userId); err != nil {
 			return err
 		}
 

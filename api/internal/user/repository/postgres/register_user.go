@@ -43,17 +43,17 @@ func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistr
 	return inserted.ID, nil
 }
 
-func (r *registerUserRepo) CreateDefaultUserSettings(ctx context.Context, userId int) error {
+func (r *registerUserRepo) CreateDefaultUserPreferences(ctx context.Context, userId int) error {
 	db := r.storage.GetInstance()
 
-	if err := db.Create(&model.UserSettingModel{
+	if err := db.Create(&model.UserPreferencesModel{
 		UserID:             userId,
-		Theme:              entity.DefaultUserSetting.Theme,
-		VaultTimeout:       entity.DefaultUserSetting.VaultTimeout,
-		VaultTimeoutAction: entity.DefaultUserSetting.VaultTimeoutAction,
-		Language:           entity.DefaultUserSetting.Language,
-		KdfAlgorithm:       entity.DefaultUserSetting.KdfAlgorithm,
-		KdfIterations:      entity.DefaultUserSetting.KdfIterations,
+		Theme:              entity.DefaultUserPreferences.Theme,
+		VaultTimeout:       entity.DefaultUserPreferences.VaultTimeout,
+		VaultTimeoutAction: entity.DefaultUserPreferences.VaultTimeoutAction,
+		Language:           entity.DefaultUserPreferences.Language,
+		KdfAlgorithm:       entity.DefaultUserPreferences.KdfAlgorithm,
+		KdfIterations:      entity.DefaultUserPreferences.KdfIterations,
 		KdfSalt:            util.GenerateUniqueString(16),
 	}).Error; err != nil {
 		return common.NewBadRequestError(err, common.CodeInternalServerError)

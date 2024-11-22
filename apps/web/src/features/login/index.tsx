@@ -11,14 +11,12 @@ import { PATH } from '../../constants/path';
 import { mutation } from '../../libs/query-client';
 
 const login = mutation<LoginRespDto, LoginReqDto>(ENDPOINT.POST_LOGIN);
-// const preLogin = mutation<PreLoginRespDto, PreLoginReqDto>(ENDPOINT.POST_PRE_LOGIN);
 
 // TODO: Implement login form
 export const Login = () => {
   const navigate = useNavigate();
 
   const loginMutation = useMutation({ mutationFn: login });
-  // const preLoginMutation = useMutation({ mutationFn: preLogin });
 
   const { register, getValues } = useForm<LoginReqDto>({
     defaultValues: { email: 'dyno@email.com', password: '1234' }
@@ -26,13 +24,6 @@ export const Login = () => {
 
   const handleLogin = async () => {
     const { email, password } = getValues();
-    // const [preLoginError, preLoginResp] = await preLoginMutation.mutateAsync({ email });
-
-    // if (preLoginError) {
-    //   return toast.error(getErrorMessage(preLoginError));
-    // }
-
-    // const { kdfAlgorithm, kdfIterations, kdfMemory, kdfParallelism } = preLoginResp.data;
     const cipher = new Cipher({
       email,
       masterPwd: password,

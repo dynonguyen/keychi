@@ -9,13 +9,10 @@ import (
 
 type RegisterUserRepository interface {
 	InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (int, error)
-	CreateDefaultUserSettings(ctx context.Context, userId int) error
+	CreateDefaultUserPreferences(ctx context.Context, userId int) error
 }
 
-type UserInfoRepository interface {
-	FindUserByEmail(ctx context.Context, email string) (*model.UserModel, error)
-}
-
-type AuthRepository interface {
-	FindPreLoginSettingByEmail(ctx context.Context, email string) (*dto.PreLoginResponse, error)
+type ProfileRepository interface {
+	FindUserById(ctx context.Context, id int) (*model.UserModel, error)
+	FindUserPreferencesByUserId(ctx context.Context, userId int) (*model.UserPreferencesModel, error)
 }

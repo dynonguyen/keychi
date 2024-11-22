@@ -80,7 +80,7 @@ export type User = Entity<{
   pwdHint?: string;
 }>;
 
-export type UserSetting = KdfParams &
+export type UserPreferences = KdfParams &
   Entity<{
     userId: number;
     theme: ThemeMode;

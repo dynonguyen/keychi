@@ -42,7 +42,7 @@ func (m *mockRepository) InsertUser(ctx context.Context, user *dto.UserRegistrat
 	return 1, nil
 }
 
-func (m *mockRepository) CreateDefaultUserSettings(ctx context.Context, userID int) error {
+func (m *mockRepository) CreateDefaultUserPreferences(ctx context.Context, userID int) error {
 	return nil
 }
 

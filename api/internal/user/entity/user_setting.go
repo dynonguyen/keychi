@@ -28,7 +28,7 @@ const (
 	Logout VaultAction = "logout"
 )
 
-type UserSetting struct {
+type UserPreferences struct {
 	ID                 int           `json:"id"`
 	UserID             int           `json:"userId"`
 	Theme              UserThemeMode `json:"theme"`
@@ -44,7 +44,7 @@ type UserSetting struct {
 	UpdatedAt          *time.Time    `json:"updatedAt"`
 }
 
-var DefaultUserSetting = &UserSetting{
+var DefaultUserPreferences = &UserPreferences{
 	Theme:              System,
 	VaultTimeout:       0,
 	VaultTimeoutAction: Lock,

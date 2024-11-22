@@ -6,7 +6,7 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/user/entity"
 )
 
-type UserSettingModel struct {
+type UserPreferencesModel struct {
 	ID                 int                  `json:"id" gorm:"column:id;primaryKey;->"`
 	UserID             int                  `json:"userId"`
 	Theme              entity.UserThemeMode `json:"theme"`
@@ -22,6 +22,6 @@ type UserSettingModel struct {
 	UpdatedAt          *time.Time           `json:"updatedAt"`
 }
 
-func (u *UserSettingModel) TableName() string {
-	return "settings"
+func (u *UserPreferencesModel) TableName() string {
+	return "preferences"
 }

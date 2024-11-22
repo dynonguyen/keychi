@@ -5,7 +5,7 @@ import React from 'react';
 import { fetcher } from '../libs/query-client';
 import { useAuthStore } from '../stores/auth';
 
-const getMe = fetcher<User>(ENDPOINT.GET_USER);
+const getMe = fetcher<User>(ENDPOINT.GET_PROFILE);
 
 export const useGetMe = (shouldGetMe?: boolean) => {
   const { setAuth } = useAuthStore();
@@ -14,7 +14,7 @@ export const useGetMe = (shouldGetMe?: boolean) => {
     data: user,
     isError
   } = useQuery({
-    queryKey: [ENDPOINT.GET_USER],
+    queryKey: [ENDPOINT.GET_PROFILE],
     queryFn: getMe,
     staleTime: 0,
     enabled: shouldGetMe,

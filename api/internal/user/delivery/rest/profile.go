@@ -11,22 +11,22 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// @Summary Get User
+// @Summary Get User Profile
 // @Tags User
-// @Success 200 {object} dto.UserInfo
+// @Success 200 {object} dto.UserProfile
 // @Failure 401 {object} common.AppError
 // @Failure 400 {object} common.AppError
 // @Failure 500 {object} common.AppError
 // @Security	Bearer
-// @Router /user [get]
-func HandleGetUser(s *infra.PgsqlStorage) echo.HandlerFunc {
+// @Router /profile [get]
+func HandleGetProfile(s *infra.PgsqlStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		repo := postgres.NewUserInfoRepository(s)
-		uc := usecase.NewGetUserUsecase(repo)
+		repo := postgres.NewProfileRepository(s)
+		uc := usecase.NewProfileUsecase(repo)
 
-		email := util.GetUserFromContext(c).Email
+		id := util.GetUserFromContext(c).ID
 
-		user, err := uc.GetUser(c.Request().Context(), email)
+		user, err := uc.GetUserProfile(c.Request().Context(), id)
 
 		if err != nil {
 			return c.JSON(common.GetAppErrorStatus(err, http.StatusBadRequest), err)

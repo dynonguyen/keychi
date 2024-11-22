@@ -20,6 +20,10 @@ yarn docker:up
 yarn docker:down
 ```
 
+### Migrate database
+
+To create tables, copy/paste `api/migration/db.sql` into `pgadmin` query editor and execute it.
+
 ### Development
 
 ```bash
@@ -29,13 +33,20 @@ go install github.com/swaggo/swag/cmd/swag@latest
 
 # Install gow cli for watching file changes and restart server (if not installed)
 go install github.com/mitranim/gow@latest
-yarn api:dev
 
+yarn api:dev
+```
+
+```bash
 # Start keychi web app
 yarn web:dev
+```
 
+```bash
 # Start keychi mobile app
+```
 
+```bash
 # Start keychi desktop app
 ```
 

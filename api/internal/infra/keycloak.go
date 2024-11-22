@@ -13,6 +13,8 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+const userLastNamePlaceholder = "_"
+
 type keycloakAuthService struct {
 	url          string
 	realm        string
@@ -68,6 +70,9 @@ func (k *keycloakAuthService) CreateUser(ctx context.Context, user *dto.UserRegi
 	client := resty.New()
 
 	firstName, lastName := util.SplitFullName(user.Name)
+	if lastName == "" {
+		lastName = userLastNamePlaceholder
+	}
 
 	payload := common.Json{
 		"username":      user.Email,
