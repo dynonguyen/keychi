@@ -1,6 +1,6 @@
 import { Button, Input } from '@nextui-org/react';
 import { Flex } from '@shared/components/react';
-import { ENDPOINT, LS_KEY, SS_KEY } from '@shared/constants';
+import { ENDPOINT, SS_KEY } from '@shared/constants';
 import { KdfParams, LoginReqDto, LoginRespDto } from '@shared/types';
 import { Cipher, getErrorMessage, isEmail } from '@shared/utils';
 import { useMutation } from '@tanstack/react-query';
@@ -35,8 +35,8 @@ export const Lock = () => {
 
     if (error) return toast.error(getErrorMessage(error));
 
-    localStorage.setItem(LS_KEY.ACCESS_TOKEN, response.data.accessToken);
-    localStorage.setItem(LS_KEY.REFRESH_TOKEN, response.data.refreshToken);
+    sessionStorage.setItem(SS_KEY.ACCESS_TOKEN, response.data.accessToken);
+    sessionStorage.setItem(SS_KEY.REFRESH_TOKEN, response.data.refreshToken);
 
     setMasterPwd(password);
 

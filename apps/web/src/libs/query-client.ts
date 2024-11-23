@@ -1,4 +1,4 @@
-import { LS_KEY } from '@shared/constants';
+import { SS_KEY } from '@shared/constants';
 import { Any } from '@shared/types';
 import { getEnv } from '@shared/utils';
 import { MutationFunction, QueryClient } from '@tanstack/react-query';
@@ -15,7 +15,7 @@ function createAxiosInstance() {
 
   instance.interceptors.request.use(
     (config) => {
-      const accessToken = localStorage.getItem(LS_KEY.ACCESS_TOKEN);
+      const accessToken = sessionStorage.getItem(SS_KEY.ACCESS_TOKEN);
 
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;

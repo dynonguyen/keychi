@@ -1,6 +1,5 @@
-import { ENDPOINT, LS_KEY, SS_KEY } from '@shared/constants';
+import { ENDPOINT, SS_KEY } from '@shared/constants';
 import isEqual from 'react-fast-compare';
-import { toast } from 'react-toastify';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { PATH } from '../constants/path';
 import { mutation } from '../libs/query-client';
@@ -9,8 +8,6 @@ type AuthState = {
   isLoading: boolean;
   isInitiated: boolean;
   isAuthenticated: boolean;
-  accessToken: string;
-  refreshToken: string;
 };
 
 type AuthAction = {
@@ -23,25 +20,24 @@ export type AuthStore = AuthState & AuthAction;
 const defaultStore = {
   isLoading: true,
   isInitiated: false,
-  isAuthenticated: false,
-  accessToken: localStorage.getItem(LS_KEY.ACCESS_TOKEN) || '',
-  refreshToken: localStorage.getItem(LS_KEY.REFRESH_TOKEN) || ''
+  isAuthenticated: false
 } as AuthState;
 
 export const useAuthStore = createWithEqualityFn<AuthStore>(
-  (set, get) => ({
+  (set) => ({
     ...defaultStore,
 
     setAuth: set,
 
     async logout(shouldRedirect = true) {
-      const { refreshToken } = get();
-      const [error] = await mutation<string, { refreshToken: string }>(ENDPOINT.POST_LOGOUT)({ refreshToken });
+      const refreshToken = sessionStorage.getItem(SS_KEY.REFRESH_TOKEN);
 
-      if (error) return toast.error(error.message);
+      if (refreshToken) {
+        await mutation<string, { refreshToken: string }>(ENDPOINT.POST_LOGOUT)({ refreshToken });
+      }
 
-      localStorage.removeItem(LS_KEY.ACCESS_TOKEN);
-      localStorage.removeItem(LS_KEY.REFRESH_TOKEN);
+      sessionStorage.removeItem(SS_KEY.ACCESS_TOKEN);
+      sessionStorage.removeItem(SS_KEY.REFRESH_TOKEN);
       sessionStorage.removeItem(SS_KEY.LOGGED_USER);
 
       set(defaultStore);
