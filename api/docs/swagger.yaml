@@ -180,6 +180,8 @@ definitions:
         type: string
       type:
         type: string
+      value:
+        type: string
     type: object
   entity.VaultProperties:
     additionalProperties: {}

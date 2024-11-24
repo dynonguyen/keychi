@@ -15,4 +15,5 @@ type RegisterUserRepository interface {
 type ProfileRepository interface {
 	FindUserById(ctx context.Context, id int) (*model.UserModel, error)
 	FindUserPreferencesByUserId(ctx context.Context, userId int) (*model.UserPreferencesModel, error)
+	UpdateUserPreferencesByUserId(ctx context.Context, userId int, preferences *dto.UserPreferencesInput) error
 }

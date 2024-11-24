@@ -747,6 +747,9 @@
                 },
                 "type": {
                     "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },

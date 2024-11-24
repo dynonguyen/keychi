@@ -15,4 +15,5 @@ func UserController(g *echo.Group, storage *infra.PgsqlStorage, authSvc service.
 
 	g.POST("/user", HandleRegisterUser(storage, authSvc))
 	g.GET("/profile", HandleGetProfile(storage), userMiddleware)
+	g.PUT("/profile/preferences", HandleUpdateUserPreferences(storage), userMiddleware)
 }

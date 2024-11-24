@@ -751,6 +751,9 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },
