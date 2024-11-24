@@ -13,16 +13,14 @@ type createFolderUsecase struct {
 	repo repository.FolderRepository
 }
 
-func (uc *createFolderUsecase) CreateFolder(ctx context.Context, userID int, folder *dto.NewFolderInput) error {
+func (uc *createFolderUsecase) CreateFolder(ctx context.Context, userID int, folder *dto.NewFolderInput) (int, error) {
 	validate := util.GetValidator()
 
 	if err := validate.Struct(folder); err != nil {
-		return common.NewBadRequestError(err, common.CodeBadRequestError)
+		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
-	_, err := uc.repo.InsertFolder(ctx, userID, folder)
-
-	return err
+	return uc.repo.InsertFolder(ctx, userID, folder)
 }
 
 func NewCreateFolderUsecase(repo repository.FolderRepository) *createFolderUsecase {

@@ -10,6 +10,11 @@ definitions:
       status:
         type: integer
     type: object
+  common.EntityCreationResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   common.I18nCode:
     enum:
     - INTERNAL_SERVER_ERROR
@@ -20,6 +25,9 @@ definitions:
     - CodeInternalServerError
     - CodeBadRequestError
     - CodeUnauthorizedError
+  common.Json:
+    additionalProperties: {}
+    type: object
   dto.HealthCheckResponse:
     properties:
       dbConnected:
@@ -35,6 +43,31 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  dto.NewVaultInput:
+    properties:
+      customFields:
+        items:
+          $ref: '#/definitions/entity.VaultCustomField'
+        type: array
+      folderId:
+        type: integer
+      name:
+        type: string
+      note:
+        type: string
+      properties:
+        $ref: '#/definitions/common.Json'
+      type:
+        allOf:
+        - $ref: '#/definitions/entity.VaultType'
+        enum:
+        - login
+        - card
+    required:
+    - name
+    - properties
+    - type
     type: object
   dto.UpdateFolderInput:
     properties:
@@ -145,6 +178,23 @@ definitions:
     x-enum-varnames:
     - Lock
     - Logout
+  entity.VaultCustomField:
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      value:
+        type: string
+    type: object
+  entity.VaultType:
+    enum:
+    - login
+    - card
+    type: string
+    x-enum-varnames:
+    - VaultTypeLogin
+    - VaultTypeCard
   model.Folder:
     properties:
       color:
@@ -303,7 +353,7 @@ paths:
         "201":
           description: Created
           schema:
-            type: string
+            $ref: '#/definitions/common.EntityCreationResponse'
         "400":
           description: Bad Request
           schema:
@@ -315,6 +365,37 @@ paths:
       summary: Register a new user
       tags:
       - User
+  /vault:
+    post:
+      parameters:
+      - description: New vault information
+        in: body
+        name: vault
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewVaultInput'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/common.EntityCreationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
+      security:
+      - Bearer: []
+      summary: Create a new vault
+      tags:
+      - Vault
   /vault/folder:
     patch:
       parameters:
@@ -355,10 +436,10 @@ paths:
         schema:
           $ref: '#/definitions/dto.NewFolderInput'
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            type: string
+            $ref: '#/definitions/common.EntityCreationResponse'
         "400":
           description: Bad Request
           schema:

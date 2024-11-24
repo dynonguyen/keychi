@@ -9,7 +9,7 @@
     "commit": "node ./node_modules/cz-customizable/standalone.js",
     "prepare": "husky",
     "nx-reset": "nx reset",
-    "permit-scripts": "chmod +x ./scripts/*",
+    "permit-scripts": "chmod +x ./scripts/* && chmod +x ./docker/postgres/*",
     "minio:upload": "docker exec minio bash -c \"/sync/upload.sh\"",
     "minio:download": "docker exec minio bash -c \"/sync/download.sh\"",
     "docker:up": "yarn permit-scripts && ./scripts/setup.sh",

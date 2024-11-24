@@ -7,3 +7,7 @@ type JsonString = map[string]string
 type TransactionManager interface {
 	WithTransaction(func() error) error
 }
+
+type EntityCreationResponse struct {
+	ID int `json:"id"`
+}

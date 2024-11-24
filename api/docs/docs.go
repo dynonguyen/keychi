@@ -183,11 +183,61 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.EntityCreationResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/vault": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "Create a new vault",
+                "parameters": [
+                    {
+                        "description": "New vault information",
+                        "name": "vault",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.NewVaultInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/common.EntityCreationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/common.AppError"
                         }
@@ -224,10 +274,10 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.EntityCreationResponse"
                         }
                     },
                     "400": {
@@ -410,6 +460,14 @@ const docTemplate = `{
                 }
             }
         },
+        "common.EntityCreationResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "common.I18nCode": {
             "type": "string",
             "enum": [
@@ -422,6 +480,10 @@ const docTemplate = `{
                 "CodeBadRequestError",
                 "CodeUnauthorizedError"
             ]
+        },
+        "common.Json": {
+            "type": "object",
+            "additionalProperties": {}
         },
         "dto.HealthCheckResponse": {
             "type": "object",
@@ -445,6 +507,45 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.NewVaultInput": {
+            "type": "object",
+            "required": [
+                "name",
+                "properties",
+                "type"
+            ],
+            "properties": {
+                "customFields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.VaultCustomField"
+                    }
+                },
+                "folderId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "properties": {
+                    "$ref": "#/definitions/common.Json"
+                },
+                "type": {
+                    "enum": [
+                        "login",
+                        "card"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.VaultType"
+                        }
+                    ]
                 }
             }
         },
@@ -606,6 +707,31 @@ const docTemplate = `{
             "x-enum-varnames": [
                 "Lock",
                 "Logout"
+            ]
+        },
+        "entity.VaultCustomField": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.VaultType": {
+            "type": "string",
+            "enum": [
+                "login",
+                "card"
+            ],
+            "x-enum-varnames": [
+                "VaultTypeLogin",
+                "VaultTypeCard"
             ]
         },
         "model.Folder": {

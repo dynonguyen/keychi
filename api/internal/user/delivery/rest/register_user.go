@@ -15,7 +15,7 @@ import (
 // @Summary Register a new user
 // @Tags User
 // @Param user body dto.UserRegistrationInput true "dto.UserRegistrationInput"
-// @Success 201 {object} string
+// @Success 201 {object} common.EntityCreationResponse
 // @Failure 400 {object} common.AppError
 // @Failure 500 {object} common.AppError
 // @Router /user [post]
@@ -30,10 +30,11 @@ func HandleRegisterUser(s *infra.PgsqlStorage, authSvc service.AuthService) echo
 		repo := postgres.NewRegisterUserRepo(s)
 		uc := usecase.NewRegisterUserUsecase(s, repo, authSvc)
 
-		if err := uc.RegisterUser(c.Request().Context(), &user); err != nil {
+		userID, err := uc.RegisterUser(c.Request().Context(), &user)
+		if err != nil {
 			return c.JSON(common.GetAppErrorStatus(err, http.StatusBadRequest), err)
 		}
 
-		return c.JSON(http.StatusCreated, common.NewCreatedResponse("ok"))
+		return c.JSON(http.StatusCreated, common.NewCreatedResponse(common.EntityCreationResponse{ID: userID}))
 	}
 }

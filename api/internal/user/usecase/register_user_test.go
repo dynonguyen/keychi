@@ -55,7 +55,7 @@ func TestRegisterUser(t *testing.T) {
 
 	for index, tc := range testCases {
 		uc := NewRegisterUserUsecase(mockTxm, mockRepo, mockAuth)
-		err := uc.RegisterUser(context.Background(), &tc.user)
+		_, err := uc.RegisterUser(context.Background(), &tc.user)
 
 		tcMsg := fmt.Sprintf("Case %d", index+1)
 

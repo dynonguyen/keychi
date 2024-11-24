@@ -1,6 +1,13 @@
 package entity
 
-import "time"
+import (
+	"errors"
+	"time"
+
+	"github.com/dynonguyen/keychi/api/internal/common"
+	"github.com/dynonguyen/keychi/api/internal/util"
+	"github.com/samber/lo"
+)
 
 type VaultType string
 
@@ -16,8 +23,8 @@ type VaultCustomField struct {
 }
 
 type VaultLoginProperty struct {
-	Username string   `json:"username"`
-	Password string   `json:"password"`
+	Username string   `json:"username" validate:"required"`
+	Password string   `json:"password" validate:"required"`
 	Urls     []string `json:"urls"`
 }
 
@@ -31,8 +38,8 @@ type VaultCardProperty struct {
 }
 
 type VaultUpdateHistory struct {
-	CreatedAt time.Time `json:"createdAt"`
-	Value     any       `json:"value"`
+	CreatedAt time.Time   `json:"createdAt"`
+	Value     common.Json `json:"value"`
 }
 
 type Vault struct {
@@ -42,10 +49,49 @@ type Vault struct {
 	Name            string               `json:"name"`
 	Type            VaultType            `json:"type"`
 	CustomFields    []VaultCustomField   `json:"customFields"`
-	Properties      any                  `json:"properties"`
+	Properties      common.Json          `json:"properties"`
 	Note            *string              `json:"note"`
 	Deleted         bool                 `json:"deleted"`
 	UpdateHistories []VaultUpdateHistory `json:"updateHistories"`
 	CreatedAt       *time.Time           `json:"createdAt"`
 	UpdatedAt       *time.Time           `json:"updatedAt"`
+}
+
+func (v *Vault) ValidateProperties() error {
+	vType, _ := v.Type, v.Properties
+	validate := util.GetValidator()
+
+	switch vType {
+	case VaultTypeLogin:
+		lProps := VaultLoginProperty{
+			Username: v.Properties["username"].(string),
+			Password: v.Properties["password"].(string),
+			Urls: lo.Map(v.Properties["urls"].([]any), func(item any, _ int) string {
+				return string(item.(string))
+			}),
+		}
+
+		if err := validate.Struct(lProps); err != nil {
+			return err
+		}
+
+	case VaultTypeCard:
+		cProps := VaultCardProperty{
+			CardholderName: v.Properties["cardholderName"].(string),
+			CardNumber:     v.Properties["cardNumber"].(string),
+			Brand:          v.Properties["brand"].(string),
+			Cvv:            v.Properties["cvv"].(string),
+			ExpireMonth:    int(v.Properties["expireMonth"].(float64)),
+			ExpireYear:     int(v.Properties["expireYear"].(float64)),
+		}
+
+		if err := validate.Struct(cProps); err != nil {
+			return err
+		}
+
+	default:
+		return errors.New("invalid vault type")
+	}
+
+	return nil
 }

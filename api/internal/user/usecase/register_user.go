@@ -16,14 +16,16 @@ type registerUserUsecase struct {
 	authSvc service.AuthService
 }
 
-func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserRegistrationInput) error {
+func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserRegistrationInput) (int, error) {
 	validate := util.GetValidator()
 
 	if err := validate.Struct(user); err != nil {
-		return common.NewBadRequestError(err, common.CodeBadRequestError)
+		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
-	return uc.txm.WithTransaction(func() error {
+	insertedUserId := common.FailedCreationId
+
+	err := uc.txm.WithTransaction(func() error {
 		userId, err := uc.repo.InsertUser(ctx, user)
 
 		if err != nil {
@@ -38,8 +40,12 @@ func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserR
 			return err
 		}
 
+		insertedUserId = userId
+
 		return nil
 	})
+
+	return insertedUserId, err
 }
 
 func NewRegisterUserUsecase(txm common.TransactionManager, repo repository.RegisterUserRepository, authSvc service.AuthService) *registerUserUsecase {
