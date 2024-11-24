@@ -58,15 +58,15 @@ type Vault struct {
 }
 
 func (v *Vault) ValidateProperties() error {
-	vType, _ := v.Type, v.Properties
+	vType, properties := v.Type, v.Properties
 	validate := util.GetValidator()
 
 	switch vType {
 	case VaultTypeLogin:
 		lProps := VaultLoginProperty{
-			Username: v.Properties["username"].(string),
-			Password: v.Properties["password"].(string),
-			Urls: lo.Map(v.Properties["urls"].([]any), func(item any, _ int) string {
+			Username: properties["username"].(string),
+			Password: properties["password"].(string),
+			Urls: lo.Map(properties["urls"].([]any), func(item any, _ int) string {
 				return string(item.(string))
 			}),
 		}
@@ -77,12 +77,12 @@ func (v *Vault) ValidateProperties() error {
 
 	case VaultTypeCard:
 		cProps := VaultCardProperty{
-			CardholderName: v.Properties["cardholderName"].(string),
-			CardNumber:     v.Properties["cardNumber"].(string),
-			Brand:          v.Properties["brand"].(string),
-			Cvv:            v.Properties["cvv"].(string),
-			ExpireMonth:    int(v.Properties["expireMonth"].(float64)),
-			ExpireYear:     int(v.Properties["expireYear"].(float64)),
+			CardholderName: properties["cardholderName"].(string),
+			CardNumber:     properties["cardNumber"].(string),
+			Brand:          properties["brand"].(string),
+			Cvv:            properties["cvv"].(string),
+			ExpireMonth:    int(properties["expireMonth"].(float64)),
+			ExpireYear:     int(properties["expireYear"].(float64)),
 		}
 
 		if err := validate.Struct(cProps); err != nil {

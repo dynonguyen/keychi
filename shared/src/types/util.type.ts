@@ -26,3 +26,7 @@ export type EnumValue<T extends string | number | bigint | boolean | null | unde
 export type TFunction = typeof i18next.t;
 
 export type Maybe<T> = T | null | undefined;
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};

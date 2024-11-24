@@ -15,7 +15,7 @@ const TYPES = {
   clean: '🧹 clean'
 };
 
-const SCOPES = ['api', 'mobile', 'web', 'desktop', 'extension', 'codebase', 'misc'];
+const SCOPES = ['api', 'mobile', 'web', 'desktop', 'extension', 'shared', 'codebase', 'misc'];
 
 module.exports = {
   types: [
