@@ -1,7 +1,10 @@
 package entity
 
 import (
+	"database/sql/driver"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
@@ -16,12 +19,44 @@ const (
 	VaultTypeCard  VaultType = "card"
 )
 
+// -----------------------------
 type VaultCustomField struct {
 	Type  string `json:"type"`
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
+type VaultCustomFields []VaultCustomField
+
+func (p VaultCustomFields) Value() (driver.Value, error) {
+	if len(p) == 0 {
+		return nil, nil
+	}
+
+	return json.Marshal(p)
+}
+
+func (p *VaultCustomFields) Scan(value any) error {
+	bytes, ok := value.([]byte)
+
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
+	}
+
+	result := VaultCustomFields{}
+	err := json.Unmarshal(bytes, &result)
+	*p = VaultCustomFields(result)
+
+	return err
+}
+
+// -----------------------------
+type VaultUpdateHistory struct {
+	CreatedAt time.Time   `json:"createdAt"`
+	Value     common.Json `json:"value"`
+}
+
+// -----------------------------
 type VaultLoginProperty struct {
 	Username string   `json:"username" validate:"required"`
 	Password string   `json:"password" validate:"required"`
@@ -37,10 +72,27 @@ type VaultCardProperty struct {
 	ExpireYear     int    `json:"expireYear"`
 }
 
-type VaultUpdateHistory struct {
-	CreatedAt time.Time   `json:"createdAt"`
-	Value     common.Json `json:"value"`
+type VaultProperties common.Json
+
+func (p VaultProperties) Value() (driver.Value, error) {
+	return json.Marshal(p)
 }
+
+func (p *VaultProperties) Scan(value any) error {
+	bytes, ok := value.([]byte)
+
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
+	}
+
+	result := VaultProperties{}
+	err := json.Unmarshal(bytes, &result)
+	*p = VaultProperties(result)
+
+	return err
+}
+
+// -----------------------------
 
 type Vault struct {
 	ID              int                  `json:"id"`
@@ -48,8 +100,8 @@ type Vault struct {
 	FolderID        *int                 `json:"folderId"`
 	Name            string               `json:"name"`
 	Type            VaultType            `json:"type"`
-	CustomFields    []VaultCustomField   `json:"customFields"`
-	Properties      common.Json          `json:"properties"`
+	CustomFields    VaultCustomFields    `json:"customFields"`
+	Properties      VaultProperties      `json:"properties"`
 	Note            *string              `json:"note"`
 	Deleted         bool                 `json:"deleted"`
 	UpdateHistories []VaultUpdateHistory `json:"updateHistories"`

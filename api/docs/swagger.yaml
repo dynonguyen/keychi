@@ -57,13 +57,9 @@ definitions:
       note:
         type: string
       properties:
-        $ref: '#/definitions/common.Json'
+        $ref: '#/definitions/entity.VaultProperties'
       type:
-        allOf:
-        - $ref: '#/definitions/entity.VaultType'
-        enum:
-        - login
-        - card
+        $ref: '#/definitions/entity.VaultType'
     required:
     - name
     - properties
@@ -184,8 +180,9 @@ definitions:
         type: string
       type:
         type: string
-      value:
-        type: string
+    type: object
+  entity.VaultProperties:
+    additionalProperties: {}
     type: object
   entity.VaultType:
     enum:
@@ -195,6 +192,13 @@ definitions:
     x-enum-varnames:
     - VaultTypeLogin
     - VaultTypeCard
+  entity.VaultUpdateHistory:
+    properties:
+      createdAt:
+        type: string
+      value:
+        $ref: '#/definitions/common.Json'
+    type: object
   model.Folder:
     properties:
       color:
@@ -240,6 +244,37 @@ definitions:
         type: integer
       vaultTimeoutAction:
         $ref: '#/definitions/entity.VaultAction'
+    type: object
+  model.Vault:
+    properties:
+      createdAt:
+        type: string
+      customFields:
+        items:
+          $ref: '#/definitions/entity.VaultCustomField'
+        type: array
+      deleted:
+        type: boolean
+      folderId:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      note:
+        type: string
+      properties:
+        $ref: '#/definitions/entity.VaultProperties'
+      type:
+        $ref: '#/definitions/entity.VaultType'
+      updateHistories:
+        items:
+          $ref: '#/definitions/entity.VaultUpdateHistory'
+        type: array
+      updatedAt:
+        type: string
+      userId:
+        type: integer
     type: object
 info:
   contact:
@@ -511,6 +546,32 @@ paths:
       security:
       - Bearer: []
       summary: List of user folders
+      tags:
+      - Vault
+  /vaults:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Vault'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.AppError'
+      security:
+      - Bearer: []
+      summary: List of user vaults
       tags:
       - Vault
 schemes:

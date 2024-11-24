@@ -438,6 +438,48 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/vaults": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Vault"
+                ],
+                "summary": "List of user vaults",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Vault"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.AppError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -534,18 +576,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "properties": {
-                    "$ref": "#/definitions/common.Json"
+                    "$ref": "#/definitions/entity.VaultProperties"
                 },
                 "type": {
-                    "enum": [
-                        "login",
-                        "card"
-                    ],
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/entity.VaultType"
-                        }
-                    ]
+                    "$ref": "#/definitions/entity.VaultType"
                 }
             }
         },
@@ -717,11 +751,12 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
-                },
-                "value": {
-                    "type": "string"
                 }
             }
+        },
+        "entity.VaultProperties": {
+            "type": "object",
+            "additionalProperties": {}
         },
         "entity.VaultType": {
             "type": "string",
@@ -733,6 +768,17 @@ const docTemplate = `{
                 "VaultTypeLogin",
                 "VaultTypeCard"
             ]
+        },
+        "entity.VaultUpdateHistory": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "value": {
+                    "$ref": "#/definitions/common.Json"
+                }
+            }
         },
         "model.Folder": {
             "type": "object",
@@ -801,6 +847,53 @@ const docTemplate = `{
                 },
                 "vaultTimeoutAction": {
                     "$ref": "#/definitions/entity.VaultAction"
+                }
+            }
+        },
+        "model.Vault": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "customFields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.VaultCustomField"
+                    }
+                },
+                "deleted": {
+                    "type": "boolean"
+                },
+                "folderId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "properties": {
+                    "$ref": "#/definitions/entity.VaultProperties"
+                },
+                "type": {
+                    "$ref": "#/definitions/entity.VaultType"
+                },
+                "updateHistories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.VaultUpdateHistory"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         }

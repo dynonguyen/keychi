@@ -13,4 +13,5 @@ func VaultController(g *echo.Group, storage *infra.PgsqlStorage) {
 	g.PATCH("/folder", HandleUpdateFolder(storage))
 
 	g.POST("", HandleCreateVault(storage))
+	g.GET("s", HandleListVault(storage))
 }

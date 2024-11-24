@@ -5,7 +5,6 @@ import (
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
-	"github.com/dynonguyen/keychi/api/internal/util"
 	"github.com/dynonguyen/keychi/api/internal/vault/dto"
 	"github.com/dynonguyen/keychi/api/internal/vault/model"
 )
@@ -22,7 +21,7 @@ func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dt
 		FolderID:     vault.FolderID,
 		Name:         vault.Name,
 		Type:         vault.Type,
-		Properties:   util.StructToMap(vault.Properties),
+		Properties:   vault.Properties,
 		CustomFields: vault.CustomFields,
 		Note:         vault.Note,
 		Deleted:      false,
@@ -33,6 +32,17 @@ func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dt
 	}
 
 	return inserted.ID, nil
+}
+
+func (r *vaultRepository) FindAllVaults(ctx context.Context, userID int) ([]model.Vault, error) {
+	db := r.storage.GetInstance()
+
+	var vaults []model.Vault
+	if err := db.Where("user_id = ?", userID).Find(&vaults).Error; err != nil {
+		return nil, common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	return vaults, nil
 }
 
 func NewVaultRepository(storage *infra.PgsqlStorage) *vaultRepository {

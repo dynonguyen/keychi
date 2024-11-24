@@ -3,7 +3,6 @@ package model
 import (
 	"time"
 
-	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/vault/entity"
 )
 
@@ -13,8 +12,8 @@ type Vault struct {
 	FolderID        *int                        `json:"folderId" gorm:"column:folder_id"`
 	Name            string                      `json:"name"`
 	Type            entity.VaultType            `json:"type"`
-	CustomFields    []entity.VaultCustomField   `json:"customFields" gorm:"column:custom_fields;type:jsonb"`
-	Properties      common.Json                 `json:"properties" gorm:"column:properties;type:jsonb"`
+	CustomFields    entity.VaultCustomFields    `json:"customFields" gorm:"column:custom_fields;type:jsonb"`
+	Properties      entity.VaultProperties      `json:"properties" gorm:"column:properties;type:jsonb"`
 	Note            *string                     `json:"note"`
 	Deleted         bool                        `json:"deleted"`
 	UpdateHistories []entity.VaultUpdateHistory `json:"updateHistories" gorm:"column:update_histories;type:jsonb"`
