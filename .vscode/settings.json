@@ -21,6 +21,7 @@
     "tailwindcss",
     "tanstack",
     "toastify",
+    "TOTP",
     "usecase",
     "zustand"
   ],
