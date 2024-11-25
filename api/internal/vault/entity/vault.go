@@ -60,6 +60,7 @@ type VaultUpdateHistory struct {
 type VaultLoginProperty struct {
 	Username string   `json:"username" validate:"required"`
 	Password string   `json:"password" validate:"required"`
+	TOTP     *string  `json:"totp"`
 	Urls     []string `json:"urls"`
 }
 
