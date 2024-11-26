@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
@@ -124,6 +125,14 @@ func (v *Vault) ValidateProperties() error {
 			}),
 		}
 
+		if v.CustomFields != nil {
+			for _, field := range v.CustomFields {
+				if field.Type == "" || field.Value == "" || field.Name == "" {
+					return errors.New("invalid custom field")
+				}
+			}
+		}
+
 		if err := validate.Struct(lProps); err != nil {
 			return err
 		}
@@ -147,4 +156,26 @@ func (v *Vault) ValidateProperties() error {
 	}
 
 	return nil
+}
+
+func (v Vault) ParseProperties() (*VaultProperties, error) {
+	props := VaultProperties{}
+	var pStruct any
+
+	switch v.Type {
+	case VaultTypeLogin:
+		pStruct = VaultLoginProperty{}
+	case VaultTypeCard:
+		pStruct = VaultCardProperty{}
+	default:
+		return nil, errors.New("invalid vault type")
+	}
+
+	t := reflect.TypeOf(pStruct)
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i).Tag.Get("json")
+		props[field] = v.Properties[field]
+	}
+
+	return &props, nil
 }

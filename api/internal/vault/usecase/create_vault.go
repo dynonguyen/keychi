@@ -21,11 +21,19 @@ func (uc *createVaultUsecase) CreateVault(ctx context.Context, userID int, vault
 		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
-	vaultEntity := entity.Vault{Type: vault.Type, Properties: vault.Properties}
+	vaultEntity := entity.Vault{Type: vault.Type, Properties: vault.Properties, CustomFields: vault.CustomFields}
 
 	if err := vaultEntity.ValidateProperties(); err != nil {
 		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
+
+	parsedProps, err := vaultEntity.ParseProperties()
+
+	if err != nil {
+		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
+	}
+
+	vault.Properties = *parsedProps
 
 	return uc.repo.InsertVault(ctx, userID, vault)
 }

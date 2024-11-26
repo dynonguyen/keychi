@@ -45,6 +45,16 @@ func (r *vaultRepository) FindAllVaults(ctx context.Context, userID int) ([]mode
 	return vaults, nil
 }
 
+func (r *vaultRepository) DeleteVault(ctx context.Context, userID, vaultID int) error {
+	db := r.storage.GetInstance()
+
+	if err := db.Model(&model.Vault{ID: vaultID}).Where("user_id = ?", userID).Update("deleted", true).Error; err != nil {
+		return common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	return nil
+}
+
 func NewVaultRepository(storage *infra.PgsqlStorage) *vaultRepository {
 	return &vaultRepository{storage: storage}
 }

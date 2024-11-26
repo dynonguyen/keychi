@@ -14,4 +14,5 @@ func VaultController(g *echo.Group, storage *infra.PgsqlStorage) {
 
 	g.POST("", HandleCreateVault(storage))
 	g.GET("s", HandleListVault(storage))
+	g.DELETE("/:id", HandleDeleteVault(storage))
 }

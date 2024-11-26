@@ -54,7 +54,7 @@ func (r *registerUserRepo) CreateDefaultUserPreferences(ctx context.Context, use
 		Language:           entity.DefaultUserPreferences.Language,
 		KdfAlgorithm:       entity.DefaultUserPreferences.KdfAlgorithm,
 		KdfIterations:      entity.DefaultUserPreferences.KdfIterations,
-		KdfSalt:            util.GenerateUniqueString(16),
+		KdfSalt:            util.GenerateString(16),
 	}).Error; err != nil {
 		return common.NewBadRequestError(err, common.CodeInternalServerError)
 	}
