@@ -17,11 +17,11 @@ type vaultRepository struct {
 }
 
 func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dto.NewVaultInput) (int, error) {
-	db := r.storage.GetInstance()
+	db := r.storage.GetInstance(ctx)
 
 	if vault.FolderID != nil {
-		if db.Model(&model.Folder{ID: *vault.FolderID}).Where("user_id = ?", userID).Take(&model.Folder{}).Error != nil {
-			return common.FailedCreationId, common.NewBadRequestError(errors.New("Folder not found"), common.CodeBadRequestError)
+		if db.Where("user_id = ? AND id = ?", userID, *vault.FolderID).Take(&model.Folder{}).Error != nil {
+			return common.FailedCreationId, common.NewBadRequestError(errors.New("folder not found"), common.CodeBadRequestError)
 		}
 	}
 
@@ -44,7 +44,7 @@ func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dt
 }
 
 func (r *vaultRepository) FindAllVaults(ctx context.Context, userID int) ([]model.Vault, error) {
-	db := r.storage.GetInstance()
+	db := r.storage.GetInstance(ctx)
 
 	var vaults []model.Vault
 	if err := db.Where("user_id = ?", userID).Find(&vaults).Error; err != nil {
@@ -55,7 +55,7 @@ func (r *vaultRepository) FindAllVaults(ctx context.Context, userID int) ([]mode
 }
 
 func (r *vaultRepository) DeleteVault(ctx context.Context, userID, vaultID int) error {
-	db := r.storage.GetInstance()
+	db := r.storage.GetInstance(ctx)
 
 	if err := db.Model(&model.Vault{ID: vaultID}).Where("user_id = ?", userID).Update("deleted", true).Error; err != nil {
 		return common.NewInternalServerError(err, common.CodeInternalServerError)
@@ -65,17 +65,17 @@ func (r *vaultRepository) DeleteVault(ctx context.Context, userID, vaultID int) 
 }
 
 func (r *vaultRepository) UpdateVault(ctx context.Context, userID int, vault *dto.UpdateVaultInput) error {
-	db := r.storage.GetInstance()
+	db := r.storage.GetInstance(ctx)
 
 	currentVault := model.Vault{ID: vault.ID}
 
 	if err := db.Where("user_id = ?", userID).Take(&currentVault).Error; err != nil {
-		return common.NewBadRequestError(errors.New("Vault not found"), common.CodeBadRequestError)
+		return common.NewBadRequestError(errors.New("vault not found"), common.CodeBadRequestError)
 	}
 
-	if vault.FolderID != nil {
-		if err := db.Take(&model.Folder{ID: *vault.FolderID}).Where("user_id = ?", userID).Error; err != nil {
-			return common.NewBadRequestError(errors.New("Folder not found"), common.CodeBadRequestError)
+	if vault.FolderID != nil && *vault.FolderID != *currentVault.FolderID {
+		if db.Where("user_id = ? AND id = ?", userID, *vault.FolderID).Take(&model.Folder{}).Error != nil {
+			return common.NewBadRequestError(errors.New("folder not found"), common.CodeBadRequestError)
 		}
 	}
 

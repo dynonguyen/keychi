@@ -28,8 +28,8 @@ var mockStorage = []*dto.UserRegistrationInput{}
 type mockTransactionManager struct{}
 type mockRepository struct{}
 
-func (m *mockTransactionManager) WithTransaction(fn func() error) error {
-	return fn()
+func (m *mockTransactionManager) WithTransaction(ctx context.Context, fn func(txCtx context.Context) error) error {
+	return fn(ctx)
 }
 
 func (m *mockRepository) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (int, error) {
