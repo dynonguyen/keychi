@@ -2,11 +2,9 @@ package postgres
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
-	"github.com/dynonguyen/keychi/api/internal/user/dto"
 	"github.com/dynonguyen/keychi/api/internal/user/model"
 )
 
@@ -42,19 +40,11 @@ func (r *profileRepository) FindUserPreferencesByUserId(ctx context.Context, use
 	return &preferences, nil
 }
 
-func (r *profileRepository) UpdateUserPreferencesByUserId(ctx context.Context, userId int, preferences *dto.UserPreferencesInput) error {
-	db := r.storage.DB
-
-	properties, err := preferences.ParseProperties()
-	if err != nil {
-		return common.NewBadRequestError(err, common.CodeBadRequestError)
-	}
-
-	fmt.Println(properties)
-
+func (r *profileRepository) UpdateUserPreferencesByUserId(ctx context.Context, userId int, properties interface{}) error {
+	db := r.storage.GetInstance(ctx)
 	result := db.Model(&model.UserPreferencesModel{}).Where("user_id = ?", userId).Updates(properties)
 	if result.Error != nil {
-		return common.NewBadRequestError(result.Error, codeUserNotFound)
+		return common.NewInternalServerError(result.Error, common.CodeInternalServerError)
 	}
 
 	return nil

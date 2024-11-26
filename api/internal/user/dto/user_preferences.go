@@ -1,8 +1,7 @@
 package dto
 
 import (
-	"bytes"
-	"encoding/json"
+	"errors"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/user/entity"
@@ -36,31 +35,65 @@ type UserPreferencesInput struct {
 	Properties UserPreferencesProperties `json:"properties" validate:"required"`
 }
 
-func JSONToStruct(input []byte, output interface{}) error {
-	decoder := json.NewDecoder(bytes.NewReader(input))
-	decoder.DisallowUnknownFields()
-	return decoder.Decode(output)
-}
-
-func (u *UserPreferencesInput) ParseProperties() (interface{}, error) {
-	var props interface{}
+func (u *UserPreferencesInput) ParseProperties() (map[string]interface{}, error) {
+	var properties = make(map[string]interface{})
 	switch u.Type {
 	case UIPreferences:
-		props = &UIPreferencesProperties{}
+		{
+			if v, ok := u.Properties["theme"]; ok {
+				if v == nil {
+					properties["theme"] = nil
+				} else if theme, ok := v.(string); ok {
+					properties["theme"] = entity.UserThemeMode(theme)
+				} else {
+					return nil, errors.New("invalid type for theme")
+				}
+			}
+			if v, ok := u.Properties["language"]; ok {
+				if v == nil {
+					properties["language"] = nil
+				} else if language, ok := v.(string); ok {
+					properties["language"] = entity.UserLanguage(language)
+				} else {
+					return nil, errors.New("invalid type for language")
+				}
+			}
+		}
 	case CipherPreferences:
-		props = &CipherPreferencesProperties{}
+		{
+			if v, ok := u.Properties["vaultTimeout"]; ok {
+				properties["vault_timeout"] = v
+			}
+			if v, ok := u.Properties["vaultTimeoutAction"]; ok {
+				if v == nil {
+					properties["vault_timeout_action"] = nil
+				} else if action, ok := v.(string); ok {
+					properties["vault_timeout_action"] = entity.VaultAction(action)
+				} else {
+					return nil, errors.New("invalid type for vaultTimeoutAction")
+				}
+			}
+			if v, ok := u.Properties["kdfAlgorithm"]; ok {
+				if v == nil {
+					properties["kdf_algorithm"] = nil
+				} else if algorithm, ok := v.(string); ok {
+					properties["kdf_algorithm"] = entity.KdfAlgorithm(algorithm)
+				} else {
+					return nil, errors.New("invalid type for kdfAlgorithm")
+				}
+			}
+			if v, ok := u.Properties["kdfIterations"]; ok {
+				properties["kdf_iterations"] = v
+			}
+			if v, ok := u.Properties["kdfMemory"]; ok {
+				properties["kdf_memory"] = v
+			}
+			if v, ok := u.Properties["kdfParallelism"]; ok {
+				properties["kdf_parallelism"] = v
+			}
+		}
 	default:
-		return nil, nil
+		return nil, errors.New("invalid user preferences type")
 	}
-
-	propertiesBytes, err := json.Marshal(u.Properties)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := JSONToStruct(propertiesBytes, props); err != nil {
-		return nil, err
-	}
-
-	return props, nil
+	return properties, nil
 }
