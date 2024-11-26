@@ -2,10 +2,13 @@ package postgres
 
 import (
 	"context"
+	"errors"
+	"time"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
 	"github.com/dynonguyen/keychi/api/internal/vault/dto"
+	"github.com/dynonguyen/keychi/api/internal/vault/entity"
 	"github.com/dynonguyen/keychi/api/internal/vault/model"
 )
 
@@ -15,6 +18,12 @@ type vaultRepository struct {
 
 func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dto.NewVaultInput) (int, error) {
 	db := r.storage.GetInstance()
+
+	if vault.FolderID != nil {
+		if db.Model(&model.Folder{ID: *vault.FolderID}).Where("user_id = ?", userID).Take(&model.Folder{}).Error != nil {
+			return common.FailedCreationId, common.NewBadRequestError(errors.New("Folder not found"), common.CodeBadRequestError)
+		}
+	}
 
 	inserted := &model.Vault{
 		UserID:       userID,
@@ -49,6 +58,47 @@ func (r *vaultRepository) DeleteVault(ctx context.Context, userID, vaultID int) 
 	db := r.storage.GetInstance()
 
 	if err := db.Model(&model.Vault{ID: vaultID}).Where("user_id = ?", userID).Update("deleted", true).Error; err != nil {
+		return common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	return nil
+}
+
+func (r *vaultRepository) UpdateVault(ctx context.Context, userID int, vault *dto.UpdateVaultInput) error {
+	db := r.storage.GetInstance()
+
+	currentVault := model.Vault{ID: vault.ID}
+
+	if err := db.Where("user_id = ?", userID).Take(&currentVault).Error; err != nil {
+		return common.NewBadRequestError(errors.New("Vault not found"), common.CodeBadRequestError)
+	}
+
+	if vault.FolderID != nil {
+		if err := db.Take(&model.Folder{ID: *vault.FolderID}).Where("user_id = ?", userID).Error; err != nil {
+			return common.NewBadRequestError(errors.New("Folder not found"), common.CodeBadRequestError)
+		}
+	}
+
+	oldPwd, newPwd := currentVault.Properties["password"], vault.Properties["password"]
+
+	if vault.Type == entity.VaultTypeLogin && newPwd != oldPwd {
+		histories := currentVault.UpdateHistories
+
+		histories = append(histories, entity.VaultUpdateHistory{CreatedAt: time.Now(),
+			Value: common.Json{"Password": oldPwd},
+		})
+
+		currentVault.UpdateHistories = histories
+	}
+
+	currentVault.FolderID = vault.FolderID
+	currentVault.Name = vault.Name
+	currentVault.Type = vault.Type
+	currentVault.Properties = vault.Properties
+	currentVault.CustomFields = vault.CustomFields
+	currentVault.Note = vault.Note
+
+	if err := db.Save(&currentVault).Error; err != nil {
 		return common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 

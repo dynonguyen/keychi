@@ -57,6 +57,30 @@ type VaultUpdateHistory struct {
 	Value     common.Json `json:"value"`
 }
 
+type VaultUpdateHistories []VaultUpdateHistory
+
+func (p VaultUpdateHistories) Value() (driver.Value, error) {
+	if len(p) == 0 {
+		return nil, nil
+	}
+
+	return json.Marshal(p)
+}
+
+func (p *VaultUpdateHistories) Scan(value any) error {
+	bytes, ok := value.([]byte)
+
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
+	}
+
+	result := VaultUpdateHistories{}
+	err := json.Unmarshal(bytes, &result)
+	*p = VaultUpdateHistories(result)
+
+	return err
+}
+
 // -----------------------------
 type VaultLoginProperty struct {
 	Username string   `json:"username" validate:"required"`
@@ -106,7 +130,7 @@ type Vault struct {
 	Properties      VaultProperties      `json:"properties"`
 	Note            *string              `json:"note"`
 	Deleted         bool                 `json:"deleted"`
-	UpdateHistories []VaultUpdateHistory `json:"updateHistories"`
+	UpdateHistories VaultUpdateHistories `json:"updateHistories"`
 	CreatedAt       *time.Time           `json:"createdAt"`
 	UpdatedAt       *time.Time           `json:"updatedAt"`
 }

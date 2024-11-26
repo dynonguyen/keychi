@@ -22,6 +22,7 @@ func (s *PgsqlStorage) WithTransaction(execute func() error) error {
 			if rbErr := s.Tx.Rollback().Error; rbErr != nil {
 				fmt.Println("Error on rollback transaction: ", rbErr)
 			}
+			s.Tx = nil
 		}
 
 		if err != nil {
@@ -37,6 +38,8 @@ func (s *PgsqlStorage) WithTransaction(execute func() error) error {
 		if cmErr := s.Tx.Commit().Error; cmErr != nil {
 			fmt.Println("Error on commit transaction: ", cmErr)
 		}
+
+		s.Tx = nil
 	}()
 
 	err = execute()
