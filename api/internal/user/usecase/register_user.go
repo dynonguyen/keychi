@@ -25,18 +25,18 @@ func (uc *registerUserUsecase) RegisterUser(ctx context.Context, user *dto.UserR
 
 	insertedUserId := common.FailedCreationId
 
-	err := uc.txm.WithTransaction(func() error {
-		userId, err := uc.repo.InsertUser(ctx, user)
+	err := uc.txm.WithTransaction(ctx, func(txCtx context.Context) error {
+		userId, err := uc.repo.InsertUser(txCtx, user)
 
 		if err != nil {
 			return err
 		}
 
-		if err := uc.repo.CreateDefaultUserPreferences(ctx, userId); err != nil {
+		if err := uc.repo.CreateDefaultUserPreferences(txCtx, userId); err != nil {
 			return err
 		}
 
-		if err := uc.authSvc.CreateUser(ctx, user); err != nil {
+		if err := uc.authSvc.CreateUser(txCtx, user); err != nil {
 			return err
 		}
 

@@ -10,34 +10,34 @@ import (
 	"github.com/dynonguyen/keychi/api/internal/vault/repository"
 )
 
-type createVaultUsecase struct {
+type updateVaultUsecase struct {
 	repo repository.VaultRepository
 }
 
-func (uc *createVaultUsecase) CreateVault(ctx context.Context, userID int, vault *dto.NewVaultInput) (int, error) {
+func (uc *updateVaultUsecase) UpdateVault(ctx context.Context, userID int, vault *dto.UpdateVaultInput) error {
 	validate := util.GetValidator()
 
 	if err := validate.Struct(vault); err != nil {
-		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
+		return common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
 	vaultEntity := entity.Vault{Type: vault.Type, Properties: vault.Properties, CustomFields: vault.CustomFields}
 
 	if err := vaultEntity.ValidateProperties(); err != nil {
-		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
+		return common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
 	parsedProps, err := vaultEntity.ParseProperties()
 
 	if err != nil {
-		return common.FailedCreationId, common.NewBadRequestError(err, common.CodeBadRequestError)
+		return common.NewBadRequestError(err, common.CodeBadRequestError)
 	}
 
 	vault.Properties = *parsedProps
 
-	return uc.repo.InsertVault(ctx, userID, vault)
+	return uc.repo.UpdateVault(ctx, userID, vault)
 }
 
-func NewCreateVaultUsecase(repo repository.VaultRepository) *createVaultUsecase {
-	return &createVaultUsecase{repo: repo}
+func NewUpdateVaultUsecase(repo repository.VaultRepository) *updateVaultUsecase {
+	return &updateVaultUsecase{repo: repo}
 }

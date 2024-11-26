@@ -23,7 +23,7 @@ var (
 )
 
 func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistrationInput) (int, error) {
-	db := r.storage.GetInstance()
+	db := r.storage.GetInstance(ctx)
 
 	// Check if user existed
 	if result := db.Where("email = ?", user.Email).Take(&model.UserModel{}); result.Error != gorm.ErrRecordNotFound {
@@ -44,7 +44,7 @@ func (r *registerUserRepo) InsertUser(ctx context.Context, user *dto.UserRegistr
 }
 
 func (r *registerUserRepo) CreateDefaultUserPreferences(ctx context.Context, userId int) error {
-	db := r.storage.GetInstance()
+	db := r.storage.GetInstance(ctx)
 
 	if err := db.Create(&model.UserPreferencesModel{
 		UserID:             userId,
@@ -54,7 +54,7 @@ func (r *registerUserRepo) CreateDefaultUserPreferences(ctx context.Context, use
 		Language:           entity.DefaultUserPreferences.Language,
 		KdfAlgorithm:       entity.DefaultUserPreferences.KdfAlgorithm,
 		KdfIterations:      entity.DefaultUserPreferences.KdfIterations,
-		KdfSalt:            util.GenerateUniqueString(16),
+		KdfSalt:            util.GenerateString(16),
 	}).Error; err != nil {
 		return common.NewBadRequestError(err, common.CodeInternalServerError)
 	}

@@ -1,7 +1,7 @@
 package infra
 
 import (
-	"fmt"
+	"context"
 
 	"gorm.io/gorm"
 )
@@ -9,45 +9,26 @@ import (
 // ------------------------
 type PgsqlStorage struct {
 	DB *gorm.DB
-	Tx *gorm.DB
 }
 
-func (s *PgsqlStorage) WithTransaction(execute func() error) error {
-	var err error
+type txCtxKey string
 
-	s.Tx = s.DB.Begin()
+const txKey txCtxKey = "tx"
 
-	defer func() {
-		rollback := func() {
-			if rbErr := s.Tx.Rollback().Error; rbErr != nil {
-				fmt.Println("Error on rollback transaction: ", rbErr)
-			}
-		}
+func (s *PgsqlStorage) WithTransaction(ctx context.Context, execute func(txCtx context.Context) error) error {
+	return s.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		txCtx := context.WithValue(ctx, txKey, tx)
 
-		if err != nil {
-			rollback()
-			return
-		}
-
-		if r := recover(); r != nil {
-			rollback()
-			panic(r)
-		}
-
-		if cmErr := s.Tx.Commit().Error; cmErr != nil {
-			fmt.Println("Error on commit transaction: ", cmErr)
-		}
-	}()
-
-	err = execute()
-
-	return err
+		return execute(txCtx)
+	})
 }
 
 // Returns the current transaction if it exists, otherwise return the default DB instance
-func (s *PgsqlStorage) GetInstance() *gorm.DB {
-	if s.Tx != nil {
-		return s.Tx
+func (s *PgsqlStorage) GetInstance(ctx context.Context) *gorm.DB {
+	tx, ok := ctx.Value(txKey).(*gorm.DB)
+
+	if ok && tx != nil {
+		return tx
 	}
 
 	return s.DB

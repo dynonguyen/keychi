@@ -19,7 +19,7 @@ var (
 )
 
 func (r *profileRepository) FindUserById(ctx context.Context, id int) (*model.UserModel, error) {
-	db := r.storage.DB
+	db := r.storage.GetInstance(ctx)
 	var user model.UserModel = model.UserModel{ID: id}
 
 	result := db.Take(&user)
@@ -31,7 +31,7 @@ func (r *profileRepository) FindUserById(ctx context.Context, id int) (*model.Us
 }
 
 func (r *profileRepository) FindUserPreferencesByUserId(ctx context.Context, userId int) (*model.UserPreferencesModel, error) {
-	db := r.storage.DB
+	db := r.storage.GetInstance(ctx)
 	var preferences model.UserPreferencesModel
 
 	result := db.Where("user_id = ?", userId).Take(&preferences)

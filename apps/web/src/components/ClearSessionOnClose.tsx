@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAuthStore } from '../stores/auth';
 
+/**  Logout user session in auth service when the tab is closed */
 export const ClearSessionOnClose = () => {
-  // Logout user session in auth service when the tab is closed
   React.useEffect(() => {
     window.onbeforeunload = () => {
       useAuthStore.getState().logout();

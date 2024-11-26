@@ -62,3 +62,6 @@ local.properties
 
 .nx/cache
 .nx/workspace-data
+
+# API
+api/docs/*

@@ -3,10 +3,8 @@ package util
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"strings"
 
-	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
@@ -45,7 +43,7 @@ func GetValidator() *validator.Validate {
 	return _singletonValidate
 }
 
-func GenerateUniqueString(length int) string {
+func GenerateString(length int) string {
 	// Calculate the number of bytes needed
 	byteLength := (length*6 + 7) / 8
 	randomBytes := make([]byte, byteLength)
@@ -56,22 +54,4 @@ func GenerateUniqueString(length int) string {
 
 	// Encode to Base64 and trim to the desired length
 	return base64.URLEncoding.EncodeToString(randomBytes)[:length]
-}
-
-func StructToMap(obj any) common.Json {
-	if obj == nil {
-		return nil
-	}
-
-	data, err := json.Marshal(obj)
-	if err != nil {
-		return nil
-	}
-
-	result := make(common.Json)
-	if err := json.Unmarshal(data, &result); err != nil {
-		return nil
-	}
-
-	return result
 }

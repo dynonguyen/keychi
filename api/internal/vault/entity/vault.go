@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
@@ -56,10 +57,35 @@ type VaultUpdateHistory struct {
 	Value     common.Json `json:"value"`
 }
 
+type VaultUpdateHistories []VaultUpdateHistory
+
+func (p VaultUpdateHistories) Value() (driver.Value, error) {
+	if len(p) == 0 {
+		return nil, nil
+	}
+
+	return json.Marshal(p)
+}
+
+func (p *VaultUpdateHistories) Scan(value any) error {
+	bytes, ok := value.([]byte)
+
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
+	}
+
+	result := VaultUpdateHistories{}
+	err := json.Unmarshal(bytes, &result)
+	*p = VaultUpdateHistories(result)
+
+	return err
+}
+
 // -----------------------------
 type VaultLoginProperty struct {
 	Username string   `json:"username" validate:"required"`
 	Password string   `json:"password" validate:"required"`
+	TOTP     *string  `json:"totp"`
 	Urls     []string `json:"urls"`
 }
 
@@ -104,7 +130,7 @@ type Vault struct {
 	Properties      VaultProperties      `json:"properties"`
 	Note            *string              `json:"note"`
 	Deleted         bool                 `json:"deleted"`
-	UpdateHistories []VaultUpdateHistory `json:"updateHistories"`
+	UpdateHistories VaultUpdateHistories `json:"updateHistories"`
 	CreatedAt       *time.Time           `json:"createdAt"`
 	UpdatedAt       *time.Time           `json:"updatedAt"`
 }
@@ -121,6 +147,14 @@ func (v *Vault) ValidateProperties() error {
 			Urls: lo.Map(properties["urls"].([]any), func(item any, _ int) string {
 				return string(item.(string))
 			}),
+		}
+
+		if v.CustomFields != nil {
+			for _, field := range v.CustomFields {
+				if field.Type == "" || field.Value == "" || field.Name == "" {
+					return errors.New("invalid custom field")
+				}
+			}
 		}
 
 		if err := validate.Struct(lProps); err != nil {
@@ -146,4 +180,26 @@ func (v *Vault) ValidateProperties() error {
 	}
 
 	return nil
+}
+
+func (v Vault) ParseProperties() (*VaultProperties, error) {
+	props := VaultProperties{}
+	var pStruct any
+
+	switch v.Type {
+	case VaultTypeLogin:
+		pStruct = VaultLoginProperty{}
+	case VaultTypeCard:
+		pStruct = VaultCardProperty{}
+	default:
+		return nil, errors.New("invalid vault type")
+	}
+
+	t := reflect.TypeOf(pStruct)
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i).Tag.Get("json")
+		props[field] = v.Properties[field]
+	}
+
+	return &props, nil
 }

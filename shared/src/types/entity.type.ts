@@ -47,6 +47,7 @@ export type VaultCustomField = {
 export type VaultLoginProperty = {
   username: string;
   password: string;
+  totp?: Maybe<string>;
   urls?: string[];
 };
 
@@ -64,14 +65,6 @@ export type VaultUpdateHistory = {
   value: object;
 };
 
-export type KdfParams = {
-  kdfSalt: string;
-  kdfAlgorithm: KdfAlgorithm;
-  kdfIterations: number;
-  kdfMemory?: Maybe<number>;
-  kdfParallelism?: Maybe<number>;
-};
-
 // -----------------------------
 export type User = Entity<{
   email: string;
@@ -79,6 +72,14 @@ export type User = Entity<{
   avatar: string;
   pwdHint?: string;
 }>;
+
+export type KdfParams = {
+  kdfSalt: string;
+  kdfAlgorithm: KdfAlgorithm;
+  kdfIterations: number;
+  kdfMemory?: Maybe<number>;
+  kdfParallelism?: Maybe<number>;
+};
 
 export type UserPreferences = KdfParams &
   Entity<{
