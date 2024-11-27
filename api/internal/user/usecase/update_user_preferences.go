@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/user/dto"
@@ -20,8 +19,6 @@ var (
 func (uc *profileUsecase) UpdateUserPreferences(ctx context.Context, id int, preferences *dto.UserPreferencesInput) error {
 
 	properties, err := preferences.ParseProperties()
-
-	fmt.Println(properties)
 
 	if err != nil {
 		return common.NewBadRequestError(err, common.CodeBadRequestError)
