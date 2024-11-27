@@ -42,9 +42,9 @@ func (r *profileRepository) FindUserPreferencesByUserId(ctx context.Context, use
 
 func (r *profileRepository) UpdateUserPreferencesByUserId(ctx context.Context, userId int, properties interface{}) error {
 	db := r.storage.GetInstance(ctx)
-	result := db.Model(&model.UserPreferencesModel{}).Where("user_id = ?", userId).Updates(properties)
-	if result.Error != nil {
-		return common.NewInternalServerError(result.Error, common.CodeInternalServerError)
+
+	if err := db.Model(&model.UserPreferencesModel{}).Where("user_id = ?", userId).Updates(map[string]interface{}{}).Error; err != nil {
+		return common.NewInternalServerError(err, common.CodeInternalServerError)
 	}
 
 	return nil

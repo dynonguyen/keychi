@@ -14,8 +14,9 @@ import (
 type mockUFRepository struct{}
 
 var userPreferencesTestCases = []struct {
-	input dto.UserPreferencesInput
-	code  common.I18nCode
+	input         dto.UserPreferencesInput
+	expectedProps map[string]interface{}
+	code          common.I18nCode
 }{
 	{
 		input: dto.UserPreferencesInput{
@@ -24,6 +25,9 @@ var userPreferencesTestCases = []struct {
 				"theme":       "dark",
 				"parallelism": 1,
 			},
+		},
+		expectedProps: map[string]interface{}{
+			"theme": "dark",
 		},
 		code: "",
 	},
@@ -34,6 +38,9 @@ var userPreferencesTestCases = []struct {
 				"theme": nil,
 			},
 		},
+		expectedProps: map[string]interface{}{
+			"theme": nil,
+		},
 		code: "",
 	},
 	{
@@ -43,7 +50,8 @@ var userPreferencesTestCases = []struct {
 				"theme": "dark",
 			},
 		},
-		code: "",
+		expectedProps: nil,
+		code:          "",
 	},
 	{
 		input: dto.UserPreferencesInput{
@@ -51,6 +59,9 @@ var userPreferencesTestCases = []struct {
 			Properties: map[string]interface{}{
 				"vaultTimeout": 1,
 			},
+		},
+		expectedProps: map[string]interface{}{
+			"vaultTimeout": 1,
 		},
 		code: "",
 	},
@@ -68,6 +79,22 @@ func (m *mockUFRepository) FindUserPreferencesByUserId(ctx context.Context, user
 	return nil, nil
 }
 
+func TestParseProperties(t *testing.T) {
+	assert := assert.New(t)
+
+	for index, tc := range userPreferencesTestCases {
+
+		properties, err := (&tc.input).ParseProperties()
+
+		tcMsg := fmt.Sprintf("Case %d", index+1)
+
+		if err != nil {
+			assert.Equal(tc.expectedProps, properties, tcMsg)
+		} else {
+			assert.Equal(tc.expectedProps, properties, tcMsg)
+		}
+	}
+}
 func TestUpdateUserPreferences(t *testing.T) {
 	assert := assert.New(t)
 
