@@ -22,14 +22,11 @@ var userPreferencesTestCases = []struct {
 		input: dto.UserPreferencesInput{
 			Type: "ui",
 			Properties: map[string]interface{}{
-				"theme":       "dark",
-				"parallelism": 1,
+				"theme": "grey",
 			},
 		},
-		expectedProps: map[string]interface{}{
-			"theme": "dark",
-		},
-		code: "",
+		expectedProps: map[string]interface{}(nil),
+		code:          "",
 	},
 	{
 		input: dto.UserPreferencesInput{
@@ -38,9 +35,10 @@ var userPreferencesTestCases = []struct {
 				"theme": nil,
 			},
 		},
-		expectedProps: map[string]interface{}{
-			"theme": nil,
-		},
+		expectedProps: map[string]interface{}(
+			map[string]interface{}{
+				"theme": nil,
+			}),
 		code: "",
 	},
 	{
@@ -50,7 +48,7 @@ var userPreferencesTestCases = []struct {
 				"theme": "dark",
 			},
 		},
-		expectedProps: nil,
+		expectedProps: map[string]interface{}(nil),
 		code:          "",
 	},
 	{
@@ -61,7 +59,7 @@ var userPreferencesTestCases = []struct {
 			},
 		},
 		expectedProps: map[string]interface{}{
-			"vaultTimeout": 1,
+			"vault_timeout": 1,
 		},
 		code: "",
 	},
@@ -84,15 +82,16 @@ func TestParseProperties(t *testing.T) {
 
 	for index, tc := range userPreferencesTestCases {
 
-		properties, err := (&tc.input).ParseProperties()
+		properties, err := (&tc.input).ToMap()
+
+		if err != nil {
+			fmt.Println(err)
+		}
 
 		tcMsg := fmt.Sprintf("Case %d", index+1)
 
-		if err != nil {
-			assert.Equal(tc.expectedProps, properties, tcMsg)
-		} else {
-			assert.Equal(tc.expectedProps, properties, tcMsg)
-		}
+		assert.Equal(tc.expectedProps, properties, tcMsg)
+
 	}
 }
 func TestUpdateUserPreferences(t *testing.T) {

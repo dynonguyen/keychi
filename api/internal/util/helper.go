@@ -55,3 +55,37 @@ func GenerateString(length int) string {
 	// Encode to Base64 and trim to the desired length
 	return base64.URLEncoding.EncodeToString(randomBytes)[:length]
 }
+
+func RegisterEnumValidator(v *validator.Validate, key string, values []string) {
+	v.RegisterValidation(key, func(fl validator.FieldLevel) bool {
+		for _, v := range values {
+			if v == fl.Field().String() {
+				return true
+			}
+		}
+		return false
+	})
+}
+
+func CamelToSnake(s string) string {
+	var res []rune
+	for i, c := range s {
+		if 'A' <= c && c <= 'Z' {
+			if i > 0 {
+				res = append(res, '_')
+			}
+			res = append(res, c+'a'-'A')
+		} else {
+			res = append(res, c)
+		}
+	}
+	return string(res)
+}
+
+func CamelKeysToSnake(m map[string]interface{}) map[string]interface{} {
+	res := make(map[string]interface{})
+	for k, v := range m {
+		res[CamelToSnake(k)] = v
+	}
+	return res
+}

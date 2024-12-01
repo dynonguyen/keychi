@@ -18,7 +18,7 @@ var (
 
 func (uc *profileUsecase) UpdateUserPreferences(ctx context.Context, id int, preferences *dto.UserPreferencesInput) error {
 
-	properties, err := preferences.ParseProperties()
+	properties, err := preferences.ToMap()
 
 	if err != nil {
 		return common.NewBadRequestError(err, common.CodeBadRequestError)

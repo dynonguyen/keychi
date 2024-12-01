@@ -1,12 +1,12 @@
 package dto
 
 import (
-	"errors"
-	"reflect"
-	"strings"
+	"bytes"
+	"encoding/json"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/user/entity"
+	"github.com/dynonguyen/keychi/api/internal/util"
 )
 
 type UserPreferencesType string
@@ -19,17 +19,31 @@ const (
 type UserPreferencesProperties common.Json
 
 type UIPreferencesProperties struct {
-	Theme    *entity.UserThemeMode `json:"theme,omitempty"`
-	Language *entity.UserLanguage  `json:"language,omitempty"`
+	Theme    *entity.UserThemeMode `json:"theme,omitempty" validate:"omitempty,enumUserThemeMode"`
+	Language *entity.UserLanguage  `json:"language,omitempty" validate:"omitempty,enumUserLanguage"`
+}
+
+func (u *UIPreferencesProperties) Validate() error {
+	v := util.GetValidator()
+	util.RegisterEnumValidator(v, "enumUserThemeMode", new(entity.UserThemeMode).Values())
+	util.RegisterEnumValidator(v, "enumUserLanguage", new(entity.UserLanguage).Values())
+	return v.Struct(u)
 }
 
 type CipherPreferencesProperties struct {
 	VaultTimeout       *int                 `json:"vaultTimeout,omitempty"`
-	VaultTimeoutAction *entity.VaultAction  `json:"vaultTimeoutAction,omitempty"`
-	KdfAlgorithm       *entity.KdfAlgorithm `json:"kdfAlgorithm,omitempty"`
+	VaultTimeoutAction *entity.VaultAction  `json:"vaultTimeoutAction,omitempty" validate:"omitempty,enumVaultAction"`
+	KdfAlgorithm       *entity.KdfAlgorithm `json:"kdfAlgorithm,omitempty" validate:"omitempty,enumKdfAlgorithm"`
 	KdfIterations      *int                 `json:"kdfIterations,omitempty"`
 	KdfMemory          *int                 `json:"kdfMemory,omitempty"`
 	KdfParallelism     *int                 `json:"kdfParallelism,omitempty"`
+}
+
+func (c *CipherPreferencesProperties) Validate() error {
+	v := util.GetValidator()
+	util.RegisterEnumValidator(v, "enumVaultAction", new(entity.VaultAction).Values())
+	util.RegisterEnumValidator(v, "enumKdfAlgorithm", new(entity.KdfAlgorithm).Values())
+	return v.Struct(c)
 }
 
 type UserPreferencesInput struct {
@@ -37,40 +51,33 @@ type UserPreferencesInput struct {
 	Properties UserPreferencesProperties `json:"properties" validate:"required"`
 }
 
-func GetJSONTagName(field reflect.StructField) string {
-	tag := field.Tag.Get("json")
-
-	if commaIndex := strings.Index(tag, ","); commaIndex != -1 {
-		return tag[:commaIndex]
+func (u *UserPreferencesInput) ToMap() (map[string]any, error) {
+	propertiesBytes, err := json.Marshal(u.Properties)
+	if err != nil {
+		return nil, err
 	}
 
-	return tag
-}
-
-func (u *UserPreferencesInput) ParseProperties() (map[string]interface{}, error) {
-	var properties = make(map[string]interface{})
-	var pStruct any
-
+	var properties interface {
+		Validate() error
+	}
 	switch u.Type {
 	case UIPreferences:
-		pStruct = UIPreferencesProperties{}
+		properties = &UIPreferencesProperties{}
 	case CipherPreferences:
-		pStruct = CipherPreferencesProperties{}
+		properties = &CipherPreferencesProperties{}
 	default:
-		return nil, errors.New("invalid preferences type")
+		return map[string]any{}, nil
 	}
 
-	t := reflect.TypeOf(pStruct)
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-
-		// jsonTagRaw := field.Tag.Get("json")
-		jsonTag := GetJSONTagName(field)
-
-		if value := u.Properties[jsonTag]; value != nil {
-			properties[jsonTag] = value
-		}
+	decoder := json.NewDecoder(bytes.NewReader(propertiesBytes))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(properties); err != nil {
+		return nil, err
 	}
 
-	return properties, nil
+	if err := properties.Validate(); err != nil {
+		return nil, err
+	}
+
+	return util.CamelKeysToSnake(u.Properties), nil
 }
