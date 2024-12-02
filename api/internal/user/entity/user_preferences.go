@@ -28,6 +28,22 @@ const (
 	Logout VaultAction = "logout"
 )
 
+func (m UserThemeMode) Values() []string {
+	return []string{string(Light), string(Dark), string(System)}
+}
+
+func (l UserLanguage) Values() []string {
+	return []string{string(English), string(Vietnamese)}
+}
+
+func (k KdfAlgorithm) Values() []string {
+	return []string{string(PBKDF2), string(Argon2)}
+}
+
+func (v VaultAction) Values() []string {
+	return []string{string(Lock), string(Logout)}
+}
+
 type UserPreferences struct {
 	ID                 int           `json:"id"`
 	UserID             int           `json:"userId"`

@@ -13,15 +13,18 @@ type profileUsecase struct {
 }
 
 var (
-	codeUserNodFound common.I18nCode = "USER_NOT_FOUND"
+	CodeUserNotFound common.I18nCode = "USER_NOT_FOUND"
 )
 
 func (uc *profileUsecase) GetUserProfile(ctx context.Context, id int) (*dto.UserProfile, error) {
 	user, err := uc.repo.FindUserById(ctx, id)
-	preferences, err := uc.repo.FindUserPreferencesByUserId(ctx, id)
+	if err != nil || user == nil {
+		return nil, common.NewBadRequestError(err, CodeUserNotFound)
+	}
 
-	if err != nil || user == nil || preferences == nil {
-		return nil, common.NewBadRequestError(err, codeUserNodFound)
+	preferences, err := uc.repo.FindUserPreferencesByUserId(ctx, id)
+	if err != nil || preferences == nil {
+		return nil, common.NewBadRequestError(err, codePreferencesNotFound)
 	}
 
 	return &dto.UserProfile{UserModel: *user, Preferences: *preferences}, nil
