@@ -2,7 +2,8 @@ import { Button, Input } from '@nextui-org/react';
 import { Flex } from '@shared/components/react';
 import { ENDPOINT, SS_KEY } from '@shared/constants';
 import { KdfParams, LoginReqDto, LoginRespDto } from '@shared/types';
-import { Cipher, getErrorMessage } from '@shared/utils';
+import { getErrorMessage } from '@shared/utils';
+import { Cipher } from '@shared/utils/web';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,7 +22,7 @@ export const Login = () => {
   const setMasterPwd = useProfileStore((state) => state.setMasterPwd);
 
   const { register, getValues } = useForm<LoginReqDto>({
-    defaultValues: { email: 'dyno@email.com', password: '1234' }
+    defaultValues: { email: 'test@email.com', password: '1234' }
   });
 
   const handleLogin = async () => {

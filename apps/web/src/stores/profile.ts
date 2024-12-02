@@ -1,5 +1,5 @@
 import { UserProfile } from '@shared/types';
-import { Cipher } from '@shared/utils';
+import { Cipher } from '@shared/utils/web';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
 

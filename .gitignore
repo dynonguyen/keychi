@@ -65,3 +65,17 @@ local.properties
 
 # API
 api/docs/*
+
+# Expo
+.expo/
+.yarn/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+cache/

@@ -1,6 +1,6 @@
 import { SS_KEY } from '@shared/constants';
 import { Any } from '@shared/types';
-import { getEnv } from '@shared/utils';
+import { getEnv } from '@shared/utils/web';
 import { MutationFunction, QueryClient } from '@tanstack/react-query';
 import to from 'await-to-js';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, HttpStatusCode } from 'axios';

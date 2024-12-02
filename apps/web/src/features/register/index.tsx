@@ -2,7 +2,8 @@ import { Button, Input } from '@nextui-org/react';
 import { Flex } from '@shared/components/react';
 import { ENDPOINT } from '@shared/constants';
 import { KdfParams, RegisterReqDto } from '@shared/types';
-import { Cipher, getErrorMessage } from '@shared/utils';
+import { getErrorMessage } from '@shared/utils';
+import { Cipher } from '@shared/utils/web';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +19,7 @@ export const Register = () => {
 
   const registerMutation = useMutation({ mutationFn: registerUSer });
   const { register, getValues } = useForm<RegisterReqDto>({
-    defaultValues: { name: 'Dyno Nguyen', email: 'dyno@email.com', password: '1234', pwdHint: 'Con mèo con ngu ngốc' }
+    defaultValues: { name: 'Dyno Nguyen', email: 'test@email.com', password: '1234', pwdHint: 'Con mèo con ngu ngốc' }
   });
 
   const handleRegister = async () => {
