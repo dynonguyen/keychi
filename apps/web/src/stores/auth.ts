@@ -1,6 +1,7 @@
-import { ENDPOINT, SS_KEY } from '@shared/constants';
+import { ENDPOINT } from '@shared/constants';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
+import { SS_KEY } from '../constants/key';
 import { PATH } from '../constants/path';
 import { mutation } from '../libs/query-client';
 

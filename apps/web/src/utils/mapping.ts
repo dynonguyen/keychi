@@ -1,5 +1,5 @@
-import { ThemeMode } from '../types/entity.type';
-import { TFunction } from '../types/util.type';
+import { ThemeMode } from '@shared/types';
+import { TFunction } from 'i18next';
 
 export function themeMapping(t: TFunction, theme?: ThemeMode) {
   const mapping: Record<ThemeMode, { label: string; icon: string }> = {

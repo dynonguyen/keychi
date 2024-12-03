@@ -19,12 +19,10 @@
     "paths": {
       "@shared/constants": ["shared/src/constants/index.ts"],
       "@shared/utils": ["shared/src/utils/index.ts"],
-      "@shared/utils/web": ["shared/src/utils/web/index.ts"],
-      "@shared/utils/mobile": ["shared/src/utils/mobile/index.ts"],
       "@shared/locales": ["shared/src/locales/index.ts"],
       "@shared/types": ["shared/src/types/index.type.ts"],
-      "@shared/components/react": ["shared/src/components/react/index.ts"],
-      "@shared/hooks/react": ["shared/src/hooks/react/index.ts"]
+      "@shared/react-web/components": ["shared/src/react-web/components/index.ts"],
+      "@shared/react-web/hooks": ["shared/src/react-web/hooks/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

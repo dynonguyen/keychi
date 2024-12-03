@@ -1,5 +1,5 @@
-import { Flex } from '@shared/components/react';
 import { COLOR_PALETTE } from '@shared/constants';
+import { Flex } from '@shared/react-web/components';
 import useThemeStore from '../stores/theme';
 
 export const GlobalLoading = () => {

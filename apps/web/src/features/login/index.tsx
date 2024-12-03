@@ -1,16 +1,17 @@
 import { Button, Input } from '@nextui-org/react';
-import { Flex } from '@shared/components/react';
-import { ENDPOINT, SS_KEY } from '@shared/constants';
+import { ENDPOINT } from '@shared/constants';
+import { Flex } from '@shared/react-web/components';
 import { KdfParams, LoginReqDto, LoginRespDto } from '@shared/types';
 import { getErrorMessage } from '@shared/utils';
-import { Cipher } from '@shared/utils/web';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { SS_KEY } from '../../constants/key';
 import { PATH } from '../../constants/path';
 import { mutation } from '../../libs/query-client';
 import { useProfileStore } from '../../stores/profile';
+import { Cipher } from '../../utils/cipher';
 
 const login = mutation<LoginRespDto, LoginReqDto>(ENDPOINT.POST_LOGIN);
 

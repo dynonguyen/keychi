@@ -1,7 +1,8 @@
-import { ENDPOINT, SS_KEY } from '@shared/constants';
+import { ENDPOINT } from '@shared/constants';
 import { UserProfile } from '@shared/types';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { SS_KEY } from '../constants/key';
 import { fetcher } from '../libs/query-client';
 import { useAuthStore } from '../stores/auth';
 import { useProfileStore } from '../stores/profile';

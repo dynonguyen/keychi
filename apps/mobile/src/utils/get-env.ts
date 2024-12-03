@@ -1,4 +1,4 @@
-import { EnvMode } from '../../constants';
+import { EnvMode } from '@shared/constants';
 
 interface ImportExpoEnv {
   EXPO_PUBLIC_ASSET_URL: string;

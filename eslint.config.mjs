@@ -131,7 +131,7 @@ export default [
             {
               importNames: ['useSearchParams'],
               name: 'react-router-dom',
-              message: "Please import { useSafeSearchParams } from '@shared/hooks/react' instead."
+              message: "'useSafeSearchParams' instead."
             }
           ]
         }

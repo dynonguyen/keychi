@@ -1,11 +1,11 @@
-import { SS_KEY } from '@shared/constants';
 import { Any } from '@shared/types';
-import { getEnv } from '@shared/utils/web';
 import { MutationFunction, QueryClient } from '@tanstack/react-query';
 import to from 'await-to-js';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, HttpStatusCode } from 'axios';
 import { ApiErrorResponse, ApiResponse } from 'shared/src/types/common.type';
+import { SS_KEY } from '../constants/key';
 import { useAuthStore } from '../stores/auth';
+import { getEnv } from '../utils/get-env';
 
 function createAxiosInstance() {
   const instance = axios.create({

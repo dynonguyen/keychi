@@ -4,6 +4,7 @@ export const LS_KEY = {
   THEME: 'keychi-theme'
 };
 
+// Session storage key
 export const SS_KEY = {
   LOGGED_USER: 'logged-user',
   ACCESS_TOKEN: 'accessToken',

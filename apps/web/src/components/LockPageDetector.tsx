@@ -1,6 +1,6 @@
-import { SS_KEY } from '@shared/constants';
 import { isEmail } from '@shared/utils';
 import { Navigate, Outlet } from 'react-router-dom';
+import { SS_KEY } from '../constants/key';
 import { PATH } from '../constants/path';
 import { useProfileStore } from '../stores/profile';
 

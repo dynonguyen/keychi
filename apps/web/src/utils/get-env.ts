@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { EnvMode } from '../../constants';
+import { EnvMode } from '@shared/constants';
 
 interface ImportMetaEnv {
   VITE_BASE_URL: string;

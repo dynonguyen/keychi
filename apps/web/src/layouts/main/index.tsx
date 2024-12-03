@@ -1,4 +1,4 @@
-import { LoadModule } from '@shared/components/react';
+import { LoadModule } from '@shared/react-web/components';
 import { Outlet } from 'react-router-dom';
 
 export const MainLayout = () => {

@@ -1,4 +1,4 @@
-import { LoadModule } from '@shared/components/react';
+import { LoadModule } from '@shared/react-web/components';
 import React from 'react';
 import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
 import LockPageDetector from '../components/LockPageDetector';

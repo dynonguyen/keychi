@@ -1,8 +1,8 @@
 import { ThemeMode } from '@shared/types';
-import { themeMapping } from '@shared/utils';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../stores/theme';
+import { themeMapping } from '../utils/mapping';
 
 export const ThemeController = () => {
   const { theme, changeTheme } = useThemeStore();

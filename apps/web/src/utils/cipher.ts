@@ -1,8 +1,8 @@
+import { DEFAULT } from '@shared/constants';
+import { KdfAlgorithm, KdfParams } from '@shared/types';
 import { match } from 'ts-pattern';
-import { DEFAULT } from '../../constants/default';
-import { KdfAlgorithm, KdfParams } from '../../types/entity.type';
-import { arrayBufferToHex, hexToArrayBuffer } from './../helper';
 import { getEnv } from './get-env';
+import { arrayBufferToHex, hexToArrayBuffer } from './helper';
 
 // -----------------------------
 type KDFOptions = {
@@ -43,7 +43,7 @@ async function pbkdf2(options: PBKDF2Options): Promise<KDFResult> {
   const saltBuffer = encoder.encode(salt);
 
   // Import the password as a cryptographic key
-  const baseKey = await window.crypto.subtle.importKey('raw', passwordBuffer, { name: 'PBKDF2' }, false, ['deriveKey']);
+  const baseKey = await crypto.subtle.importKey('raw', passwordBuffer, { name: 'PBKDF2' }, false, ['deriveKey']);
 
   // Derive key from the base key
   const derivedKey = await crypto.subtle.deriveKey(
@@ -78,8 +78,8 @@ async function encryptAES(plaintext: string, key: CryptoKey): Promise<ArrayBuffe
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(plaintext);
 
-  const iv = window.crypto.getRandomValues(new Uint8Array(ENCRYPTION_OPTION.IV_LENGTH));
-  const cipherText = await window.crypto.subtle.encrypt({ name: ENCRYPTION_OPTION.ALGORITHM, iv }, key, encodedData);
+  const iv = crypto.getRandomValues(new Uint8Array(ENCRYPTION_OPTION.IV_LENGTH));
+  const cipherText = await crypto.subtle.encrypt({ name: ENCRYPTION_OPTION.ALGORITHM, iv }, key, encodedData);
 
   const encrypted = new Uint8Array(iv.byteLength + cipherText.byteLength);
   encrypted.set(new Uint8Array(iv), 0);
