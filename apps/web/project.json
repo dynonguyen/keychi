@@ -35,6 +35,7 @@
         "production": { "buildTarget": "web:build:production" }
       },
       "dependsOn": []
-    }
+    },
+    "lint": { "command": "yarn web:lint" }
   }
 }

@@ -8,8 +8,6 @@ import { queryClient } from './libs/query-client';
 import { router } from './routes/router';
 
 export const App = () => {
-  const x = 1;
-
   return (
     <ErrorBoundaryWrapper>
       <NextUIProvider>

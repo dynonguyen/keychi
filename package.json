@@ -17,6 +17,7 @@
     "docker:down": "cd ./docker && docker compose down",
     "web:dev": "nx run web:serve",
     "web:build": "nx run web:build",
+    "web:lint": "eslint \"apps/web/src\" -c ./eslint.config.mjs",
     "mobile:dev": "nx run mobile:start",
     "api:doc": "cd api && swag init --parseInternal=true --quiet --dir internal -g config/swagger.go -o ./docs",
     "api:dev": "yarn api:doc && cd api && gow run cmd/server/main.go",
