@@ -10,7 +10,7 @@ import (
 )
 
 type minioClient struct {
-	publicBucket string
+	PublicBucket string
 	client       *minio.Client
 }
 
@@ -21,9 +21,27 @@ func (m *minioClient) UploadObject(bucketName, objectName string, data []byte, o
 
 	reader := bytes.NewReader(data)
 
-	_, err := m.client.PutObject(bucketName, objectName, reader, int64(reader.Len()), minio.PutObjectOptions{})
+	opts := minio.PutObjectOptions{}
+	if options != nil {
+		opts = *options
+	}
+
+	_, err := m.client.PutObject(bucketName, objectName, reader, int64(reader.Len()), opts)
 
 	return err
+}
+
+func (m *minioClient) ListObject(bucketName string, objectPrefix string) []minio.ObjectInfo {
+	var objects []minio.ObjectInfo
+
+	objectsCh := make(chan struct{})
+	defer close(objectsCh)
+
+	for obj := range m.client.ListObjectsV2(bucketName, objectPrefix, true, objectsCh) {
+		objects = append(objects, obj)
+	}
+
+	return objects
 }
 
 func NewMinioClient() (*minioClient, error) {
@@ -38,5 +56,5 @@ func NewMinioClient() (*minioClient, error) {
 		return nil, err
 	}
 
-	return &minioClient{client: client, publicBucket: os.Getenv("MINIO_PUBLIC_BUCKET")}, nil
+	return &minioClient{client: client, PublicBucket: os.Getenv("MINIO_PUBLIC_BUCKET")}, nil
 }

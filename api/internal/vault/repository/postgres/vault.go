@@ -3,17 +3,86 @@ package postgres
 import (
 	"context"
 	"errors"
+	"fmt"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/dynonguyen/keychi/api/internal/common"
 	"github.com/dynonguyen/keychi/api/internal/infra"
+	"github.com/dynonguyen/keychi/api/internal/util"
 	"github.com/dynonguyen/keychi/api/internal/vault/dto"
 	"github.com/dynonguyen/keychi/api/internal/vault/entity"
 	"github.com/dynonguyen/keychi/api/internal/vault/model"
+	"github.com/samber/lo"
 )
 
 type vaultRepository struct {
 	storage *infra.PgsqlStorage
+}
+
+var faviconCache map[string]bool
+
+func createFaviconCache() {
+	if faviconCache == nil {
+		faviconCache = make(map[string]bool)
+
+		m, err := infra.NewMinioClient()
+
+		if err != nil {
+			return
+		}
+
+		objects := m.ListObject(m.PublicBucket, "icons")
+		for _, object := range objects {
+			key := strings.Replace(object.Key, "icons/", "", 1)
+			faviconCache[key] = true
+		}
+	}
+}
+
+func uploadFaviconFromProperties(props entity.VaultProperties) error {
+	createFaviconCache()
+
+	urls := lo.Map(props["urls"].([]any), func(u any, _ int) string {
+		return u.(string)
+	})
+
+	if len(urls) == 0 {
+		return errors.New("no urls found")
+	}
+
+	website := urls[0]
+
+	parsedUrl, err := url.Parse(website)
+	if err != nil {
+		return err
+	}
+
+	hostName := parsedUrl.Hostname()
+
+	if faviconCache[hostName] {
+		return nil
+	}
+
+	favicon, err := util.FetchFavicon(website)
+	if err != nil {
+		return err
+	}
+
+	m, err := infra.NewMinioClient()
+	if err != nil {
+		return err
+	}
+
+	err = m.UploadObject(m.PublicBucket, "icons/"+hostName, favicon, nil)
+	if err != nil {
+		return err
+	}
+
+	faviconCache[hostName] = true
+
+	return nil
 }
 
 func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dto.NewVaultInput) (int, error) {
@@ -38,6 +107,12 @@ func (r *vaultRepository) InsertVault(ctx context.Context, userID int, vault *dt
 
 	if err := db.Create(inserted).Error; err != nil {
 		return common.FailedCreationId, common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	if inserted.Type == entity.VaultTypeLogin {
+		if err := uploadFaviconFromProperties(inserted.Properties); err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	return inserted.ID, nil
@@ -73,7 +148,7 @@ func (r *vaultRepository) UpdateVault(ctx context.Context, userID int, vault *dt
 		return common.NewBadRequestError(errors.New("vault not found"), common.CodeBadRequestError)
 	}
 
-	if vault.FolderID != nil && *vault.FolderID != *currentVault.FolderID {
+	if vault.FolderID != nil {
 		if db.Where("user_id = ? AND id = ?", userID, *vault.FolderID).Take(&model.Folder{}).Error != nil {
 			return common.NewBadRequestError(errors.New("folder not found"), common.CodeBadRequestError)
 		}
@@ -100,6 +175,12 @@ func (r *vaultRepository) UpdateVault(ctx context.Context, userID int, vault *dt
 
 	if err := db.Save(&currentVault).Error; err != nil {
 		return common.NewInternalServerError(err, common.CodeInternalServerError)
+	}
+
+	if currentVault.Type == entity.VaultTypeLogin {
+		if err := uploadFaviconFromProperties(currentVault.Properties); err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	return nil
