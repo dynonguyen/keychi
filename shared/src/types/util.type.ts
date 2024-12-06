@@ -30,3 +30,15 @@ export type Maybe<T> = T | null | undefined;
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
+
+/**
+  obj = { a: { b: "string" }, c: "string" }
+  => FlattenKeys<typeof obj> = 'a.b' | 'c'
+*/
+type IsLeafNode<T> = T extends object ? (keyof T extends never ? true : false) : true;
+
+export type FlattenKeys<T> = T extends object
+  ? {
+      [K in keyof T]-?: IsLeafNode<T[K]> extends true ? `${string & K}` : `${string & K}.${FlattenKeys<T[K]>}`;
+    }[keyof T]
+  : '';

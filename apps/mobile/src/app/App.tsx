@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
+import ThemeProvider from '../components/ThemeProvider';
 
 export const App = () => {
   return (
-    <View style={{ padding: 32 }}>
-      <Text>Hello</Text>
-    </View>
+    <ThemeProvider>
+      <Text>Hello Keychi</Text>
+    </ThemeProvider>
   );
 };
 

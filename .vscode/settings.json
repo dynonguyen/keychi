@@ -57,5 +57,7 @@
   // imports list exceeds 10 dependencies - it may/won't not scan them
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.preferences.importModuleSpecifier": "project-relative"
+  "typescript.preferences.importModuleSpecifier": "project-relative",
+
+  "tailwindCSS.files.exclude": ["**/.git/**", "**/node_modules/**", "**/.hg/**", "**/.svn/**", "**/apps/mobile/**"]
 }
