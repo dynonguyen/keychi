@@ -10,3 +10,8 @@ export function themeMapping(t: TFunction, theme?: ThemeMode) {
 
   return { mapping, ...(theme ? mapping[theme] : {}) };
 }
+
+export function getActualTheme(theme: ThemeMode) {
+  if (theme !== ThemeMode.System) return theme;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? ThemeMode.Dark : ThemeMode.Light;
+}

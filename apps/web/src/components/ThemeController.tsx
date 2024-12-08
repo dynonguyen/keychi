@@ -1,25 +1,31 @@
 import { ThemeMode } from '@shared/types';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { useThemeStore } from '../stores/theme';
+import useSetTheme from '../hooks/useSetTheme';
+import { useProfileStore } from '../stores/profile';
 import { themeMapping } from '../utils/mapping';
 
 export const ThemeController = () => {
-  const { theme, changeTheme } = useThemeStore();
+  const { preferences } = useProfileStore();
   const { t } = useTranslation();
+  const setTheme = useSetTheme();
 
   const { mapping } = themeMapping(t);
   const options = Object.entries(mapping);
 
-  return options.map(([mode, { icon }]) => (
-    <span
-      key={mode}
-      onClick={() => {
-        changeTheme(mode as ThemeMode);
-      }}
-      className={clsx(icon, { 'text-primary text-2xl': mode === theme })}
-    ></span>
-  ));
+  return (
+    <div>
+      {options.map(([mode, { icon }]) => (
+        <span
+          key={mode}
+          onClick={() => setTheme(mode as ThemeMode)} // Use the function directly
+          className={clsx(icon, {
+            'text-primary text-2xl': mode === preferences.theme
+          })}
+        ></span>
+      ))}
+    </div>
+  );
 };
 
 export default ThemeController;
