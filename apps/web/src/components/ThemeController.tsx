@@ -13,19 +13,15 @@ export const ThemeController = () => {
   const { mapping } = themeMapping(t);
   const options = Object.entries(mapping);
 
-  return (
-    <div>
-      {options.map(([mode, { icon }]) => (
-        <span
-          key={mode}
-          onClick={() => setTheme(mode as ThemeMode)} // Use the function directly
-          className={clsx(icon, {
-            'text-primary text-2xl': mode === preferences.theme
-          })}
-        ></span>
-      ))}
-    </div>
-  );
+  return options.map(([mode, { icon }]) => (
+    <span
+      key={mode}
+      onClick={() => setTheme(mode as ThemeMode)}
+      className={clsx(icon, {
+        'text-primary text-2xl': mode === preferences.theme
+      })}
+    ></span>
+  ));
 };
 
 export default ThemeController;
