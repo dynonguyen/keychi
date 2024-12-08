@@ -17,9 +17,7 @@ export const ThemeController = () => {
     <span
       key={mode}
       onClick={() => setTheme(mode as ThemeMode)}
-      className={clsx(icon, {
-        'text-primary text-2xl': mode === preferences.theme
-      })}
+      className={clsx(icon, { 'text-primary text-2xl': mode === preferences.theme })}
     ></span>
   ));
 };
