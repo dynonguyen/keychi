@@ -10,7 +10,6 @@ type ProfileStore = UserProfile & {
   masterPwd: string;
   setMasterPwd(pwd: string): void;
   setProfile(profile: UserProfile): void;
-  setTheme(theme: ThemeMode): void;
 };
 
 const initTheme = (): ThemeMode => {
@@ -43,10 +42,6 @@ export const useProfileStore = createWithEqualityFn<ProfileStore>(
 
     setMasterPwd(pwd) {
       set({ masterPwd: pwd });
-    },
-
-    setTheme(theme) {
-      set({ preferences: { ...get().preferences, theme } });
     }
   }),
   isEqual

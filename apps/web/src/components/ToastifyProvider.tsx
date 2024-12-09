@@ -1,9 +1,9 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import useCheckDarkTheme from '../hooks/useCheckDarkTheme';
+import useTheme from '../hooks/useTheme';
 
 export const ToastifyProvider = () => {
-  const isDark = useCheckDarkTheme();
+  const { isDark } = useTheme();
 
   return (
     <ToastContainer
