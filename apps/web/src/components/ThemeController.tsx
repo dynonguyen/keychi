@@ -1,3 +1,4 @@
+import { DEFAULT } from '@shared/constants';
 import { ThemeMode } from '@shared/types';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +7,7 @@ import { useProfileStore } from '../stores/profile';
 import { themeMapping } from '../utils/mapping';
 
 export const ThemeController = () => {
-  const { preferences } = useProfileStore();
+  const theme = useProfileStore((state) => state?.preferences?.theme) || DEFAULT.USER_THEME;
   const { t } = useTranslation();
   const { setTheme } = useTheme();
 
@@ -17,7 +18,7 @@ export const ThemeController = () => {
     <span
       key={mode}
       onClick={() => setTheme(mode as ThemeMode)}
-      className={clsx(icon, { 'text-primary text-2xl': mode === preferences.theme })}
+      className={clsx(icon, { 'text-primary text-2xl': mode === theme })}
     ></span>
   ));
 };

@@ -1,8 +1,6 @@
-import { DEFAULT } from '@shared/constants';
-import { ThemeMode, UserProfile } from '@shared/types';
+import { UserProfile } from '@shared/types';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
-import { LS_KEY } from '../constants/key';
 import { Cipher } from '../utils/cipher';
 
 type ProfileStore = UserProfile & {
@@ -12,16 +10,7 @@ type ProfileStore = UserProfile & {
   setProfile(profile: UserProfile): void;
 };
 
-const initTheme = (): ThemeMode => {
-  const savedTheme = localStorage.getItem(LS_KEY.THEME) as ThemeMode | undefined;
-  return savedTheme && Object.values(ThemeMode).includes(savedTheme) ? savedTheme : DEFAULT.USER_THEME;
-};
-
-const defaultStore = {
-  preferences: {
-    theme: initTheme()
-  }
-} as ProfileStore;
+const defaultStore = {} as ProfileStore;
 
 export const useProfileStore = createWithEqualityFn<ProfileStore>(
   (set, get) => ({
