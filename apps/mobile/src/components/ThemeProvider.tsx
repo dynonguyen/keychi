@@ -1,6 +1,6 @@
 import { COLOR_PALETTE } from '@shared/constants';
+import { DeepPartial } from '@shared/types';
 import React from 'react';
-import { DeepPartial } from 'shared/src/types/util.type';
 import { createGlobalStyles, ThemeContext, ThemeContextValue } from '../contexts/theme';
 
 type ThemeProviderProps = DeepPartial<ThemeContextValue> & {

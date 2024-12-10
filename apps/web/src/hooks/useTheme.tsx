@@ -8,17 +8,17 @@ import { mutation } from '../libs/query-client';
 import { useAuthStore } from '../stores/auth';
 import { useProfileStore } from '../stores/profile';
 
-const setThemeFn = mutation<ApiResponse, PreferencesReqDto>(ENDPOINT.PATCH_PREFERENCES, undefined, 'patch');
+const updateTheme = mutation<ApiResponse, PreferencesReqDto>(ENDPOINT.PATCH_PREFERENCES, undefined, 'patch');
 
 export const useTheme = () => {
-  const setThemeMutation = useMutation({ mutationFn: setThemeFn });
+  const themeMutation = useMutation({ mutationFn: updateTheme });
 
   const isDark = useProfileStore((state) => state?.preferences?.theme === ThemeMode.Dark);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const setTheme = async (mode: ThemeMode) => {
     if (isAuthenticated) {
-      const [error] = await setThemeMutation.mutateAsync({
+      const [error] = await themeMutation.mutateAsync({
         type: PreferencesType.UI,
         properties: { theme: mode }
       });
