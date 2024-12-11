@@ -38,6 +38,11 @@ export enum VaultCustomFieldType {
   Boolean = 'boolean'
 }
 
+export enum PreferencesType {
+  UI = 'ui',
+  Cipher = 'cipher'
+}
+
 export type VaultCustomField = {
   type: VaultCustomFieldType;
   name: string;

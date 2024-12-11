@@ -1,9 +1,9 @@
 import { COLOR_PALETTE } from '@shared/constants';
 import { Flex } from '@shared/react-web/components';
-import useThemeStore from '../stores/theme';
+import useTheme from '../hooks/useTheme';
 
 export const GlobalLoading = () => {
-  const isDark = useThemeStore((state) => state.isDark);
+  const { isDark } = useTheme();
   const color = COLOR_PALETTE[isDark ? 'dark' : 'light'].primary['500'];
   const dur = 1;
 

@@ -1,6 +1,6 @@
+import { Any } from '@shared/types';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Any } from 'shared/src/types/util.type';
 import { ThemeContextValue } from '../contexts/theme';
 import { useTheme } from '../hooks/useTheme';
 

@@ -1,4 +1,4 @@
-import { User, UserPreferences } from './entity.type';
+import { PreferencesType, User, UserPreferences } from './entity.type';
 
 export type RegisterReqDto = {
   email: string;
@@ -16,6 +16,23 @@ export type LoginRespDto = {
   refreshToken: string;
   expiresIn: number;
   tokenType: string;
+};
+
+export type UIPropertiesReqDto = {
+  theme: string;
+  language: string;
+};
+export type CipherPropertiesReqDto = {
+  kdfSalt: string;
+  kdfAlgorithm: string;
+  kdfIterations: number;
+  kdfMemory: number;
+  kdfParallelism: number;
+};
+
+export type PreferencesReqDto = {
+  type: PreferencesType;
+  properties: Partial<UIPropertiesReqDto | CipherPropertiesReqDto>;
 };
 
 export type UserProfile = User & { preferences: UserPreferences };

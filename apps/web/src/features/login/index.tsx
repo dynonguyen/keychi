@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import ThemeController from '../../components/ThemeController';
 import { SS_KEY } from '../../constants/key';
 import { PATH } from '../../constants/path';
 import { mutation } from '../../libs/query-client';
@@ -48,6 +49,7 @@ export const Login = () => {
   return (
     <div>
       <p>TODO: Implement login form</p>
+      <ThemeController />
       <Flex className="gap-2" center>
         <Input type="text" {...register('email')} />
         <Input type="password" {...register('password')} />
