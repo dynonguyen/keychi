@@ -1,5 +1,5 @@
-import { LoadModule } from '@keychi/shared/react-web/components';
 import { Outlet } from 'react-router-dom';
+import LoadModule from '../../components/LoadModule';
 
 export const MainLayout = () => {
   return (

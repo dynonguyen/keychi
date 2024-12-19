@@ -1,7 +1,7 @@
-import { Flex } from '@keychi/shared/react-web/components';
-import { Button } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
 import ThemeController from '../components/ThemeController';
+import { Button } from '../components/ui';
+import Flex from '../components/ui/Flex';
 import usePageTitle from '../hooks/usePageTitle';
 import { useAuthStore } from '../stores/auth';
 import { useProfileStore } from '../stores/profile';

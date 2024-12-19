@@ -1,4 +1,3 @@
-import { NextUIProvider } from '@nextui-org/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import ClearSessionOnClose from './components/ClearSessionOnClose';
@@ -11,14 +10,12 @@ import { router } from './routes/router';
 export const App = () => {
   return (
     <ErrorBoundaryWrapper>
-      <NextUIProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <ThemeWatcher />
-          <ToastifyProvider />
-          <ClearSessionOnClose />
-        </QueryClientProvider>
-      </NextUIProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <ThemeWatcher />
+        <ToastifyProvider />
+        <ClearSessionOnClose />
+      </QueryClientProvider>
     </ErrorBoundaryWrapper>
   );
 };

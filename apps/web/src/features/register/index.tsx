@@ -1,12 +1,11 @@
 import { ENDPOINT } from '@keychi/shared/constants';
-import { Flex } from '@keychi/shared/react-web/components';
 import { KdfParams, RegisterReqDto } from '@keychi/shared/types';
 import { getErrorMessage } from '@keychi/shared/utils';
-import { Button, Input } from '@nextui-org/react';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Button, Flex, Input } from '../../components/ui';
 import { PATH } from '../../constants/path';
 import { mutation } from '../../libs/query-client';
 import { Cipher } from '../../utils/cipher';
@@ -42,9 +41,9 @@ export const Register = () => {
     <div>
       <p>TODO: Implement register form</p>
       <Flex className="gap-2" center>
-        <Input type="text" {...register('email')} />
-        <Input type="text" {...register('name')} />
-        <Input type="password" {...register('password')} />
+        <Input placeholder="Email" type="text" {...register('email')} />
+        <Input placeholder="Name" type="text" {...register('name')} />
+        <Input placeholder="Password" type="password" {...register('password')} />
         <Button color="primary" onClick={handleRegister}>
           Sign up
         </Button>

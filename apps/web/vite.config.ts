@@ -3,7 +3,6 @@ import 'dotenv/config';
 import react from '@vitejs/plugin-react';
 import dayjs from 'dayjs';
 import path from 'path';
-import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import { ViteEjsPlugin as viteEjsPlugin } from 'vite-plugin-ejs';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -35,12 +34,6 @@ export default defineConfig({
   ],
 
   define: { 'process.env': {} },
-
-  css: {
-    postcss: {
-      plugins: [tailwindcss(path.resolve(workspaceRoot, 'tailwind.config.js'))]
-    }
-  },
 
   build: {
     emptyOutDir: true,

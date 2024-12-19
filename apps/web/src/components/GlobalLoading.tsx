@@ -1,6 +1,6 @@
 import { COLOR_PALETTE } from '@keychi/shared/constants';
-import { Flex } from '@keychi/shared/react-web/components';
 import useTheme from '../hooks/useTheme';
+import Flex from './ui/Flex';
 
 export const GlobalLoading = () => {
   const { isDark } = useTheme();

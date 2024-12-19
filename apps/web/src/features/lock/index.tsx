@@ -1,12 +1,11 @@
 import { ENDPOINT } from '@keychi/shared/constants';
-import { Flex } from '@keychi/shared/react-web/components';
 import { KdfParams, LoginReqDto, LoginRespDto } from '@keychi/shared/types';
 import { getErrorMessage, isEmail } from '@keychi/shared/utils';
-import { Button, Input } from '@nextui-org/react';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Button, Flex, Input } from '../../components/ui';
 import { SS_KEY } from '../../constants/key';
 import { PATH } from '../../constants/path';
 import { mutation } from '../../libs/query-client';
@@ -50,14 +49,14 @@ export const Lock = () => {
   return (
     <Flex stack center className="p-4">
       <h1 className="text-xl font-medium">Your vault is locked</h1>
-      <Input type="password" label="Master password" placeholder="Enter your password" {...register('password')} />
+      <Input type="password" placeholder="Enter your password" {...register('password')} />
 
       <Flex className="gap-4">
-        <Button color="primary" onClick={handleUnlock}>
+        <Button variant="default" onClick={handleUnlock}>
           Unlock
         </Button>
 
-        <Button color="default" variant="bordered" onClick={() => logout()}>
+        <Button variant="default" onClick={() => logout()}>
           Logout
         </Button>
       </Flex>

@@ -1,13 +1,12 @@
 import { ENDPOINT } from '@keychi/shared/constants';
-import { Flex } from '@keychi/shared/react-web/components';
 import { KdfParams, LoginReqDto, LoginRespDto } from '@keychi/shared/types';
 import { getErrorMessage } from '@keychi/shared/utils';
-import { Button, Input } from '@nextui-org/react';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ThemeController from '../../components/ThemeController';
+import { Button, Flex, Input } from '../../components/ui';
 import { SS_KEY } from '../../constants/key';
 import { PATH } from '../../constants/path';
 import { mutation } from '../../libs/query-client';
@@ -51,8 +50,8 @@ export const Login = () => {
       <p>TODO: Implement login form</p>
       <ThemeController />
       <Flex className="gap-2" center>
-        <Input type="text" {...register('email')} />
-        <Input type="password" {...register('password')} />
+        <Input placeholder="Email" type="text" {...register('email')} />
+        <Input placeholder="Password" type="password" {...register('password')} />
         <Button color="primary" onClick={handleLogin}>
           Login
         </Button>

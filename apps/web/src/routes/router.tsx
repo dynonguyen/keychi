@@ -1,6 +1,6 @@
-import { LoadModule } from '@keychi/shared/react-web/components';
 import React from 'react';
 import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
+import LoadModule from '../components/LoadModule';
 import LockPageDetector from '../components/LockPageDetector';
 import { PATH } from '../constants/path';
 import AuthGuard from '../guards/AuthGuard';
