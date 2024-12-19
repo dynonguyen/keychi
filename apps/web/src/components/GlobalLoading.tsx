@@ -1,5 +1,5 @@
-import { COLOR_PALETTE } from '@shared/constants';
-import { Flex } from '@shared/react-web/components';
+import { COLOR_PALETTE } from '@keychi/shared/constants';
+import { Flex } from '@keychi/shared/react-web/components';
 import useTheme from '../hooks/useTheme';
 
 export const GlobalLoading = () => {

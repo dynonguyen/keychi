@@ -1,5 +1,5 @@
-import { ENDPOINT } from '@shared/constants';
-import { UserProfile } from '@shared/types';
+import { ENDPOINT } from '@keychi/shared/constants';
+import { UserProfile } from '@keychi/shared/types';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { SS_KEY } from '../constants/key';

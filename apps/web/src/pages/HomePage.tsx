@@ -1,5 +1,5 @@
+import { Flex } from '@keychi/shared/react-web/components';
 import { Button } from '@nextui-org/react';
-import { Flex } from '@shared/react-web/components';
 import { useTranslation } from 'react-i18next';
 import ThemeController from '../components/ThemeController';
 import usePageTitle from '../hooks/usePageTitle';

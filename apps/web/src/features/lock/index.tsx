@@ -1,8 +1,8 @@
+import { ENDPOINT } from '@keychi/shared/constants';
+import { Flex } from '@keychi/shared/react-web/components';
+import { KdfParams, LoginReqDto, LoginRespDto } from '@keychi/shared/types';
+import { getErrorMessage, isEmail } from '@keychi/shared/utils';
 import { Button, Input } from '@nextui-org/react';
-import { ENDPOINT } from '@shared/constants';
-import { Flex } from '@shared/react-web/components';
-import { KdfParams, LoginReqDto, LoginRespDto } from '@shared/types';
-import { getErrorMessage, isEmail } from '@shared/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';

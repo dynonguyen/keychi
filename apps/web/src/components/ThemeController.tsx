@@ -1,5 +1,5 @@
-import { DEFAULT } from '@shared/constants';
-import { ThemeMode } from '@shared/types';
+import { DEFAULT } from '@keychi/shared/constants';
+import { ThemeMode } from '@keychi/shared/types';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import useTheme from '../hooks/useTheme';

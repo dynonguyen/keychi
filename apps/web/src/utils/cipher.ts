@@ -1,5 +1,5 @@
-import { DEFAULT } from '@shared/constants';
-import { KdfAlgorithm, KdfParams } from '@shared/types';
+import { DEFAULT } from '@keychi/shared/constants';
+import { KdfAlgorithm, KdfParams } from '@keychi/shared/types';
 import { match } from 'ts-pattern';
 import { getEnv } from './get-env';
 import { arrayBufferToHex, hexToArrayBuffer } from './helper';

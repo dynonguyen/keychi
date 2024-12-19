@@ -1,4 +1,4 @@
-import { Any } from '@shared/types';
+import { Any } from '@keychi/shared/types';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemeContextValue } from '../contexts/theme';

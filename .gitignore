@@ -18,7 +18,6 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 package-lock.json
-.nx/cache
 
 # Binaries for programs and plugins
 *.exe
@@ -60,9 +59,6 @@ local.properties
 .settings/
 *.sublime-workspace
 
-.nx/cache
-.nx/workspace-data
-
 # API
 api/docs/*
 
@@ -79,3 +75,9 @@ npm-debug.*
 *.orig.*
 web-build/
 cache/
+expo-env.d.ts
+.nx/
+
+# Desktop
+apps/desktop/out/
+!apps/desktop/build

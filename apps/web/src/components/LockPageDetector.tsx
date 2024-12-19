@@ -1,4 +1,4 @@
-import { isEmail } from '@shared/utils';
+import { isEmail } from '@keychi/shared/utils';
 import { Navigate, Outlet } from 'react-router-dom';
 import { SS_KEY } from '../constants/key';
 import { PATH } from '../constants/path';

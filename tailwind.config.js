@@ -1,4 +1,3 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import materialSymbolIcons from '@iconify-json/material-symbols/icons.json';
 import { addIconSelectors } from '@iconify/tailwind';
 import { nextui } from '@nextui-org/react';
@@ -15,7 +14,15 @@ const utilClasses = plugin(function ({ addUtilities }) {
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./{apps,libs,shared}/**/*.{ts,tsx,vue}', './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'],
+  content: {
+    relative: true,
+    files: [
+      './apps/web/**/*.{ts,tsx}',
+      './shared/**/*.ts',
+      './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
+    ]
+  },
+
   darkMode: 'class',
 
   theme: {

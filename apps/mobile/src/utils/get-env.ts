@@ -1,4 +1,4 @@
-import { EnvMode } from '@shared/constants';
+import { EnvMode } from '@keychi/shared/constants';
 
 interface ImportExpoEnv {
   EXPO_PUBLIC_ASSET_URL: string;

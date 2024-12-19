@@ -1,4 +1,4 @@
-import { ColorPaletteToken } from '@shared/constants';
+import { ColorPaletteToken } from '@keychi/shared/constants';
 import { get } from 'lodash-es';
 import React from 'react';
 import { ScrollView, View, ViewProps, ViewStyle } from 'react-native';

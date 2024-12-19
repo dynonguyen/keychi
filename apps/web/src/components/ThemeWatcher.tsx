@@ -1,5 +1,5 @@
-import { DEFAULT } from '@shared/constants';
-import { ThemeMode } from '@shared/types';
+import { DEFAULT } from '@keychi/shared/constants';
+import { ThemeMode } from '@keychi/shared/types';
 import React from 'react';
 import { LS_KEY } from '../constants/key';
 import { useProfileStore } from '../stores/profile';

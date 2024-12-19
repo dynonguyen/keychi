@@ -1,4 +1,4 @@
-import { UserProfile } from '@shared/types';
+import { UserProfile } from '@keychi/shared/types';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { Cipher } from '../utils/cipher';

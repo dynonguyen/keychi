@@ -1,19 +1,19 @@
 import 'dotenv/config';
 
-/// <reference types='vitest' />
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import react from '@vitejs/plugin-react';
 import dayjs from 'dayjs';
 import path from 'path';
+import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import { ViteEjsPlugin as viteEjsPlugin } from 'vite-plugin-ejs';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import { version } from './package.json';
 
 const now = dayjs();
 const releaseDate = now.format('DD/MM/YYYY HH:mm:ss');
 const moduleReleaseExt = now.format('DDMMYYHHmmss');
 
-const projectRoot = path.resolve(__dirname, '..', '..');
+const workspaceRoot = path.resolve(__dirname, '..', '..');
 const root = __dirname;
 
 export default defineConfig({
@@ -24,7 +24,7 @@ export default defineConfig({
 
   plugins: [
     react(),
-    nxViteTsPaths(),
+    tsconfigPaths(),
     viteEjsPlugin({
       releaseDate,
       releaseVersion: version,
@@ -34,9 +34,17 @@ export default defineConfig({
     })
   ],
 
+  define: { 'process.env': {} },
+
+  css: {
+    postcss: {
+      plugins: [tailwindcss(path.resolve(workspaceRoot, 'tailwind.config.js'))]
+    }
+  },
+
   build: {
     emptyOutDir: true,
-    outDir: path.join(projectRoot, 'build/apps/web'),
+    outDir: path.join(workspaceRoot, 'build/apps/web'),
     reportCompressedSize: true,
     chunkSizeWarningLimit: 1500,
     rollupOptions: {

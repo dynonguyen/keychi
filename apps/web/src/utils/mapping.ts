@@ -1,4 +1,4 @@
-import { ThemeMode } from '@shared/types';
+import { ThemeMode } from '@keychi/shared/types';
 import { TFunction } from 'i18next';
 
 export function themeMapping(t: TFunction, theme?: ThemeMode) {

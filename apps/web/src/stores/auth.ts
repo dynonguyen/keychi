@@ -1,4 +1,4 @@
-import { ENDPOINT } from '@shared/constants';
+import { ENDPOINT } from '@keychi/shared/constants';
 import isEqual from 'react-fast-compare';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { SS_KEY } from '../constants/key';

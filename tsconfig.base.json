@@ -3,7 +3,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -14,15 +13,10 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "strict": true,
     "baseUrl": ".",
-    "types": ["./shared/src/types/i18next.d.ts"],
     "paths": {
-      "@shared/constants": ["shared/src/constants/index.ts"],
-      "@shared/utils": ["shared/src/utils/index.ts"],
-      "@shared/locales": ["shared/src/locales/index.ts"],
-      "@shared/types": ["shared/src/types/index.type.ts"],
-      "@shared/react-web/components": ["shared/src/react-web/components/index.ts"],
-      "@shared/react-web/hooks": ["shared/src/react-web/hooks/index.ts"]
+      "@keychi/shared/*": ["shared/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

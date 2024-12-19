@@ -1,6 +1,6 @@
-import { ENDPOINT } from '@shared/constants';
-import { PreferencesReqDto, PreferencesType, ThemeMode } from '@shared/types';
-import { getErrorMessage } from '@shared/utils';
+import { ENDPOINT } from '@keychi/shared/constants';
+import { PreferencesReqDto, PreferencesType, ThemeMode } from '@keychi/shared/types';
+import { getErrorMessage } from '@keychi/shared/utils';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { ApiResponse } from 'shared/src/types/common.type';

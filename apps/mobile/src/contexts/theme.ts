@@ -1,4 +1,4 @@
-import { COLOR_PALETTE, ColorPalette } from '@shared/constants';
+import { COLOR_PALETTE, ColorPalette } from '@keychi/shared/constants';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemeMode } from 'shared/src/types/entity.type';

@@ -1,4 +1,4 @@
-import { Any } from '@shared/types';
+import { Any } from '@keychi/shared/types';
 import { MutationFunction, QueryClient } from '@tanstack/react-query';
 import to from 'await-to-js';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, HttpStatusCode } from 'axios';

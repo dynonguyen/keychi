@@ -1,5 +1,5 @@
-import { COLOR_PALETTE } from '@shared/constants';
-import { DeepPartial } from '@shared/types';
+import { COLOR_PALETTE } from '@keychi/shared/constants';
+import { DeepPartial } from '@keychi/shared/types';
 import React from 'react';
 import { createGlobalStyles, ThemeContext, ThemeContextValue } from '../contexts/theme';
 
@@ -16,7 +16,11 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
 
   const globalStyles = createGlobalStyles({ palette, isDark });
 
-  return <ThemeContext.Provider value={{ palette, isDark: false, globalStyles }}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={{ palette, isDark: false, globalStyles, changeTheme: () => null }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 export default ThemeProvider;

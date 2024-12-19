@@ -1,4 +1,4 @@
-import { ReactChildren } from '@shared/types';
+import { ReactChildren } from '@keychi/shared/types';
 import { Navigate } from 'react-router-dom';
 import { SS_KEY } from '../constants/key';
 import { PATH } from '../constants/path';

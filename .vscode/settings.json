@@ -23,13 +23,14 @@
     "toastify",
     "TOTP",
     "usecase",
+    "VITE",
     "zustand"
   ],
 
   "files.exclude": {
-    "**/.nx": true,
     "**/.husky": true,
     "yarn-error.log": true
+    // "apps/desktop/out": true
   },
 
   "search.exclude": {
