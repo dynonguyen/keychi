@@ -17,9 +17,7 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
   const globalStyles = createGlobalStyles({ palette, isDark });
 
   return (
-    <ThemeContext.Provider value={{ palette, isDark: false, globalStyles, changeTheme: () => null }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext value={{ palette, isDark: false, globalStyles, changeTheme: () => null }}>{children}</ThemeContext>
   );
 };
 

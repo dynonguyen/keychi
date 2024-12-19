@@ -2,5 +2,5 @@ import React from 'react';
 import { ThemeContext } from '../contexts/theme';
 
 export const useTheme = () => {
-  return React.useContext(ThemeContext);
+  return React.use(ThemeContext);
 };

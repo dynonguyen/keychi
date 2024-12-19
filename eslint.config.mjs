@@ -79,7 +79,7 @@ export default [
 
   // React web
   {
-    files: ['apps/web/**/*.tsx'],
+    files: ['apps/web/**/*.tsx', 'shared/**/*.tsx'],
     rules: {
       'no-restricted-imports': [
         'error',
