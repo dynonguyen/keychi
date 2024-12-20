@@ -16,6 +16,7 @@
     "nextui",
     "pgsql",
     "resty",
+    "shadcn",
     "supabase",
     "swaggo",
     "tailwindcss",
