@@ -1,8 +1,9 @@
 import { DEFAULT } from '@keychi/shared/constants';
-import { KdfAlgorithm, KdfParams } from '@keychi/shared/types';
+import { Any, KdfAlgorithm, KdfParams } from '@keychi/shared/types';
 import { match } from 'ts-pattern';
 import { getEnv } from './get-env';
 import { arrayBufferToHex, hexToArrayBuffer } from './helper';
+import { loadWasm } from './load-wasm';
 
 // -----------------------------
 type KDFOptions = {
@@ -65,7 +66,11 @@ type Argon2Options = KDFOptions & {
 
 // TODO: Implement the Argon2 function
 async function argon2(_options: Argon2Options): Promise<KDFResult> {
-  return { baseKey: new CryptoKey(), derivedKey: new CryptoKey() };
+  await loadWasm();
+  const { password, salt, memory, parallelism } = _options;
+  const result = await (window as Any).argon2Hash(password, salt, parallelism, memory);
+  alert(result);
+  return pbkdf2(_options);
 }
 
 // -----------------------------
@@ -163,6 +168,13 @@ export class Cipher {
       kdfAlgorithm: KdfAlgorithm.PBKDF2,
       kdfSalt,
       kdfIterations: 100_000
+    });
+
+    const _ = await this._deriveKey({
+      kdfAlgorithm: KdfAlgorithm.Argon2,
+      kdfSalt,
+      kdfMemory: 1024,
+      kdfParallelism: 1
     });
 
     return this._cryptoKeyToHex(derivedKey);
