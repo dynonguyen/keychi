@@ -1,6 +1,6 @@
 import { DEFAULT } from '@keychi/shared/constants';
 import { Any, KdfAlgorithm, KdfParams } from '@keychi/shared/types';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { getEnv } from './get-env';
 import { arrayBufferToHex, hexToArrayBuffer } from './helper';
 import { loadWasm } from './load-wasm';
@@ -64,13 +64,10 @@ type Argon2Options = KDFOptions & {
   parallelism: number;
 };
 
-// TODO: Implement the Argon2 function
-async function argon2(_options: Argon2Options): Promise<KDFResult> {
+async function argon2(_options: Argon2Options): Promise<string> {
   await loadWasm();
   const { password, salt, memory, parallelism } = _options;
-  const result = await (window as Any).argon2Hash(password, salt, parallelism, memory);
-  alert(result);
-  return pbkdf2(_options);
+  return (window as Any).argon2Hash(password, salt, parallelism, memory);
 }
 
 // -----------------------------
@@ -121,24 +118,27 @@ export type CipherOptions = {
 };
 
 export class Cipher {
-  private _encryptionKey: CryptoKey | null = null;
+  private _encryptionKey: CryptoKey | string | null = null;
 
   constructor(private options: CipherOptions) {}
 
-  private async _getEncryptionKey(): Promise<CryptoKey> {
+  private async _getEncryptionKey(): Promise<CryptoKey | string> {
     if (this._encryptionKey) return this._encryptionKey;
 
-    const { derivedKey } = await this._deriveKey();
-    return derivedKey;
+    const kdfResult = await this._deriveKey();
+    return match(kdfResult)
+      .with({ derivedKey: P.any }, (result) => result.derivedKey)
+      .with(P.any, (result) => result)
+      .exhaustive();
   }
 
   private async _cryptoKeyToHex(key: CryptoKey): Promise<string> {
     return crypto.subtle.exportKey('raw', key).then(arrayBufferToHex);
   }
 
-  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<KDFResult> {
+  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<KDFResult | string> {
     const { masterPwd, kdfParams } = this.options;
-    const { kdfSalt, kdfAlgorithm, kdfIterations, kdfMemory, kdfParallelism } = { ...kdfParams, ...kdfOptions };
+    const { kdfSalt, kdfAlgorithm, kdfIterations } = { ...kdfParams, ...kdfOptions };
 
     return match(kdfAlgorithm)
       .with(KdfAlgorithm.PBKDF2, async () => {
@@ -149,13 +149,14 @@ export class Cipher {
           hashAlgorithm: PBKDF2HashAlgorithm.Sha256
         });
       })
-      .with(KdfAlgorithm.Argon2, () => {
+      .with(KdfAlgorithm.Argon2, async () => {
+        const { kdfMemory, kdfParallelism } = { ...kdfParams, ...kdfOptions };
+
         return argon2({
           password: masterPwd,
           salt: kdfSalt,
           memory: kdfMemory!,
-          parallelism: kdfParallelism!,
-          iterations: DEFAULT.KDF_ARGON2_ITERATIONS
+          parallelism: kdfParallelism!
         });
       })
       .exhaustive();
@@ -164,35 +165,48 @@ export class Cipher {
   async getAuthenticationPwd(): Promise<string> {
     const kdfSalt = this.options.email + getEnv('VITE_AUTH_KDF_SALT');
 
-    const { derivedKey } = await this._deriveKey({
-      kdfAlgorithm: KdfAlgorithm.PBKDF2,
-      kdfSalt,
-      kdfIterations: 100_000
-    });
-
-    const _ = await this._deriveKey({
-      kdfAlgorithm: KdfAlgorithm.Argon2,
-      kdfSalt,
-      kdfMemory: 1024,
-      kdfParallelism: 1
-    });
-
-    return this._cryptoKeyToHex(derivedKey);
+    return match(this.options.kdfParams.kdfAlgorithm)
+      .with(KdfAlgorithm.PBKDF2, async () => {
+        return await this._deriveKey({
+          kdfAlgorithm: KdfAlgorithm.PBKDF2,
+          kdfSalt,
+          kdfIterations: 100_000
+        }).then((result) => this._cryptoKeyToHex((result as KDFResult).derivedKey));
+      })
+      .with(KdfAlgorithm.Argon2, async () => {
+        return await this._deriveKey({
+          kdfAlgorithm: KdfAlgorithm.Argon2,
+          kdfSalt,
+          kdfMemory: 1024 * 1024,
+          kdfParallelism: 2
+        }).then((result) => result as string);
+      })
+      .exhaustive();
   }
 
   async encrypt(plaintext: string): Promise<string> {
     const encryptionKey = await this._getEncryptionKey();
 
-    return encryptAES(plaintext, encryptionKey).then(arrayBufferToHex);
+    const key = await match(encryptionKey)
+      .with(P.string, async (keyString) => {
+        return crypto.subtle.importKey('raw', hexToArrayBuffer(keyString), { name: 'AES-GCM' }, false, ['encrypt']);
+      })
+      .with(P.instanceOf(CryptoKey), (cryptoKey) => cryptoKey)
+      .exhaustive();
+
+    return encryptAES(plaintext, key).then(arrayBufferToHex);
   }
 
-  async decrypt(encrypted: string | ArrayBuffer): Promise<string> {
-    const encryptionKey = await this._getEncryptionKey();
+  async decrypt(encrypted: string | ArrayBuffer, encryptionKey: string | CryptoKey): Promise<string> {
+    const key =
+      typeof encryptionKey === 'string'
+        ? await crypto.subtle.importKey('raw', hexToArrayBuffer(encryptionKey), { name: 'AES-GCM' }, false, ['decrypt'])
+        : encryptionKey;
 
     if (encrypted instanceof ArrayBuffer) {
-      return decryptAES(encrypted, encryptionKey);
+      return decryptAES(encrypted, key);
     }
 
-    return decryptAES(hexToArrayBuffer(encrypted), encryptionKey);
+    return decryptAES(hexToArrayBuffer(encrypted), key);
   }
 }
