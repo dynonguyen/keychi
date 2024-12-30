@@ -10,7 +10,7 @@ describe('Cipher', () => {
     kdfSalt: 'salt123',
     kdfIterations: 100000,
     kdfMemory: 1024 * 1024,
-    kdfParallelism: 2
+    kdfParallelism: 1
   };
 
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe('Cipher', () => {
     cipher = new Cipher({
       email,
       masterPwd,
-      kdfParams: { ...kdfParams, kdfAlgorithm: KdfAlgorithm.Argon2 }
+      kdfParams: { ...kdfParams, kdfMemory: 46 * 1024, kdfIterations: 1, kdfAlgorithm: KdfAlgorithm.Argon2 }
     });
     const encryptionKey = await cipher['_getEncryptionKey']();
     expect(encryptionKey).toBeDefined();
@@ -54,7 +54,7 @@ describe('Cipher', () => {
     cipher = new Cipher({
       email,
       masterPwd,
-      kdfParams: { ...kdfParams, kdfAlgorithm: KdfAlgorithm.Argon2 }
+      kdfParams: { ...kdfParams, kdfMemory: 46 * 1024, kdfIterations: 1, kdfAlgorithm: KdfAlgorithm.Argon2 }
     });
     const plaintext = 'Hello, World!';
     const encrypted = await cipher.encrypt(plaintext);

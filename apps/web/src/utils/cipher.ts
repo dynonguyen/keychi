@@ -66,8 +66,8 @@ type Argon2Options = KDFOptions & {
 
 async function argon2(_options: Argon2Options): Promise<string> {
   await loadWasm();
-  const { password, salt, memory, parallelism } = _options;
-  return (window as Any).argon2Hash(password, salt, parallelism, memory);
+  const { password, salt, memory, iterations, parallelism, hashLength } = _options;
+  return (window as Any).argon2Hash(password, salt, iterations, memory, parallelism, hashLength);
 }
 
 // -----------------------------
@@ -128,7 +128,7 @@ export class Cipher {
     const kdfResult = await this._deriveKey();
     return match(kdfResult)
       .with({ derivedKey: P.any }, (result) => result.derivedKey)
-      .with(P.any, (result) => result)
+      .with(P.string, (result) => result)
       .exhaustive();
   }
 
@@ -156,7 +156,9 @@ export class Cipher {
           password: masterPwd,
           salt: kdfSalt,
           memory: kdfMemory!,
-          parallelism: kdfParallelism!
+          iterations: kdfIterations!,
+          parallelism: kdfParallelism!,
+          hashLength: 32
         });
       })
       .exhaustive();
@@ -188,8 +190,10 @@ export class Cipher {
     const encryptionKey = await this._getEncryptionKey();
 
     const key = await match(encryptionKey)
-      .with(P.string, async (keyString) => {
-        return crypto.subtle.importKey('raw', hexToArrayBuffer(keyString), { name: 'AES-GCM' }, false, ['encrypt']);
+      .with(P.string, async (key) => {
+        const matchResult = key.match(/.{1,2}/g);
+        const hashBytes = new Uint8Array((matchResult ?? []).map((byte) => parseInt(byte, 16)));
+        return crypto.subtle.importKey('raw', hashBytes, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
       })
       .with(P.instanceOf(CryptoKey), (cryptoKey) => cryptoKey)
       .exhaustive();
@@ -198,10 +202,15 @@ export class Cipher {
   }
 
   async decrypt(encrypted: string | ArrayBuffer, encryptionKey: string | CryptoKey): Promise<string> {
-    const key =
-      typeof encryptionKey === 'string'
-        ? await crypto.subtle.importKey('raw', hexToArrayBuffer(encryptionKey), { name: 'AES-GCM' }, false, ['decrypt'])
-        : encryptionKey;
+    const key = await match(encryptionKey)
+      .with(P.string, async (key) => {
+        const matchResult = key.match(/.{1,2}/g);
+        const hashBytes = new Uint8Array((matchResult ?? []).map((byte) => parseInt(byte, 16)));
+
+        return crypto.subtle.importKey('raw', hashBytes, { name: 'AES-GCM' }, false, ['decrypt']);
+      })
+      .with(P.instanceOf(CryptoKey), (cryptoKey) => cryptoKey)
+      .exhaustive();
 
     if (encrypted instanceof ArrayBuffer) {
       return decryptAES(encrypted, key);
