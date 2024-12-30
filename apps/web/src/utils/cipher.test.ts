@@ -49,4 +49,19 @@ describe('Cipher', () => {
     expect(encryptionKey).toBeDefined();
     expect(typeof encryptionKey).toBe('string');
   });
+
+  it('should encrypt and decrypt a message correctly using Argon2', async () => {
+    cipher = new Cipher({
+      email,
+      masterPwd,
+      kdfParams: { ...kdfParams, kdfAlgorithm: KdfAlgorithm.Argon2 }
+    });
+    const plaintext = 'Hello, World!';
+    const encrypted = await cipher.encrypt(plaintext);
+    expect(encrypted).toBeDefined();
+    expect(typeof encrypted).toBe('string');
+
+    const decrypted = await cipher.decrypt(encrypted, await cipher['_getEncryptionKey']());
+    expect(decrypted).toBe(plaintext);
+  });
 });
