@@ -13,8 +13,6 @@ type KDFOptions = {
   iterations?: number;
 };
 
-type KDFResult = CryptoKey;
-
 // PBKDF2
 enum PBKDF2HashAlgorithm {
   Sha1 = 'SHA-1',
@@ -27,7 +25,7 @@ type PBKDF2Options = KDFOptions & {
   hashAlgorithm?: PBKDF2HashAlgorithm;
 };
 
-async function pbkdf2(options: PBKDF2Options): Promise<KDFResult> {
+async function pbkdf2(options: PBKDF2Options): Promise<CryptoKey> {
   const {
     password,
     salt,
@@ -83,9 +81,9 @@ type Argon2Options = KDFOptions & {
  * @param {number} options.iterations - The number of iterations for Argon2.
  * @param {number} options.parallelism - The degree of parallelism for Argon2.
  * @param {number} options.hashLength - The desired length of the hash output.
- * @returns {Promise<KDFResult>} A promise that resolves to the derived key, imported as an AES-GCM key.
+ * @returns {Promise<CryptoKey>} A promise that resolves to the derived key.
  */
-async function argon2(options: Argon2Options): Promise<KDFResult> {
+async function argon2(options: Argon2Options): Promise<CryptoKey> {
   await loadWasm();
   const { password, salt, memory, iterations, parallelism, hashLength } = options;
   const keyBuffer = (window as Any).argon2Hash(password, salt, iterations, memory, parallelism, hashLength);
@@ -155,7 +153,7 @@ export class Cipher {
     return crypto.subtle.exportKey('raw', key).then(arrayBufferToHex);
   }
 
-  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<KDFResult> {
+  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<CryptoKey> {
     const { masterPwd, kdfParams } = this.options;
     const { kdfSalt, kdfAlgorithm, kdfIterations } = { ...kdfParams, ...kdfOptions };
     this._encryptionKey = await match(kdfAlgorithm)
@@ -208,6 +206,7 @@ export class Cipher {
 
   async encrypt(plaintext: string): Promise<string> {
     const encryptionKey = await this._getEncryptionKey();
+
     return encryptAES(plaintext, encryptionKey).then(arrayBufferToHex);
   }
 
