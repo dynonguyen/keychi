@@ -9,7 +9,7 @@ describe('Cipher', () => {
     kdfAlgorithm: KdfAlgorithm.PBKDF2,
     kdfSalt: 'salt123',
     kdfIterations: 100000,
-    kdfMemory: 1024 * 1024,
+    kdfMemory: 64 * 1024,
     kdfParallelism: 1
   };
 
@@ -29,7 +29,7 @@ describe('Cipher', () => {
     expect(encrypted).toBeDefined();
     expect(typeof encrypted).toBe('string');
 
-    const decrypted = await cipher.decrypt(encrypted, await cipher['_getEncryptionKey']());
+    const decrypted = await cipher.decrypt(encrypted);
     expect(decrypted).toBe(plaintext);
   });
 
@@ -43,25 +43,24 @@ describe('Cipher', () => {
     cipher = new Cipher({
       email,
       masterPwd,
-      kdfParams: { ...kdfParams, kdfMemory: 46 * 1024, kdfIterations: 1, kdfAlgorithm: KdfAlgorithm.Argon2 }
+      kdfParams: { ...kdfParams, kdfIterations: 2, kdfAlgorithm: KdfAlgorithm.Argon2 }
     });
     const encryptionKey = await cipher['_getEncryptionKey']();
     expect(encryptionKey).toBeDefined();
-    expect(typeof encryptionKey).toBe('string');
+    expect(encryptionKey instanceof CryptoKey).toBe(true);
   });
 
   it('should encrypt and decrypt a message correctly using Argon2', async () => {
     cipher = new Cipher({
       email,
       masterPwd,
-      kdfParams: { ...kdfParams, kdfMemory: 46 * 1024, kdfIterations: 1, kdfAlgorithm: KdfAlgorithm.Argon2 }
+      kdfParams: { ...kdfParams, kdfIterations: 2, kdfAlgorithm: KdfAlgorithm.Argon2 }
     });
     const plaintext = 'Hello, World!';
     const encrypted = await cipher.encrypt(plaintext);
     expect(encrypted).toBeDefined();
-    expect(typeof encrypted).toBe('string');
 
-    const decrypted = await cipher.decrypt(encrypted, await cipher['_getEncryptionKey']());
+    const decrypted = await cipher.decrypt(encrypted);
     expect(decrypted).toBe(plaintext);
   });
 });

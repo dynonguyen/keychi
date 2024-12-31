@@ -1,8 +1,8 @@
 import { DEFAULT } from '@keychi/shared/constants';
 import { Any, KdfAlgorithm, KdfParams } from '@keychi/shared/types';
-import { match, P } from 'ts-pattern';
+import { match } from 'ts-pattern';
 import { getEnv } from './get-env';
-import { arrayBufferToHex, hexToArrayBuffer } from './helper';
+import { arrayBufferToHex, hexToArrayBuffer, hexToUint8Array } from './helper';
 import { loadWasm } from './load-wasm';
 
 // -----------------------------
@@ -13,10 +13,7 @@ type KDFOptions = {
   iterations?: number;
 };
 
-type KDFResult = {
-  baseKey: CryptoKey;
-  derivedKey: CryptoKey;
-};
+type KDFResult = CryptoKey;
 
 // PBKDF2
 enum PBKDF2HashAlgorithm {
@@ -55,7 +52,7 @@ async function pbkdf2(options: PBKDF2Options): Promise<KDFResult> {
     ['encrypt', 'decrypt']
   );
 
-  return { baseKey, derivedKey };
+  return derivedKey;
 }
 
 // Argon2
@@ -64,10 +61,36 @@ type Argon2Options = KDFOptions & {
   parallelism: number;
 };
 
-async function argon2(_options: Argon2Options): Promise<string> {
+/**
+ * Generates a key derivation function (KDF) result using the Argon2 algorithm.
+ *
+ * This function loads the necessary WebAssembly module and performs the Argon2 hashing
+ * with the provided options.
+ *
+ * OWASP further notes that the following Argon2id options provide equivalent cryptographic strength and simply trade off memory usage for compute workload:[10]
+
+- Memory: 46 MiB, Iterations: 1, Parallelism: 1
+- Memory: 19 MiB, Iterations: 2, Parallelism: 1
+- Memory: 12 MiB, Iterations: 3, Parallelism: 1
+- Memory: 9 MiB, Iterations: 4, Parallelism: 1
+- Memory: 7 MiB, Iterations: 5, Parallelism: 1
+
+ *
+ * @param {Argon2Options} options - The options for the Argon2 hashing algorithm.
+ * @param {string} options.password - The password to be hashed.
+ * @param {Uint8Array} options.salt - The salt to be used in the hashing process.
+ * @param {number} options.memory - The memory cost parameter for Argon2.
+ * @param {number} options.iterations - The number of iterations for Argon2.
+ * @param {number} options.parallelism - The degree of parallelism for Argon2.
+ * @param {number} options.hashLength - The desired length of the hash output.
+ * @returns {Promise<KDFResult>} A promise that resolves to the derived key, imported as an AES-GCM key.
+ */
+async function argon2(options: Argon2Options): Promise<KDFResult> {
   await loadWasm();
-  const { password, salt, memory, iterations, parallelism, hashLength } = _options;
-  return (window as Any).argon2Hash(password, salt, iterations, memory, parallelism, hashLength);
+  const { password, salt, memory, iterations, parallelism, hashLength } = options;
+  const keyBuffer = (window as Any).argon2Hash(password, salt, iterations, memory, parallelism, hashLength);
+  const key = hexToUint8Array(keyBuffer);
+  return crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt', 'encrypt']);
 }
 
 // -----------------------------
@@ -118,29 +141,24 @@ export type CipherOptions = {
 };
 
 export class Cipher {
-  private _encryptionKey: CryptoKey | string | null = null;
+  private _encryptionKey: CryptoKey | null = null;
 
   constructor(private options: CipherOptions) {}
 
-  private async _getEncryptionKey(): Promise<CryptoKey | string> {
+  private async _getEncryptionKey(): Promise<CryptoKey> {
     if (this._encryptionKey) return this._encryptionKey;
 
-    const kdfResult = await this._deriveKey();
-    return match(kdfResult)
-      .with({ derivedKey: P.any }, (result) => result.derivedKey)
-      .with(P.string, (result) => result)
-      .exhaustive();
+    return this._deriveKey();
   }
 
   private async _cryptoKeyToHex(key: CryptoKey): Promise<string> {
     return crypto.subtle.exportKey('raw', key).then(arrayBufferToHex);
   }
 
-  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<KDFResult | string> {
+  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<KDFResult> {
     const { masterPwd, kdfParams } = this.options;
     const { kdfSalt, kdfAlgorithm, kdfIterations } = { ...kdfParams, ...kdfOptions };
-
-    return match(kdfAlgorithm)
+    this._encryptionKey = await match(kdfAlgorithm)
       .with(KdfAlgorithm.PBKDF2, async () => {
         return await pbkdf2({
           password: masterPwd,
@@ -151,7 +169,6 @@ export class Cipher {
       })
       .with(KdfAlgorithm.Argon2, async () => {
         const { kdfMemory, kdfParallelism } = { ...kdfParams, ...kdfOptions };
-
         return argon2({
           password: masterPwd,
           salt: kdfSalt,
@@ -162,6 +179,8 @@ export class Cipher {
         });
       })
       .exhaustive();
+
+    return this._encryptionKey;
   }
 
   async getAuthenticationPwd(): Promise<string> {
@@ -173,49 +192,32 @@ export class Cipher {
           kdfAlgorithm: KdfAlgorithm.PBKDF2,
           kdfSalt,
           kdfIterations: 100_000
-        }).then((result) => this._cryptoKeyToHex((result as KDFResult).derivedKey));
+        }).then(this._cryptoKeyToHex);
       })
       .with(KdfAlgorithm.Argon2, async () => {
         return await this._deriveKey({
           kdfAlgorithm: KdfAlgorithm.Argon2,
           kdfSalt,
-          kdfMemory: 1024 * 1024,
-          kdfParallelism: 2
-        }).then((result) => result as string);
+          kdfMemory: 64 * 1024,
+          kdfIterations: 2,
+          kdfParallelism: 1
+        }).then(this._cryptoKeyToHex);
       })
       .exhaustive();
   }
 
   async encrypt(plaintext: string): Promise<string> {
     const encryptionKey = await this._getEncryptionKey();
-
-    const key = await match(encryptionKey)
-      .with(P.string, async (key) => {
-        const matchResult = key.match(/.{1,2}/g);
-        const hashBytes = new Uint8Array((matchResult ?? []).map((byte) => parseInt(byte, 16)));
-        return crypto.subtle.importKey('raw', hashBytes, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
-      })
-      .with(P.instanceOf(CryptoKey), (cryptoKey) => cryptoKey)
-      .exhaustive();
-
-    return encryptAES(plaintext, key).then(arrayBufferToHex);
+    return encryptAES(plaintext, encryptionKey).then(arrayBufferToHex);
   }
 
-  async decrypt(encrypted: string | ArrayBuffer, encryptionKey: string | CryptoKey): Promise<string> {
-    const key = await match(encryptionKey)
-      .with(P.string, async (key) => {
-        const matchResult = key.match(/.{1,2}/g);
-        const hashBytes = new Uint8Array((matchResult ?? []).map((byte) => parseInt(byte, 16)));
-
-        return crypto.subtle.importKey('raw', hashBytes, { name: 'AES-GCM' }, false, ['decrypt']);
-      })
-      .with(P.instanceOf(CryptoKey), (cryptoKey) => cryptoKey)
-      .exhaustive();
+  async decrypt(encrypted: string | ArrayBuffer): Promise<string> {
+    const encryptionKey = await this._getEncryptionKey();
 
     if (encrypted instanceof ArrayBuffer) {
-      return decryptAES(encrypted, key);
+      return decryptAES(encrypted, encryptionKey);
     }
 
-    return decryptAES(hexToArrayBuffer(encrypted), key);
+    return decryptAES(hexToArrayBuffer(encrypted), encryptionKey);
   }
 }
