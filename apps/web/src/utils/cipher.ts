@@ -1,9 +1,10 @@
 import { DEFAULT } from '@keychi/shared/constants';
 import { Any, KdfAlgorithm, KdfParams } from '@keychi/shared/types';
+import to from 'await-to-js';
 import { match } from 'ts-pattern';
 import { getEnv } from './get-env';
 import { arrayBufferToHex, hexToArrayBuffer, hexToUint8Array } from './helper';
-import { loadWasm } from './load-wasm';
+import { loadArgon2Wasm } from './load-wasm';
 
 // -----------------------------
 type KDFOptions = {
@@ -59,35 +60,17 @@ type Argon2Options = KDFOptions & {
   parallelism: number;
 };
 
-/**
- * Generates a key derivation function (KDF) result using the Argon2 algorithm.
- *
- * This function loads the necessary WebAssembly module and performs the Argon2 hashing
- * with the provided options.
- *
- * OWASP further notes that the following Argon2id options provide equivalent cryptographic strength and simply trade off memory usage for compute workload:[10]
-
-- Memory: 46 MiB, Iterations: 1, Parallelism: 1
-- Memory: 19 MiB, Iterations: 2, Parallelism: 1
-- Memory: 12 MiB, Iterations: 3, Parallelism: 1
-- Memory: 9 MiB, Iterations: 4, Parallelism: 1
-- Memory: 7 MiB, Iterations: 5, Parallelism: 1
-
- *
- * @param {Argon2Options} options - The options for the Argon2 hashing algorithm.
- * @param {string} options.password - The password to be hashed.
- * @param {Uint8Array} options.salt - The salt to be used in the hashing process.
- * @param {number} options.memory - The memory cost parameter for Argon2.
- * @param {number} options.iterations - The number of iterations for Argon2.
- * @param {number} options.parallelism - The degree of parallelism for Argon2.
- * @param {number} options.hashLength - The desired length of the hash output.
- * @returns {Promise<CryptoKey>} A promise that resolves to the derived key.
- */
 async function argon2(options: Argon2Options): Promise<CryptoKey> {
-  await loadWasm();
+  const [err] = await to(loadArgon2Wasm());
+
+  if (err || !(window as Any).argon2Hash) {
+    throw new Error('Argon2 WASM module not loaded');
+  }
+
   const { password, salt, memory, iterations, parallelism, hashLength } = options;
   const keyBuffer = (window as Any).argon2Hash(password, salt, iterations, memory, parallelism, hashLength);
   const key = hexToUint8Array(keyBuffer);
+
   return crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt', 'encrypt']);
 }
 
@@ -184,24 +167,13 @@ export class Cipher {
   async getAuthenticationPwd(): Promise<string> {
     const kdfSalt = this.options.email + getEnv('VITE_AUTH_KDF_SALT');
 
-    return match(this.options.kdfParams.kdfAlgorithm)
-      .with(KdfAlgorithm.PBKDF2, async () => {
-        return await this._deriveKey({
-          kdfAlgorithm: KdfAlgorithm.PBKDF2,
-          kdfSalt,
-          kdfIterations: 100_000
-        }).then(this._cryptoKeyToHex);
-      })
-      .with(KdfAlgorithm.Argon2, async () => {
-        return await this._deriveKey({
-          kdfAlgorithm: KdfAlgorithm.Argon2,
-          kdfSalt,
-          kdfMemory: 64 * 1024,
-          kdfIterations: 2,
-          kdfParallelism: 1
-        }).then(this._cryptoKeyToHex);
-      })
-      .exhaustive();
+    const derivedKey = await this._deriveKey({
+      kdfAlgorithm: KdfAlgorithm.PBKDF2,
+      kdfSalt,
+      kdfIterations: 100_000
+    });
+
+    return this._cryptoKeyToHex(derivedKey);
   }
 
   async encrypt(plaintext: string): Promise<string> {

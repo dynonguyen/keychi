@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-		"test": "vitest"
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@keychi/shared": "*"

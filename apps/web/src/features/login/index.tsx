@@ -1,5 +1,5 @@
 import { ENDPOINT } from '@keychi/shared/constants';
-import { KdfParams, LoginReqDto, LoginRespDto } from '@keychi/shared/types';
+import { KdfAlgorithm, KdfParams, LoginReqDto, LoginRespDto } from '@keychi/shared/types';
 import { getErrorMessage } from '@keychi/shared/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -29,7 +29,11 @@ export const Login = () => {
   const handleLogin = async () => {
     const { email, password } = getValues();
 
-    const cipher = new Cipher({ email, masterPwd: password, kdfParams: {} as KdfParams });
+    const cipher = new Cipher({
+      email,
+      masterPwd: password,
+      kdfParams: { kdfAlgorithm: KdfAlgorithm.Argon2 } as KdfParams
+    });
     const authPwd = await cipher.getAuthenticationPwd();
 
     const [error, response] = await loginMutation.mutateAsync({ email, password: authPwd });

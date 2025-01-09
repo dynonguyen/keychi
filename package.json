@@ -22,6 +22,7 @@
     "web:build": "yarn web:lint && yarn workspace @keychi/web build",
     "web:lint": "eslint \"apps/web/src\" -c ./eslint.config.mjs",
     "web:test": "yarn workspace @keychi/web test",
+    "web:test:watch": "yarn workspace @keychi/web test:watch",
     "mobile:dev": "yarn workspace @keychi/mobile dev",
     "mobile:lint": "eslint \"apps/mobile/src\" -c ./eslint.config.mjs",
     "desktop:dev": "yarn workspace @keychi/desktop dev",

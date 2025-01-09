@@ -1,8 +1,10 @@
 import { KdfAlgorithm, KdfParams } from '@keychi/shared/types';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Cipher } from './cipher';
+
 describe('Cipher', () => {
   let cipher: Cipher;
+
   const email = 'test@example.com';
   const masterPwd = 'password123';
   const kdfParams: KdfParams = {
