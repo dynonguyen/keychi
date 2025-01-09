@@ -1,8 +1,10 @@
 import { DEFAULT } from '@keychi/shared/constants';
-import { KdfAlgorithm, KdfParams } from '@keychi/shared/types';
+import { Any, KdfAlgorithm, KdfParams } from '@keychi/shared/types';
+import to from 'await-to-js';
 import { match } from 'ts-pattern';
 import { getEnv } from './get-env';
-import { arrayBufferToHex, hexToArrayBuffer } from './helper';
+import { arrayBufferToHex, hexToArrayBuffer, hexToUint8Array } from './helper';
+import { loadArgon2Wasm } from './load-wasm';
 
 // -----------------------------
 type KDFOptions = {
@@ -10,11 +12,6 @@ type KDFOptions = {
   salt: string;
   hashLength?: number;
   iterations?: number;
-};
-
-type KDFResult = {
-  baseKey: CryptoKey;
-  derivedKey: CryptoKey;
 };
 
 // PBKDF2
@@ -29,7 +26,7 @@ type PBKDF2Options = KDFOptions & {
   hashAlgorithm?: PBKDF2HashAlgorithm;
 };
 
-async function pbkdf2(options: PBKDF2Options): Promise<KDFResult> {
+async function pbkdf2(options: PBKDF2Options): Promise<CryptoKey> {
   const {
     password,
     salt,
@@ -54,7 +51,7 @@ async function pbkdf2(options: PBKDF2Options): Promise<KDFResult> {
     ['encrypt', 'decrypt']
   );
 
-  return { baseKey, derivedKey };
+  return derivedKey;
 }
 
 // Argon2
@@ -63,9 +60,18 @@ type Argon2Options = KDFOptions & {
   parallelism: number;
 };
 
-// TODO: Implement the Argon2 function
-async function argon2(_options: Argon2Options): Promise<KDFResult> {
-  return { baseKey: new CryptoKey(), derivedKey: new CryptoKey() };
+async function argon2(options: Argon2Options): Promise<CryptoKey> {
+  const [err] = await to(loadArgon2Wasm());
+
+  if (err || !(window as Any).argon2Hash) {
+    throw new Error('Argon2 WASM module not loaded');
+  }
+
+  const { password, salt, memory, iterations, parallelism, hashLength } = options;
+  const keyBuffer = (window as Any).argon2Hash(password, salt, iterations, memory, parallelism, hashLength);
+  const key = hexToUint8Array(keyBuffer);
+
+  return crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt', 'encrypt']);
 }
 
 // -----------------------------
@@ -123,19 +129,17 @@ export class Cipher {
   private async _getEncryptionKey(): Promise<CryptoKey> {
     if (this._encryptionKey) return this._encryptionKey;
 
-    const { derivedKey } = await this._deriveKey();
-    return derivedKey;
+    return this._deriveKey();
   }
 
   private async _cryptoKeyToHex(key: CryptoKey): Promise<string> {
     return crypto.subtle.exportKey('raw', key).then(arrayBufferToHex);
   }
 
-  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<KDFResult> {
+  private async _deriveKey(kdfOptions?: Partial<KdfParams>): Promise<CryptoKey> {
     const { masterPwd, kdfParams } = this.options;
-    const { kdfSalt, kdfAlgorithm, kdfIterations, kdfMemory, kdfParallelism } = { ...kdfParams, ...kdfOptions };
-
-    return match(kdfAlgorithm)
+    const { kdfSalt, kdfAlgorithm, kdfIterations } = { ...kdfParams, ...kdfOptions };
+    this._encryptionKey = await match(kdfAlgorithm)
       .with(KdfAlgorithm.PBKDF2, async () => {
         return await pbkdf2({
           password: masterPwd,
@@ -144,22 +148,26 @@ export class Cipher {
           hashAlgorithm: PBKDF2HashAlgorithm.Sha256
         });
       })
-      .with(KdfAlgorithm.Argon2, () => {
+      .with(KdfAlgorithm.Argon2, async () => {
+        const { kdfMemory, kdfParallelism } = { ...kdfParams, ...kdfOptions };
         return argon2({
           password: masterPwd,
           salt: kdfSalt,
           memory: kdfMemory!,
+          iterations: kdfIterations!,
           parallelism: kdfParallelism!,
-          iterations: DEFAULT.KDF_ARGON2_ITERATIONS
+          hashLength: 32
         });
       })
       .exhaustive();
+
+    return this._encryptionKey;
   }
 
   async getAuthenticationPwd(): Promise<string> {
     const kdfSalt = this.options.email + getEnv('VITE_AUTH_KDF_SALT');
 
-    const { derivedKey } = await this._deriveKey({
+    const derivedKey = await this._deriveKey({
       kdfAlgorithm: KdfAlgorithm.PBKDF2,
       kdfSalt,
       kdfIterations: 100_000

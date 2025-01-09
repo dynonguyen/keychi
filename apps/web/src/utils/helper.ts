@@ -13,6 +13,14 @@ export function hexToArrayBuffer(hex: string): ArrayBuffer {
   return buffer.buffer;
 }
 
+export function hexToUint8Array(hex: string): Uint8Array {
+  if (hex.length % 2 !== 0) {
+    throw new Error('Invalid hex string: length must be even.');
+  }
+
+  return new Uint8Array((hex.match(/.{1,2}/g) ?? []).map((byte: string) => parseInt(byte, 16)));
+}
+
 export function arrayBufferToHex(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
 
