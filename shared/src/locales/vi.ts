@@ -28,6 +28,17 @@ const vi = {
     USER_NOT_FOUND: 'Người dùng không tồn tại',
     EMAIL_DUPLICATE: 'Email đã tồn tại',
     INVALID_USER: 'Email hoặc mật khẩu không đúng'
+  },
+  features: {
+    login: {
+      welcomeBack: 'Chào mừng trở lại',
+      enterDetails: 'Xin chào 👋 Vui lòng nhập thông tin của bạn',
+      loginSuccess: 'Đăng nhập thành công'
+    }
+  },
+  common: {
+    signIn: 'Đăng nhập',
+    signUp: 'Đăng ký'
   }
 } as const;
 

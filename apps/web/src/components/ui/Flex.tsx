@@ -6,12 +6,14 @@ type FlexProps = {
   wrap?: boolean;
   stack?: boolean;
   center?: boolean;
+  ref?: React.Ref<HTMLElement>;
 } & React.HTMLAttributes<HTMLElement>;
 
 export const Flex = (props: FlexProps) => {
-  const { component = 'div', wrap = false, stack = false, center, className, ...others } = props;
+  const { component = 'div', wrap = false, stack = false, center, className, ref, ...others } = props;
 
   return React.createElement(component, {
+    ref,
     className: clsx('flex', className, {
       'flex-wrap': wrap,
       'flex-col': stack,

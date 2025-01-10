@@ -43,8 +43,8 @@ export default {
         sm: `${BASE_RADIUS - 4}px`
       },
       colors: generateTailwindColors(SHADCN_COLOR_PALETTE.light)
-    },
+    }
+  },
 
-    plugins: [iconifyPlugin, utilClassesPlugin, twAnimatePlugin]
-  }
+  plugins: [utilClassesPlugin, twAnimatePlugin, iconifyPlugin]
 };

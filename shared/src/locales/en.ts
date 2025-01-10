@@ -3,7 +3,7 @@ const en = {
     home: 'Home page',
     notFound: 'Page not found',
     serverError: 'Server error',
-    login: 'Login',
+    login: 'Sign in',
     register: 'Register',
     lock: 'Your vault is locked'
   },
@@ -28,6 +28,17 @@ const en = {
     USER_NOT_FOUND: 'User not found',
     EMAIL_DUPLICATE: 'Email already exists',
     INVALID_USER: 'Invalid email or password'
+  },
+  features: {
+    login: {
+      welcomeBack: 'Welcome Back',
+      enterDetails: 'Hi 👋 Please enter your details',
+      loginSuccess: 'Login successfully'
+    }
+  },
+  common: {
+    signIn: 'Sign in',
+    signUp: 'Sign up'
   }
 } as const;
 
