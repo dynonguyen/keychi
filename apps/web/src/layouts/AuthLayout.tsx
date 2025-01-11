@@ -17,7 +17,11 @@ export const AuthLayout = (props: ReactChildren) => {
           <Typography variant="xlMedium">{APP_NAME}</Typography>
         </Flex>
 
-        <div className="flex-grow">{children}</div>
+        <div className="flex-grow">
+          <Flex stack center className="mt-16 lg:mt-32 gap-4">
+            {children}
+          </Flex>
+        </div>
 
         <Typography variant="smRegular" className="text-center mt-auto text-foreground-500">
           ©2025 Keychi
@@ -29,7 +33,7 @@ export const AuthLayout = (props: ReactChildren) => {
         <div
           className="size-full bg-cover rounded-2xl"
           style={{ backgroundImage: `url(${getAssetUrl('img/login-background.png')})` }}
-        ></div>
+        />
       </div>
     </Flex>
   );

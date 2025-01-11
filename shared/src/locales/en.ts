@@ -1,10 +1,12 @@
+import { APP_NAME } from '../constants';
+
 const en = {
   pageTitle: {
     home: 'Home page',
     notFound: 'Page not found',
     serverError: 'Server error',
     login: 'Sign in',
-    register: 'Register',
+    register: 'Sign up',
     lock: 'Your vault is locked'
   },
   pageResultAction: 'Return to our <toHome>home page</toHome> or <toContact>contact us</toContact>.',
@@ -29,16 +31,38 @@ const en = {
     EMAIL_DUPLICATE: 'Email already exists',
     INVALID_USER: 'Invalid email or password'
   },
-  features: {
-    login: {
-      welcomeBack: 'Welcome Back',
-      enterDetails: 'Hi 👋 Please enter your details',
-      loginSuccess: 'Login successfully'
-    }
-  },
   common: {
     signIn: 'Sign in',
-    signUp: 'Sign up'
+    signUp: 'Sign up',
+    logout: 'Logout',
+    unlock: 'Unlock',
+    password: 'Password',
+    fullname: 'Fullname'
+  },
+  validation: {
+    required: 'This field is required',
+    minLength: 'Must be greater than or equal to {{min}} characters',
+    maxLength: 'Must be less than or equal to {{max}} characters',
+    invalid: 'This field is invalid',
+    min: 'The maximum value is {{min}}',
+    max: 'The minimum value is {{max}}',
+    specialChar: 'Does not contain special characters',
+    email: 'Invalid email'
+  },
+  features: {
+    login: {
+      welcomeBack: 'Welcome back',
+      enterDetails: 'Hi 👋 Please enter your details',
+      loginSuccess: 'Login successfully'
+    },
+    register: {
+      getStarted: 'Get started',
+      welcome: `Welcome to ${APP_NAME} - Let's create your account`,
+      registerSuccess: 'Register successfully'
+    },
+    lock: {
+      title: 'Your vault is locked'
+    }
   }
 } as const;
 

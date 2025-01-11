@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ENDPOINT } from '@keychi/shared/constants';
-import { KdfAlgorithm, KdfParams, LoginReqDto, LoginRespDto } from '@keychi/shared/types';
+import { KdfParams, RegisterReqDto } from '@keychi/shared/types';
 import { getErrorMessage } from '@keychi/shared/utils';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
@@ -11,60 +11,58 @@ import { toast } from 'react-toastify';
 import { Button, Flex, Input } from '../../../components/ui';
 import FormControl from '../../../components/ui/FormControl';
 import PasswordInput from '../../../components/ui/PasswordInput';
-import { SS_KEY } from '../../../constants/key';
 import { PATH } from '../../../constants/path';
 import { mutation } from '../../../libs/query-client';
-import { useProfileStore } from '../../../stores/profile';
 import { Cipher } from '../../../utils/cipher';
-import { loginSchema } from '../utils/validation';
+import { registerSchema } from '../utils/validation';
 
-const login = mutation<LoginRespDto, LoginReqDto>(ENDPOINT.POST_LOGIN);
+const registerUser = mutation<string, RegisterReqDto>(ENDPOINT.POST_REGISTER);
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const loginMutation = useMutation({ mutationFn: login });
-  const setMasterPwd = useProfileStore((state) => state.setMasterPwd);
+  const registerMutation = useMutation({ mutationFn: registerUser });
 
-  const schema = React.useMemo(() => loginSchema(t), [i18n.language]);
-  const { register, handleSubmit, formState } = useForm<LoginReqDto>({
-    resolver: zodResolver(schema)
-  });
-
+  const schema = React.useMemo(() => registerSchema(t), [i18n.language]);
+  const { register, handleSubmit, formState } = useForm<RegisterReqDto>({ resolver: zodResolver(schema) });
   const { errors } = formState;
 
-  const handleLogin = async (form: LoginReqDto) => {
+  const handleRegister = async (form: RegisterReqDto) => {
     const { email, password } = form;
+    const cipher = new Cipher({ masterPwd: password, email, kdfParams: {} as KdfParams });
 
-    const cipher = new Cipher({
-      email,
-      masterPwd: password,
-      kdfParams: { kdfAlgorithm: KdfAlgorithm.Argon2 } as KdfParams
-    });
     const authPwd = await cipher.getAuthenticationPwd();
 
-    const [error, response] = await loginMutation.mutateAsync({ email, password: authPwd });
+    const [error] = await registerMutation.mutateAsync({ ...form, password: authPwd });
 
-    if (error) return toast.error(getErrorMessage(error));
+    if (error) {
+      return toast.error(getErrorMessage(error));
+    }
 
-    sessionStorage.setItem(SS_KEY.ACCESS_TOKEN, response.data.accessToken);
-    sessionStorage.setItem(SS_KEY.REFRESH_TOKEN, response.data.refreshToken);
-
-    setMasterPwd(password);
-
-    toast.success(t('features.login.loginSuccess'));
-    navigate(PATH.HOME);
+    toast.success(t('features.register.registerSuccess'));
+    navigate(PATH.LOGIN);
   };
 
   return (
-    <Flex stack className="gap-3 w-96 max-w-full" center component="form" onSubmit={handleSubmit(handleLogin)}>
+    <Flex stack className="gap-3 w-96 max-w-full" center component="form" onSubmit={handleSubmit(handleRegister)}>
+      <FormControl label={t('common.fullname')} name="name" error={!!errors.name} helperText={errors.name?.message}>
+        <Input
+          size="lg"
+          placeholder={t('common.fullname')}
+          startIcon={<span className="icon msi-perm-contact-calendar-outline-rounded" />}
+          autoFocus
+          autoComplete="off"
+          {...register('name')}
+        />
+      </FormControl>
+
       <FormControl label="Email" name="email" error={!!errors.email} helperText={errors.email?.message}>
         <Input
           size="lg"
           placeholder="Email"
-          autoFocus
           startIcon={<span className="icon msi-alternate-email-rounded" />}
+          autoComplete="off"
           {...register('email')}
         />
       </FormControl>
@@ -84,10 +82,10 @@ export const LoginForm = () => {
       </FormControl>
 
       <Button type="submit" className="w-full">
-        {t('common.signIn')}
+        {t('common.signUp')}
       </Button>
     </Flex>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

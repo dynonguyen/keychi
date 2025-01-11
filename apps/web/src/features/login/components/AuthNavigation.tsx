@@ -14,18 +14,18 @@ export const AuthNavigation = () => {
   ];
 
   return (
-    <Flex className="w-80 h-11 max-w-full p-1 rounded-xl bg-neutral-200 justify-between">
+    <Flex className="w-96 h-11 max-w-full p-1 rounded-xl bg-neutral-200 justify-between gap-1">
       {items.map((item) => (
-        <Flex
-          center
+        <Link
           className={clsx(
-            'size-full text-sm rounded-lg',
-            item.active ? 'font-semibold bg-neutral-50' : 'text-foreground-500'
+            'flex items-center justify-center size-full text-sm rounded-lg w-full cursor-pointer',
+            item.active ? 'font-semibold bg-neutral-50' : 'text-foreground-500 hover:bg-neutral-50/40 transition-colors'
           )}
           key={item.to}
+          to={item.to}
         >
-          <Link to={item.to}>{item.text}</Link>
-        </Flex>
+          {item.text}
+        </Link>
       ))}
     </Flex>
   );

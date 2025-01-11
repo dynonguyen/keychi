@@ -7,10 +7,10 @@ export const WelcomeText = () => {
 
   return (
     <Flex stack className="gap-1">
-      <h2 className="text-3xl font-bold text-center">{t('features.login.welcomeBack')}</h2>
+      <h2 className="text-3xl font-bold text-center">{t('features.register.getStarted')}</h2>
 
       <Typography variant="smMedium" className="text-foreground-500 text-center">
-        {t('features.login.enterDetails')}
+        {t('features.register.welcome')}
       </Typography>
     </Flex>
   );
