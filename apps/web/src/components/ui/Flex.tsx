@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 
-type FlexProps = {
+export type FlexProps = {
   component?: React.ElementType;
   wrap?: boolean;
   stack?: boolean;

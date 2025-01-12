@@ -37,7 +37,18 @@ const vi = {
     logout: 'Đăng xuất',
     unlock: 'Mở khóa',
     password: 'Mật khẩu',
-    fullname: 'Họ tên'
+    fullname: 'Họ tên',
+    vault_one: 'Vault',
+    vault_other: 'Vaults',
+    setting_one: 'Cài đặt',
+    setting_other: 'Cài đặt',
+    favorite_one: 'Yêu thích',
+    favorite_other: 'Yêu thích',
+    tool_one: 'Công cụ',
+    tool_other: 'Công cụ',
+    trash: 'Thùng rác',
+    newItem: 'Thêm mới',
+    lockNow: 'Khóa ngay'
   },
   validation: {
     required: 'Trường này là bắt buộc',

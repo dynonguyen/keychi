@@ -8,6 +8,7 @@ type ProfileStore = UserProfile & {
   masterPwd: string;
   setMasterPwd(pwd: string): void;
   setProfile(profile: UserProfile): void;
+  lock(): void;
 };
 
 const defaultStore = {} as ProfileStore;
@@ -31,6 +32,10 @@ export const useProfileStore = createWithEqualityFn<ProfileStore>(
 
     setMasterPwd(pwd) {
       set({ masterPwd: pwd });
+    },
+
+    lock() {
+      set({ masterPwd: '' });
     }
   }),
   isEqual

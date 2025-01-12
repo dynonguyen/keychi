@@ -33,6 +33,7 @@ const typographyVariants = cva('keychi-typography', {
 export type TypographyProps = VariantProps<typeof typographyVariants> &
   React.HTMLAttributes<HTMLElement> & {
     component?: React.ElementType;
+    maxLines?: number;
     ref?: React.Ref<HTMLElement>;
   };
 

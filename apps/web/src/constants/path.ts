@@ -3,5 +3,9 @@ export const PATH = {
   ABOUT: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  LOCK: '/lock'
+  LOCK: '/lock',
+  VAULTS: '/vaults',
+  TOTP: '/totp',
+  SETTINGS: '/settings',
+  TOOLS: '/tools'
 };

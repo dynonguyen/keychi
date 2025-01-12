@@ -37,7 +37,18 @@ const en = {
     logout: 'Logout',
     unlock: 'Unlock',
     password: 'Password',
-    fullname: 'Fullname'
+    fullname: 'Fullname',
+    vault_one: 'Vault',
+    vault_other: 'Vaults',
+    setting_one: 'Setting',
+    setting_other: 'Settings',
+    favorite_one: 'Favorite',
+    favorite_other: 'Favorites',
+    tool_one: 'Tool',
+    tool_other: 'Tools',
+    trash: 'Trash',
+    newItem: 'New item',
+    lockNow: 'Lock now'
   },
   validation: {
     required: 'This field is required',

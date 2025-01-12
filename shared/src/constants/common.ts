@@ -5,3 +5,8 @@ export enum EnvMode {
   Dev = 'dev',
   Prod = 'prod'
 }
+
+export enum SortOrder {
+  Asc = 'asc',
+  Desc = 'desc'
+}

@@ -103,7 +103,7 @@ const LIGHT_COLOR_PALETTE = {
     main: '#71717a'
   },
   divider: {
-    main: '#11111126'
+    main: '#e4e4e7'
   }
 };
 
@@ -212,7 +212,7 @@ const DARK_COLOR_PALETTE: ColorPalette = {
     main: '#3f3f46'
   },
   divider: {
-    main: '#ffffff26'
+    main: '#3f3f46'
   }
 };
 

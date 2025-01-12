@@ -10,6 +10,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import ServerErrorPage from '../pages/ServerErrorPage';
 
 const HomePage = React.lazy(() => import('../pages/HomePage'));
+const VaultsPage = React.lazy(() => import('../pages/VaultsPage'));
 const LoginPage = React.lazy(() => import('../pages/LoginPage'));
 const LockPage = React.lazy(() => import('../pages/LockPage'));
 const RegisterPage = React.lazy(() => import('../pages/RegisterPage'));
@@ -22,7 +23,13 @@ const protectedRoutes: RouteObject = {
       <MainLayout />
     </AuthGuard>
   ),
-  children: [{ path: PATH.HOME, element: <HomePage /> }]
+  children: [
+    { path: PATH.HOME, element: <HomePage /> },
+    { path: PATH.VAULTS, element: <VaultsPage /> },
+    { path: PATH.TOTP, element: <div>TOTP</div> },
+    { path: PATH.TOOLS, element: <div>Tool</div> },
+    { path: PATH.SETTINGS, element: <div>Settings</div> }
+  ]
 };
 
 const authRoutes: RouteObject = {

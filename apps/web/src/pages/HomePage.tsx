@@ -1,28 +1,8 @@
-import { useTranslation } from 'react-i18next';
-import ThemeController from '../components/ThemeController';
-import { Button } from '../components/ui';
-import Flex from '../components/ui/Flex';
-import usePageTitle from '../hooks/usePageTitle';
-import { useAuthStore } from '../stores/auth';
-import { useProfileStore } from '../stores/profile';
+import { Navigate } from 'react-router-dom';
+import { PATH } from '../constants/path';
 
 export const HomePage = () => {
-  const { t } = useTranslation();
-  const { logout } = useAuthStore();
-  const { name } = useProfileStore();
-
-  usePageTitle(t('pageTitle.home'));
-
-  return (
-    <Flex className="gap-2 items-start" wrap center>
-      <p className="text-xl">Home page</p>
-      <div>
-        <ThemeController />
-      </div>
-      <Button onClick={() => logout()}>Logout</Button>
-      <div>User: {name}</div>
-    </Flex>
-  );
+  return <Navigate to={PATH.VAULTS} />;
 };
 
 export default HomePage;

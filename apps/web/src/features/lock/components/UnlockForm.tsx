@@ -73,6 +73,7 @@ export const UnlockForm = () => {
       >
         <PasswordInput
           size="lg"
+          autoFocus
           placeholder={t('common.password')}
           startIcon={<span className="icon msi-lock-outline" />}
           {...register('password')}
@@ -80,7 +81,7 @@ export const UnlockForm = () => {
       </FormControl>
 
       <Flex className="gap-4 w-full">
-        <Button className="w-full" variant="outline" onClick={handleLogout}>
+        <Button type="button" className="w-full" variant="outline" onClick={handleLogout}>
           {t('common.logout')}
         </Button>
         <Button className="w-full" type="submit">

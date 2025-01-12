@@ -2,7 +2,7 @@ import i18next from 'i18next';
 import { ApiErrorResponse } from '../types/common.type';
 import { Any } from '../types/util.type';
 
-export function toNumber(
+export function toSafeNumber(
   value: Any,
   defaultValue?: number,
   options: {
