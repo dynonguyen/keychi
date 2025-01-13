@@ -48,7 +48,9 @@ const en = {
     tool_other: 'Tools',
     trash: 'Trash',
     newItem: 'New item',
-    lockNow: 'Lock now'
+    lockNow: 'Lock now',
+    collapseSidebar: 'Collapse sidebar',
+    expandSidebar: 'Expand sidebar'
   },
   validation: {
     required: 'This field is required',

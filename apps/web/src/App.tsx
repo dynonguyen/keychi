@@ -1,5 +1,6 @@
 import { SHADCN_COLOR_PALETTE } from '@keychi/shared/constants';
 import { generateCssVariables } from '@keychi/shared/utils/tailwind-helper';
+import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
@@ -27,7 +28,9 @@ export const App = () => {
   return (
     <ErrorBoundaryWrapper>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <TooltipProvider>
+          <RouterProvider router={router} />
+        </TooltipProvider>
         <ThemeWatcher />
         <ToastifyProvider />
         <ClearSessionOnClose />

@@ -13,6 +13,7 @@ export const ToastifyProvider = () => {
       draggable={false}
       pauseOnHover
       theme={isDark ? 'dark' : 'light'}
+      limit={3}
     />
   );
 };

@@ -9,7 +9,7 @@ export const UserAvatar = ({ className, ...others }: FlexProps) => {
   return (
     <Flex
       center
-      className={clsx('rounded-full size-8 bg-secondary-500 text-white font-semibold shrink-0', className)}
+      className={clsx('rounded-full size-8 bg-pink-600 text-white font-semibold shrink-0', className)}
       {...others}
     >
       {letter}

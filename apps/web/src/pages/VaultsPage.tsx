@@ -8,7 +8,7 @@ import { useAuthStore } from '../stores/auth';
 
 export const VaultsPage = () => {
   const { t, i18n } = useTranslation();
-  const { logout } = useAuthStore();
+  const logout = useAuthStore((state) => state.logout);
 
   usePageTitle(t('pageTitle.home'));
 

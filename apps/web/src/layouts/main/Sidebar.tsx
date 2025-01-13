@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { Button, Flex, FlexProps } from '../../components/ui';
 import Divider from '../../components/ui/Divider';
+import Tooltip from '../../components/ui/Tooltip';
 import Typography from '../../components/ui/Typography';
 import UserAvatar from '../../components/UserAvatar';
-import { VaultFilterKey } from '../../constants/common';
+import { VaultFilterKey, VaultFilterType } from '../../constants/common';
 import { PATH } from '../../constants/path';
 import useSafeSearchParams from '../../hooks/useSafeSearchParams';
 import { useAuthStore } from '../../stores/auth';
@@ -30,23 +31,35 @@ const SIDEBAR_WIDTH = [64, 284];
 
 const SidebarToggler = () => {
   const { open, toggle } = useSidebarStore();
+  const { t } = useTranslation();
 
   return (
-    <Button variant="outline" size="icon" className="size-8 shrink-0 rounded-full" onClick={toggle}>
-      <span
-        className={clsx(
-          'icon size-4 text-foreground-500',
-          open ? 'msi-keyboard-double-arrow-left-rounded' : 'msi-keyboard-double-arrow-right-rounded'
-        )}
-      />
-    </Button>
+    <Tooltip title={t(open ? 'common.collapseSidebar' : 'common.expandSidebar')} placement="right">
+      <Button variant="outline" size="icon" className="size-8 shrink-0 rounded-full" onClick={toggle}>
+        <span
+          className={clsx(
+            'icon size-4 text-foreground-500',
+            open ? 'msi-keyboard-double-arrow-left-rounded' : 'msi-keyboard-double-arrow-right-rounded'
+          )}
+        />
+      </Button>
+    </Tooltip>
   );
 };
 
 const Logo = () => {
   const open = useSidebarStore((state) => state.open);
 
-  if (!open) return null;
+  if (!open) {
+    return (
+      <div className="rounded-full size-8 shrink-0 overflow-hidden group">
+        <img className="size-full group-hover:hidden" src={getAssetUrl('img/logo.svg')} />
+        <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity">
+          <SidebarToggler />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Link to={PATH.HOME}>
@@ -64,7 +77,6 @@ const SidebarItem = (props: SidebarItemProps) => {
   const { icon, activeIcon, label, to, active, slotProps } = props;
   const open = useSidebarStore((state) => state.open);
 
-  // TODO: Implement Tooltip & show it when the sidebar is collapsed
   const renderItem = () => {
     return (
       <Flex
@@ -84,18 +96,23 @@ const SidebarItem = (props: SidebarItemProps) => {
     );
   };
 
-  return to ? <Link to={to}>{renderItem()}</Link> : renderItem();
+  const renderItemWithTooltip = () => {
+    return open ? (
+      renderItem()
+    ) : (
+      <Tooltip title={label} placement="right">
+        {renderItem()}
+      </Tooltip>
+    );
+  };
+
+  return to ? <Link to={to}>{renderItemWithTooltip()}</Link> : renderItemWithTooltip();
 };
 
 const SidebarMenu = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { trash, favorite } = useSafeSearchParams<Record<EnumValue<VaultFilterKey>, boolean>>({
-    transform: {
-      trash: (value) => value === 'true',
-      favorite: (value) => value === 'true'
-    }
-  });
+  const { type } = useSafeSearchParams<Record<EnumValue<VaultFilterKey>, VaultFilterType>>();
 
   const menu: SidebarItemProps[] = [
     {
@@ -103,7 +120,7 @@ const SidebarMenu = () => {
       activeIcon: 'msi-key-vertical-rounded -rotate-45',
       label: t('common.vault_other'),
       to: PATH.VAULTS,
-      active: (pathname === PATH.VAULTS || pathname === PATH.HOME) && !trash && !favorite
+      active: (pathname === PATH.VAULTS || pathname === PATH.HOME) && !Object.values(VaultFilterType).includes(type)
     },
     {
       icon: 'msi-shield-lock-outline-rounded',
@@ -115,15 +132,15 @@ const SidebarMenu = () => {
       icon: 'msi-favorite-outline-rounded',
       activeIcon: 'msi-favorite-rounded',
       label: t('common.favorite_other'),
-      to: `${PATH.VAULTS}?${VaultFilterKey.Favorite}=true`,
-      active: pathname === PATH.VAULTS && favorite
+      to: `${PATH.VAULTS}?${VaultFilterKey.Type}=${VaultFilterType.Favorite}`,
+      active: pathname === PATH.VAULTS && type === VaultFilterType.Favorite
     },
     {
       icon: 'msi-delete-outline-rounded',
       activeIcon: 'msi-delete-rounded',
       label: t('common.trash'),
-      to: `${PATH.VAULTS}?${VaultFilterKey.Trash}=true`,
-      active: pathname === PATH.VAULTS && trash
+      to: `${PATH.VAULTS}?${VaultFilterKey.Type}=${VaultFilterType.Trash}`,
+      active: pathname === PATH.VAULTS && type === VaultFilterType.Trash
     },
     {
       icon: 'msi-build-outline-rounded',
@@ -175,7 +192,9 @@ const Account = () => {
       <Divider />
 
       <Flex className="gap-2">
-        <UserAvatar title={name} />
+        <Tooltip title={open ? '' : name} placement="right">
+          <UserAvatar />
+        </Tooltip>
 
         {open && (
           <Flex stack>
@@ -223,7 +242,7 @@ export const Sidebar = () => {
         >
           <Flex className="justify-between">
             <Logo />
-            <SidebarToggler />
+            {open && <SidebarToggler />}
           </Flex>
 
           <NewButton />
