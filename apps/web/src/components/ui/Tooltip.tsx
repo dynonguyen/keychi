@@ -50,13 +50,15 @@ export const Tooltip = (props: TooltipProps) => {
     );
   };
 
+  const Wrapper = disablePortal ? React.Fragment : Portal;
+
   return (
     <Root {...slotProps?.root}>
       <Trigger asChild {...slotProps?.trigger}>
         {children}
       </Trigger>
 
-      {disablePortal ? renderContent() : <Portal {...slotProps?.portal}>{renderContent()}</Portal>}
+      <Wrapper {...slotProps?.portal}>{renderContent()}</Wrapper>
     </Root>
   );
 };
