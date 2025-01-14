@@ -8,10 +8,17 @@ export const MainLayout = () => {
     <Flex className="w-screen h-screen overflow-hidden">
       <Sidebar />
 
-      <div className="overflow-auto w-full min-h-full">
-        <LoadModule fallback={null} suspense={null}>
-          <Outlet />
-        </LoadModule>
+      <div className="size-full flex-grow">
+        <div className="m-3 h-full">
+          <div
+            className="overflow-auto size-full p-4 border border-divider rounded-2xl bg-background"
+            style={{ height: 'calc(100% - 1.5rem)' }}
+          >
+            <LoadModule fallback={null} suspense={null}>
+              <Outlet />
+            </LoadModule>
+          </div>
+        </div>
       </div>
     </Flex>
   );

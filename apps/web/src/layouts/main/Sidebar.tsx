@@ -217,8 +217,8 @@ const NewButton = () => {
 
   return (
     <React.Fragment>
-      <Button className={clsx('my-6 rounded-xl', !open && 'size-8')} size={open ? 'md' : 'icon'}>
-        <span className={clsx('icon msi-add-2-rounded', open ? 'size-5' : 'size-4')}></span>
+      <Button className={clsx('my-6 rounded-lg', !open && 'size-8')} size={open ? 'sm' : 'icon'}>
+        <span className={clsx('icon msi-add-2-rounded', 'size-4')}></span>
         {open && <Typography variant="mdSemiBold">{t('common.newItem')}</Typography>}
       </Button>
     </React.Fragment>
@@ -229,32 +229,28 @@ export const Sidebar = () => {
   const open = useSidebarStore((state) => state.open);
 
   return (
-    <div className="h-full shrink-0">
-      <div className="m-3 h-full shrink-0">
-        <Flex
-          stack
-          className="p-4 border border-divider rounded-2xl overflow-y-auto overflow-x-hidden"
-          style={{
-            height: 'calc(100% - 1.5rem)',
-            width: open ? SIDEBAR_WIDTH[1] : SIDEBAR_WIDTH[0],
-            transition: 'width 0.15s'
-          }}
-        >
-          <Flex className="justify-between">
-            <Logo />
-            {open && <SidebarToggler />}
-          </Flex>
+    <Flex
+      stack
+      className="px-4 py-2 h-full overflow-y-auto overflow-x-hidden"
+      style={{
+        height: 'calc(100% - 1.5rem)',
+        width: open ? SIDEBAR_WIDTH[1] : SIDEBAR_WIDTH[0],
+        transition: 'width 0.15s'
+      }}
+    >
+      <Flex className="justify-between">
+        <Logo />
+        {open && <SidebarToggler />}
+      </Flex>
 
-          <NewButton />
+      <NewButton />
 
-          <SidebarMenu />
+      <SidebarMenu />
 
-          <div className="mt-auto">
-            <Account />
-          </div>
-        </Flex>
+      <div className="mt-auto">
+        <Account />
       </div>
-    </div>
+    </Flex>
   );
 };
 

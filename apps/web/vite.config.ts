@@ -29,7 +29,7 @@ export default defineConfig({
       releaseVersion: version,
       baseUrl: process.env.VITE_BASE_URL,
       logoUrl: process.env.VITE_ASSET_URL + '/img/app-logo.svg',
-      faviconUrl: process.env.VITE_ASSET_URL + '/img/logo.svg'
+      faviconUrl: process.env.VITE_ASSET_URL + '/img/app-logo.svg'
     })
   ],
 
