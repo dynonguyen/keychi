@@ -5,8 +5,12 @@ import { pick } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+import { match } from 'ts-pattern';
+import LoadModule from '../../components/LoadModule';
 import { Button, Flex, FlexProps } from '../../components/ui';
 import Divider from '../../components/ui/Divider';
+import Drawer from '../../components/ui/Drawer';
+import Tabs, { Tab } from '../../components/ui/Tabs';
 import Tooltip from '../../components/ui/Tooltip';
 import Typography from '../../components/ui/Typography';
 import UserAvatar from '../../components/UserAvatar';
@@ -17,6 +21,9 @@ import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import { useSidebarStore } from '../../stores/sidebar';
 import { getAssetUrl } from '../../utils/get-asset';
+
+const NewFolderForm = React.lazy(() => import('../../features/new-folder'));
+const NewVaultForm = React.lazy(() => import('../../features/new-vault'));
 
 type SidebarItemProps = {
   label: string;
@@ -212,15 +219,46 @@ const Account = () => {
 };
 
 const NewButton = () => {
+  type FormType = 'folder' | 'vault';
+
   const open = useSidebarStore((state) => state.open);
   const { t } = useTranslation();
+  const [openNew, setOpenNew] = React.useState(false);
+  const [tab, setTab] = React.useState<FormType>('vault');
+
+  const tabs: Array<Tab<FormType>> = [
+    { label: t('common.folder_one'), value: 'folder', icon: 'msi-folder-outline-rounded' },
+    { label: t('common.vault_one'), value: 'vault', icon: 'msi-key-vertical-outline-rounded -rotate-45' }
+  ];
+
+  const Form = match(tab)
+    .with('folder', () => NewFolderForm)
+    .with('vault', () => NewVaultForm)
+    .exhaustive();
 
   return (
     <React.Fragment>
-      <Button className={clsx('my-6 rounded-lg', !open && 'size-8')} size={open ? 'sm' : 'icon'}>
+      <Button
+        className={clsx('my-6 rounded-lg', !open && 'size-8')}
+        size={open ? 'sm' : 'icon'}
+        onClick={() => setOpenNew(true)}
+      >
         <span className={clsx('icon msi-add-2-rounded', 'size-4')}></span>
         {open && <Typography variant="mdSemiBold">{t('common.newItem')}</Typography>}
       </Button>
+
+      <Drawer
+        open={openNew}
+        onClose={() => setOpenNew(false)}
+        size={800}
+        title={t('common.newItem')}
+        content={
+          <Flex stack className="p-4 gap-4">
+            <Tabs value={tab} tabs={tabs} onTabChange={(tab) => setTab(tab.value)} />
+            <LoadModule>{openNew && <Form />}</LoadModule>
+          </Flex>
+        }
+      />
     </React.Fragment>
   );
 };

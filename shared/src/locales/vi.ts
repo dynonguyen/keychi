@@ -50,7 +50,10 @@ const vi = {
     newItem: 'Thêm mới',
     lockNow: 'Khóa ngay',
     collapseSidebar: 'Thu gọn sidebar',
-    expandSidebar: 'Mở rộng sidebar'
+    expandSidebar: 'Mở rộng sidebar',
+    close: 'Đóng',
+    folder_one: 'Thư mục',
+    folder_other: 'Thư mục'
   },
   validation: {
     required: 'Trường này là bắt buộc',

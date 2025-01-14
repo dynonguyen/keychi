@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { DialogProps, Drawer as VaulDrawer } from 'vaul';
+import Button from './Button';
 import Flex, { FlexProps } from './Flex';
 import Typography from './Typography';
 
@@ -14,7 +16,9 @@ export type DrawerProps = {
   content?: React.ReactNode;
   overlay?: boolean;
   size?: number;
+  showCloseBtn?: boolean;
   onClose?(): void;
+  onOpenChange?(open?: boolean): void;
   slotProps?: {
     root?: DialogProps;
     trigger?: React.ComponentProps<typeof VaulDrawer.Trigger>;
@@ -39,15 +43,25 @@ export const Drawer = (props: DrawerProps) => {
     action,
     content,
     children,
+    showCloseBtn = true,
     onClose,
+    onOpenChange,
     slotProps
   } = props;
 
-  const Wrapper = disablePortal ? VaulDrawer.Portal : React.Fragment;
+  const { t } = useTranslation();
+
+  const Wrapper = disablePortal ? React.Fragment : VaulDrawer.Portal;
   const isVertical = placement === 'top' || placement === 'bottom';
 
   return (
-    <VaulDrawer.Root {...slotProps?.root} open={open} direction={placement} onClose={onClose}>
+    <VaulDrawer.Root
+      {...slotProps?.root}
+      open={open}
+      direction={placement}
+      onClose={onClose}
+      onOpenChange={onOpenChange}
+    >
       {children && <VaulDrawer.Trigger {...slotProps?.trigger}> {children}</VaulDrawer.Trigger>}
 
       <Wrapper {...slotProps?.portal}>
@@ -65,10 +79,10 @@ export const Drawer = (props: DrawerProps) => {
             'fixed bg-background',
             !overlay && 'shadow-lg',
             {
-              'inset-y-0 right-0 max-h-screen': placement === 'right',
-              'inset-y-0 left-0 max-h-screen': placement === 'left',
-              'inset-x-0 bottom-0': placement === 'bottom',
-              'inset-x-0 top-0': placement === 'top'
+              'inset-y-0 right-0 max-h-screen max-w-full': placement === 'right',
+              'inset-y-0 left-0 max-h-screen max-w-full': placement === 'left',
+              'inset-x-0 bottom-0 max-h-full': placement === 'bottom',
+              'inset-x-0 top-0 max-h-full': placement === 'top'
             },
             slotProps?.content?.className
           )}
@@ -99,12 +113,20 @@ export const Drawer = (props: DrawerProps) => {
               {content}
             </div>
 
-            {action && (
+            {(action || showCloseBtn) && (
               <div
                 {...slotProps?.action}
                 className={clsx('flex-shrink-0 p-2 border-t border-divider', slotProps?.action?.className)}
               >
-                {action}
+                <Flex className="justify-between gap-2">
+                  {showCloseBtn && onClose && (
+                    <Button onClick={onClose} variant="outline" className="mr-2">
+                      {t('common.close')}
+                    </Button>
+                  )}
+
+                  {action}
+                </Flex>
               </div>
             )}
           </Flex>

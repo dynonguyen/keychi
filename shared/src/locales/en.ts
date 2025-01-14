@@ -50,7 +50,10 @@ const en = {
     newItem: 'New item',
     lockNow: 'Lock now',
     collapseSidebar: 'Collapse sidebar',
-    expandSidebar: 'Expand sidebar'
+    expandSidebar: 'Expand sidebar',
+    close: 'Close',
+    folder_one: 'Folder',
+    folder_other: 'Folders'
   },
   validation: {
     required: 'This field is required',
