@@ -41,6 +41,7 @@
     "@expo/metro-runtime": "~4.0.0",
     "@expo/vector-icons": "^14.0.2",
     "@hookform/resolvers": "^3.10.0",
+    "@radix-ui/react-popover": "^1.1.4",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-navigation/bottom-tabs": "^7.0.0",

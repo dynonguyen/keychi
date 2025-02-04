@@ -7,7 +7,7 @@ const vi = {
     serverError: 'Đã xảy ra lỗi',
     login: 'Đăng nhập',
     register: 'Đăng ký',
-    lock: 'Vault của bạn đã bị khóa'
+    lock: 'Kho của bạn đã bị khóa'
   },
   pageResultAction: 'Quay về <toHome>trang chủ</toHome> hoặc <toContact>liên hệ với chúng tôi</toContact>.',
   notFound: {
@@ -38,8 +38,8 @@ const vi = {
     unlock: 'Mở khóa',
     password: 'Mật khẩu',
     fullname: 'Họ tên',
-    vault_one: 'Vault',
-    vault_other: 'Vaults',
+    vault_one: 'Kho',
+    vault_other: 'Kho',
     setting_one: 'Cài đặt',
     setting_other: 'Cài đặt',
     favorite_one: 'Yêu thích',
@@ -77,7 +77,7 @@ const vi = {
       registerSuccess: 'Đăng ký thành công'
     },
     lock: {
-      title: 'Vault của bạn đã bị khóa'
+      title: 'Kho của bạn đã bị khóa'
     }
   }
 } as const;
